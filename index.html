@@ -2120,6 +2120,90 @@ body {
 .sim-ai-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(81,95,252,0.6); font-family: 'Geist Mono', monospace; flex-shrink: 0; margin-top: 2px; }
 .sim-ai-text { font-size: 10px; color: rgba(255,255,255,0.3); line-height: 1.5; }
 
+
+/* ══ PREP WIZARD ══ */
+.wizard-bar {
+  background: linear-gradient(135deg, rgba(81,95,252,0.08) 0%, rgba(81,95,252,0.04) 100%);
+  border: 1px solid rgba(81,95,252,0.2);
+  border-radius: var(--r-lg); margin-bottom: 16px;
+  overflow: hidden; transition: all .2s;
+}
+.wizard-header {
+  padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+  cursor: pointer; user-select: none;
+}
+.wizard-header:hover { background: rgba(255,255,255,0.02); }
+.wizard-icon { font-size: 16px; flex-shrink: 0; }
+.wizard-title { font-size: 12px; font-weight: 700; color: #fff; flex: 1; }
+.wizard-subtitle { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+.wizard-chevron {
+  font-size: 10px; color: rgba(255,255,255,0.3); transition: transform .2s;
+  font-family: monospace;
+}
+.wizard-bar.open .wizard-chevron { transform: rotate(180deg); }
+.wizard-body { display: none; padding: 0 20px 16px; }
+.wizard-bar.open .wizard-body { display: block; }
+
+.wizard-paste-area {
+  width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r); padding: 12px 14px;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: rgba(255,255,255,0.6); resize: none; height: 120px;
+  outline: none; line-height: 1.6; margin-bottom: 10px;
+  transition: border-color .15s;
+}
+.wizard-paste-area:focus { border-color: rgba(81,95,252,0.4); }
+.wizard-paste-area::placeholder { color: rgba(255,255,255,0.2); font-style: italic; }
+
+.wizard-actions { display: flex; gap: 8px; align-items: center; }
+.wizard-populate-btn {
+  background: linear-gradient(215deg,#515FFC,#363FA9);
+  border: none; border-radius: var(--r); padding: 9px 20px;
+  font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 700;
+  color: white; cursor: pointer; transition: opacity .15s;
+  display: flex; align-items: center; gap: 7px;
+}
+.wizard-populate-btn:hover { opacity: 0.88; }
+.wizard-populate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.wizard-clear-btn {
+  background: none; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r); padding: 9px 16px;
+  font-family: 'Geist', sans-serif; font-size: 12px;
+  color: rgba(255,255,255,0.35); cursor: pointer; transition: all .15s;
+}
+.wizard-clear-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.6); }
+.wizard-status {
+  font-size: 10.5px; margin-left: auto; display: flex; align-items: center; gap: 6px;
+}
+.wizard-status.success { color: #38BB94; }
+.wizard-status.error   { color: #F13C47; }
+.wizard-status.info    { color: rgba(255,255,255,0.4); }
+
+.wizard-populated-summary {
+  display: none; margin-top: 10px; padding: 10px 14px;
+  background: rgba(56,187,148,0.06); border: 1px solid rgba(56,187,148,0.2);
+  border-radius: var(--r); font-size: 10.5px; color: rgba(56,187,148,0.8);
+  line-height: 1.7;
+}
+.wizard-populated-summary.visible { display: block; }
+.wizard-field-tag {
+  display: inline-block; background: rgba(56,187,148,0.1); border-radius: 3px;
+  padding: 1px 6px; font-size: 9px; font-weight: 700; font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.06em; color: rgba(56,187,148,0.9); margin: 1px 2px;
+}
+
+.wizard-intel-notes {
+  display: none; margin-top: 10px; padding: 12px 14px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r); font-size: 11px; color: rgba(255,255,255,0.5);
+  line-height: 1.7; white-space: pre-wrap;
+}
+.wizard-intel-notes.visible { display: block; }
+.wizard-intel-notes-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,160,48,0.7); font-family: 'Geist Mono', monospace; margin-bottom: 8px;
+}
+
 </style>
 </head>
 <body>
@@ -2154,6 +2238,44 @@ body {
 </div>
 
 <!-- CLIENT STRIP -->
+
+<!-- PREP WIZARD -->
+<div class="wizard-bar" id="prepWizard">
+  <div class="wizard-header" onclick="toggleWizard()">
+    <span class="wizard-icon">⚡</span>
+    <div style="flex:1">
+      <div class="wizard-title">Prep Wizard — paste Intel brief to auto-populate</div>
+      <div class="wizard-subtitle">Paste the markdown output from Intel · one click populates all fields</div>
+    </div>
+    <span class="wizard-chevron">▼</span>
+  </div>
+  <div class="wizard-body">
+    <textarea
+      class="wizard-paste-area"
+      id="wizardInput"
+      placeholder="Paste the markdown brief from Intel here...
+
+---
+conquer_prep: true
+---
+## CLIENT
+name: Meridian Capital Partners
+..."></textarea>
+    <div class="wizard-actions">
+      <button class="wizard-populate-btn" onclick="runWizard()">
+        ⚡ Populate all fields
+      </button>
+      <button class="wizard-clear-btn" onclick="clearWizard()">Clear</button>
+      <span class="wizard-status info" id="wizardStatus"></span>
+    </div>
+    <div class="wizard-populated-summary" id="wizardSummary"></div>
+    <div class="wizard-intel-notes" id="wizardNotes">
+      <div class="wizard-intel-notes-label">⚑ Intel Notes — for facilitator only</div>
+      <div id="wizardNotesText"></div>
+    </div>
+  </div>
+</div>
+
 <div class="client-strip">
   <div class="cs-col">
     <div class="cs-label">Client</div>
@@ -5675,6 +5797,330 @@ function renderSimulation(d) {
         <span class="sim-ai-text">${d.what_ai_did || ''}</span>
       </div>
     </div>`;
+}
+
+
+// ══════════════════════════════════════════════════════════
+// PREP WIZARD — parses Intel brief markdown, populates tool
+// ══════════════════════════════════════════════════════════
+
+function toggleWizard() {
+  document.getElementById('prepWizard').classList.toggle('open');
+}
+
+function clearWizard() {
+  document.getElementById('wizardInput').value = '';
+  document.getElementById('wizardStatus').textContent = '';
+  document.getElementById('wizardSummary').classList.remove('visible');
+  document.getElementById('wizardNotes').classList.remove('visible');
+}
+
+function runWizard() {
+  const raw = document.getElementById('wizardInput').value.trim();
+  if (!raw) {
+    setWizardStatus('Paste an Intel brief first', 'error');
+    return;
+  }
+
+  try {
+    const parsed = parseIntelBrief(raw);
+    applyBrief(parsed);
+  } catch(e) {
+    setWizardStatus('Could not parse brief: ' + e.message, 'error');
+  }
+}
+
+function setWizardStatus(msg, type) {
+  const el = document.getElementById('wizardStatus');
+  el.textContent = msg;
+  el.className = 'wizard-status ' + (type || 'info');
+}
+
+// ── PARSER ──
+function parseIntelBrief(md) {
+  const out = {};
+  const lines = md.split('\n');
+  let section = null;
+  let notesCapturing = false;
+  let notesLines = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Skip YAML frontmatter
+    if (trimmed === '---') continue;
+    if (trimmed.startsWith('conquer_prep:') || trimmed.startsWith('version:')) continue;
+
+    // Section headers
+    if (trimmed.startsWith('## ')) {
+      section = trimmed.replace('## ', '').toLowerCase().trim().replace(/ /g, '_');
+      notesCapturing = (section === 'intel_notes');
+      if (notesCapturing) notesLines = [];
+      continue;
+    }
+
+    // Skip comment lines
+    if (trimmed.startsWith('#')) continue;
+
+    // Notes section — capture all
+    if (notesCapturing) {
+      if (trimmed.startsWith('notes: |')) continue;
+      if (trimmed.startsWith('notes:')) {
+        notesLines.push(trimmed.replace('notes:', '').trim());
+      } else if (trimmed) {
+        notesLines.push(line.replace(/^  /, '')); // strip 2-space indent
+      }
+      continue;
+    }
+
+    // Key: value pairs (skip for list sections)
+    const kvMatch = trimmed.match(/^([a-zA-Z_]+):\s*(.*)$/);
+    if (kvMatch && section && section !== 'signals' && section !== 'patterns') {
+      const key = kvMatch[1].toLowerCase();
+      const val = kvMatch[2].trim();
+
+      if (!out[section]) out[section] = {};
+      out[section][key] = val;
+    }
+
+    // Signal list items
+    if (section === 'signals' && trimmed.startsWith('- text:')) {
+      if (!out.signals) out.signals = [];
+      const textMatch = trimmed.match(/- text:\s*(.+?)\s*\|\s*area:\s*(\w+)/);
+      if (textMatch) {
+        out.signals.push({ text: textMatch[1].trim(), area: textMatch[2].trim() });
+      } else {
+        const textOnly = trimmed.replace('- text:', '').trim();
+        out.signals.push({ text: textOnly, area: 'ops' });
+      }
+    }
+
+    // Pattern list items
+    if (section === 'patterns' && trimmed.startsWith('- code:')) {
+      if (!out.patterns) out.patterns = [];
+      const pMatch = trimmed.match(/- code:\s*(\S+)\s*\|\s*reason:\s*(.+)/);
+      if (pMatch) {
+        out.patterns.push({ code: pMatch[1].trim(), reason: pMatch[2].trim() });
+      }
+    }
+
+    // TASHDE fields
+    if (section === 'tashde') {
+      if (!out.tashde) out.tashde = {};
+      const tashdMatch = trimmed.match(/^([TASDHEF][_\w]*):\s*(.+)$/i);
+      if (tashdMatch) {
+        out.tashde[tashdMatch[1].toLowerCase()] = tashdMatch[2].trim();
+      }
+    }
+  }
+
+  out.intel_notes = notesLines.join('\n').trim();
+  return out;
+}
+
+// ── APPLIER ──
+function applyBrief(p) {
+  const populated = [];
+
+  // 1. CLIENT STRIP
+  const client = p.client || {};
+  if (client.name) {
+    const nameInputs = document.querySelectorAll('.cs-input');
+    if (nameInputs[0]) { nameInputs[0].value = client.name; populated.push('client'); }
+    if (nameInputs[1] && client.people) { nameInputs[1].value = client.people; populated.push('people'); }
+    if (nameInputs[2] && client.primary_challenge) { nameInputs[2].value = client.primary_challenge; populated.push('challenge'); }
+    if (nameInputs[3] && client.running) { nameInputs[3].value = client.running; }
+  }
+
+  // Also pull challenge from ## CHALLENGE section if not in ## CLIENT
+  const challengeSection = p.challenge || {};
+  const challengeText = client.primary_challenge || challengeSection.primary_challenge || '';
+  const challengeInput = document.querySelectorAll('.cs-input')[2];
+  if (challengeInput && challengeText) { challengeInput.value = challengeText; }
+
+  // Sync client name to CLIENT MODE slides
+  const headlineEl = document.querySelector('#clientPatternSlide .slide-headline');
+  if (headlineEl && client.name) {
+    headlineEl.innerHTML = `${client.name}. <em>Here's where we see your pattern.</em>`;
+  }
+
+  // 2. VERTICAL
+  const vertLine = p.vertical || {};
+  const vertKey = (vertLine.vertical || '').toLowerCase().replace('-', '');
+  const VERT_MAP = {
+    'realestate': 're', 'privatecredit': 'pc', 'automotive': 'av',
+    'aviation': 'ai', 'staffing': 'st', 'media': 'me',
+    'assetmanagement': 'am', 'investmentbanking': 'ib',
+    're': 're', 'pc': 'pc', 'av': 'av', 'ai': 'ai',
+    'st': 'st', 'me': 'me', 'am': 'am', 'ib': 'ib'
+  };
+  const vKey = VERT_MAP[vertKey];
+  if (vKey) {
+    const vCard = document.getElementById('vcard-' + vKey);
+    if (vCard) {
+      selectVertical(vKey, vCard);
+      populated.push('vertical');
+    }
+  }
+
+  // 3. CHALLENGE → primary challenge field (cs-input index 2)
+  const challengeEl = document.querySelectorAll('.cs-input')[2];
+  if (challengeEl && client.primary_challenge) {
+    challengeEl.value = client.primary_challenge;
+    populated.push('challenge');
+  }
+
+  // 4. ARCHETYPE
+  const archLine = p.archetype || {};
+  const archRaw = (archLine.archetype || '').toLowerCase();
+  const ARCH_MAP = {
+    'open-discovery': 'open', 'opendiscovery': 'open', 'open': 'open',
+    'the-peer': 'peer', 'thepeer': 'peer', 'peer': 'peer',
+    'corporate-navigator': 'nav', 'corporatenavigator': 'nav', 'nav': 'nav',
+    'infrastructure-first': 'infra', 'infrastructurefirst': 'infra', 'infra': 'infra'
+  };
+  const archKey = ARCH_MAP[archRaw];
+  if (archKey) {
+    const archCard = document.getElementById('arch-' + archKey);
+    if (archCard) {
+      selectArchetype(archKey);
+      populated.push('archetype');
+    }
+  }
+
+  // 5. TECH STACK
+  const stackLine = p.tech_stack || p['tech stack'] || {};
+  const systemsRaw = stackLine.systems || '';
+  if (systemsRaw) {
+    const systemList = systemsRaw.split(',').map(s => s.trim().toLowerCase());
+    const TAG_MAP = {
+      'salesforce': 'Salesforce', 'microsoft 365': 'Microsoft 365', 'microsoft365': 'Microsoft 365',
+      'm365': 'Microsoft 365', 'aws': 'AWS', 'azure': 'Azure', 'gcp': 'GCP',
+      'copilot': 'Copilot', 'yardi': 'Yardi', 'bloomberg': 'Bloomberg',
+      'optimizely': 'Optimizely', 'sap': 'SAP', 'servicenow': 'ServiceNow'
+    };
+    let stackHit = false;
+    document.querySelectorAll('.tech-tag').forEach(tag => {
+      const tagText = tag.textContent.trim().toLowerCase();
+      const shouldActive = systemList.some(s => tagText.includes(s) || s.includes(tagText));
+      tag.classList.toggle('active', shouldActive);
+      if (shouldActive) stackHit = true;
+    });
+    // Also set text input
+    const techInput = document.getElementById('techStackInput');
+    if (techInput && systemsRaw) techInput.value = systemsRaw;
+    if (stackHit) {
+      updatePatternLibrary();
+      populated.push('tech stack');
+    }
+  }
+
+  // 6. SIGNAL CHIPS — inject vertical-specific signals from brief
+  if (p.signals && p.signals.length > 0) {
+    const containers = document.querySelectorAll('.listen-signals');
+    if (containers.length > 0) {
+      const container = containers[0];
+      // Remove existing chips
+      container.querySelectorAll('.signal-chip').forEach(c => c.remove());
+      // Add brief signals
+      p.signals.forEach(sig => {
+        const chip = document.createElement('div');
+        chip.className = 'signal-chip';
+        chip.setAttribute('data-opp', sig.area + '-0');
+        chip.innerHTML = `<span class="chip-dot"></span>${sig.text}`;
+        chip.onclick = function() { this.classList.toggle('tagged'); tagSignal(this); };
+        container.appendChild(chip);
+      });
+      populated.push('signals (' + p.signals.length + ')');
+    }
+  }
+
+  // 7. PATTERNS — light up in pattern library
+  if (p.patterns && p.patterns.length > 0) {
+    const patCodes = p.patterns.map(p => p.code.replace('P', '').toLowerCase());
+    document.querySelectorAll('.pattern-card').forEach(card => {
+      const id = card.id?.replace('pat-', '');
+      const lit = patCodes.includes(id);
+      card.classList.toggle('pattern-lit', lit);
+    });
+    // Open pattern library
+    const patLib = document.getElementById('patternLibrary');
+    if (patLib) patLib.classList.add('open');
+    populated.push('patterns');
+  }
+
+  // 8. TASHDE
+  if (p.tashde) {
+    const t = p.tashde;
+    const fieldMap = {
+      't_triggers': '[data-tashde="T"]', 'triggers': '[data-tashde="T"]',
+      'a_actors': '[data-tashde="A"]', 'actors': '[data-tashde="A"]',
+      's_systems': '[data-tashde="S"]', 'systems_field': '[data-tashde="S"]',
+      'd_decisions': '[data-tashde="D"]', 'decisions': '[data-tashde="D"]',
+      'h_handoffs': '[data-tashde="H"]', 'handoffs': '[data-tashde="H"]',
+      'e_exceptions': '[data-tashde="E"]', 'exceptions': '[data-tashde="E"]',
+    };
+
+    // Process name
+    if (t.process_name) {
+      const pnEl = document.querySelector('.tashde-process-name');
+      if (pnEl) pnEl.value = t.process_name;
+    }
+
+    let tashdeHit = false;
+    Object.entries(fieldMap).forEach(([key, selector]) => {
+      if (t[key]) {
+        const el = document.querySelector(selector);
+        if (el) { el.value = t[key]; tashdeHit = true; }
+      }
+    });
+
+    if (tashdeHit) {
+      // Open TASHDE accordion
+      const tashdePanel = document.getElementById('tashdePanel');
+      if (tashdePanel) tashdePanel.classList.add('open');
+      populated.push('TASHDE');
+    }
+  }
+
+  // 9. DEMO CONTEXT — pre-fill simulation generator
+  const demoLine = p.demo || {};
+  if (demoLine.demo_context) {
+    const simExtra = document.getElementById('simExtraInput');
+    if (simExtra) { simExtra.value = demoLine.demo_context; populated.push('demo context'); }
+  }
+  if (demoLine.pattern_family) {
+    const btn = document.querySelector(`.sim-p-btn[data-p="${demoLine.pattern_family}"]`);
+    if (btn) simSelectPattern(demoLine.pattern_family, btn);
+  }
+
+  // 10. SHOW SUMMARY
+  const summaryEl = document.getElementById('wizardSummary');
+  if (summaryEl) {
+    if (populated.length > 0) {
+      summaryEl.innerHTML = '✓ Populated: ' + populated.map(f =>
+        `<span class="wizard-field-tag">${f}</span>`
+      ).join(' ');
+      summaryEl.classList.add('visible');
+      setWizardStatus('✓ ' + populated.length + ' sections populated', 'success');
+    } else {
+      setWizardStatus('No recognised fields found — check the format matches the spec', 'error');
+    }
+  }
+
+  // 11. INTEL NOTES
+  if (p.intel_notes) {
+    const notesEl = document.getElementById('wizardNotes');
+    const notesText = document.getElementById('wizardNotesText');
+    if (notesEl && notesText) {
+      notesText.textContent = p.intel_notes;
+      notesEl.classList.add('visible');
+    }
+  }
+
+  // Scroll to top of PREP
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 </script>
