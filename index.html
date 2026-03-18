@@ -1590,6 +1590,71 @@ body {
   align-items: center; padding: 20px 0;
 }
 
+
+/* ══ PATTERN SLIDE — DEFAULT & ADJUSTMENT ══ */
+
+/* default badge on slide */
+.pattern-slide-status {
+  position: absolute; top: 36px; right: 72px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  font-family: 'Geist Mono', monospace; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px; z-index: 10;
+  transition: opacity .2s;
+}
+.pattern-slide-status.is-default {
+  background: rgba(255,160,48,0.12); border: 1px solid rgba(255,160,48,0.25);
+  color: rgba(255,160,48,0.7);
+}
+.pattern-slide-status.is-custom {
+  background: rgba(81,95,252,0.12); border: 1px solid rgba(81,95,252,0.25);
+  color: rgba(81,95,252,0.8);
+}
+
+/* discreet adjustment panel — hover to reveal */
+.pattern-adjust-panel {
+  position: absolute; top: 0; left: 0; right: 0;
+  background: rgba(8,8,15,0.97);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 12px 72px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s;
+  z-index: 20;
+}
+.slide-patterns:hover .pattern-adjust-panel {
+  opacity: 1; pointer-events: all;
+}
+.pap-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  font-family: 'Geist Mono', monospace; flex-shrink: 0;
+}
+.pap-chip {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  font-family: 'Geist Mono', monospace;
+  padding: 3px 9px; border-radius: 4px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.35);
+  transition: all .12s; user-select: none;
+}
+.pap-chip:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
+.pap-chip.pap-on { background: rgba(81,95,252,0.15); border-color: rgba(81,95,252,0.4); color: #515FFC; }
+.pap-reset {
+  margin-left: auto; font-size: 9px; color: rgba(255,255,255,0.2);
+  font-family: 'Geist Mono', monospace; cursor: pointer; letter-spacing: 0.08em;
+  background: none; border: none; text-transform: uppercase;
+  transition: color .12s;
+}
+.pap-reset:hover { color: rgba(255,255,255,0.5); }
+
+/* pattern client grid — full 4-col when patterns active */
+.pattern-client-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; width: 100%;
+  padding-top: 8px;
+}
+
 </style>
 </head>
 <body>
@@ -2941,6 +3006,8 @@ function updateSpecMeter() {
 }
 // init
 updateSpecMeter();
+// init pattern slide with defaults
+syncClientPatternSlide([], new Set());
 
 
 // ══ PATTERN LIBRARY — system → pattern mapping ══
@@ -3070,31 +3137,105 @@ function updatePatternLibrary() {
   syncClientPatternSlide(activeSystems, activePatterns);
 }
 
+// Track manual pattern overrides from the adjust panel
+let clientPatternOverrides = null; // null = use auto/default, Set = manual
+
+const DEFAULT_PATTERNS = new Set([1, 2, 4, 5, 8, 9]); // most universal patterns
+
 function syncClientPatternSlide(activeSystems, activePatterns) {
   const noPatterns = document.getElementById('pcNoPatterns');
-  let anyLit = false;
 
-  for (let p = 1; p <= 10; p++) {
+  // Determine which patterns to show:
+  // 1. If tech stack tagged → use activePatterns from stack
+  // 2. If manual overrides set → use those
+  // 3. Otherwise → use DEFAULT_PATTERNS
+  let patternsToShow;
+  const hasStackTags = activeSystems.length > 0;
+
+  if (hasStackTags) {
+    patternsToShow = activePatterns;
+    clientPatternOverrides = null; // reset manual when stack changes
+    // sync chips to match
+    document.querySelectorAll('.pap-chip').forEach(chip => {
+      const p = chip.getAttribute('data-pat');
+      const num = isNaN(p) ? p : parseInt(p);
+      chip.classList.toggle('pap-on', activePatterns.has(num));
+    });
+  } else if (clientPatternOverrides !== null) {
+    patternsToShow = clientPatternOverrides;
+  } else {
+    patternsToShow = DEFAULT_PATTERNS;
+  }
+
+  // Update status badge
+  const statusEl = document.getElementById('patternSlideStatus');
+  if (statusEl) {
+    if (hasStackTags) {
+      statusEl.textContent = activeSystems.map(s => s.charAt(0).toUpperCase()+s.slice(1)).join(' · ');
+      statusEl.className = 'pattern-slide-status is-custom';
+    } else if (clientPatternOverrides !== null) {
+      statusEl.textContent = 'Custom selection';
+      statusEl.className = 'pattern-slide-status is-custom';
+    } else {
+      statusEl.textContent = 'Default — most universal';
+      statusEl.className = 'pattern-slide-status is-default';
+    }
+  }
+
+  let anyLit = false;
+  const patKeys = [1,2,3,4,5,6,'6b',7,8,9,10,11];
+  for (const p of patKeys) {
     const card = document.getElementById('cpc-'+p);
     const skinEl = document.getElementById('cpc-'+p+'-skin');
     if (!card) continue;
 
-    const lit = activePatterns.has(p);
+    const pNum = isNaN(p) ? p : (typeof p === 'string' && p.includes('b') ? p : parseInt(p));
+    const lit = patternsToShow.has(pNum) || patternsToShow.has(p);
     card.classList.toggle('pc-lit', lit);
     if (lit) anyLit = true;
 
-    // Find best skin copy for this pattern given active systems
-    if (skinEl && lit) {
+    if (skinEl && lit && hasStackTags) {
       let skinText = null;
       for (const sys of activeSystems) {
         const key = p + '-' + sys;
         if (PATTERN_SKIN_COPY[key]) { skinText = PATTERN_SKIN_COPY[key]; break; }
       }
-      skinEl.innerHTML = skinText || 'Pattern detected from your tech stack';
+      skinEl.innerHTML = skinText || 'Pattern active for your tech stack';
     }
   }
 
-  if (noPatterns) noPatterns.style.display = anyLit ? 'none' : 'block';
+  if (noPatterns) noPatterns.style.display = anyLit ? 'none' : 'flex';
+}
+
+function toggleClientPattern(patNum, chip) {
+  // Build current set from chip states
+  const overrides = new Set();
+  document.querySelectorAll('.pap-chip').forEach(c => {
+    if (c.classList.contains('pap-on')) {
+      const p = c.getAttribute('data-pat');
+      overrides.add(isNaN(p) ? p : (p.includes('b') ? p : parseInt(p)));
+    }
+  });
+  // Toggle the clicked one
+  chip.classList.toggle('pap-on');
+  const p = chip.getAttribute('data-pat');
+  const pKey = isNaN(p) ? p : (p.includes('b') ? p : parseInt(p));
+  if (chip.classList.contains('pap-on')) overrides.add(pKey);
+  else overrides.delete(pKey);
+
+  clientPatternOverrides = overrides;
+  syncClientPatternSlide([], new Set());
+}
+
+function resetPatternAdjust() {
+  clientPatternOverrides = null;
+  document.querySelectorAll('.pap-chip').forEach(chip => {
+    const p = chip.getAttribute('data-pat');
+    const pNum = isNaN(p) ? p : (p.includes('b') ? p : parseInt(p));
+    const isDefault = DEFAULT_PATTERNS.has(pNum) || DEFAULT_PATTERNS.has(parseInt(p));
+    chip.classList.toggle('pap-on', isDefault);
+  });
+  syncClientPatternSlide([], new Set());
 }
 
 // Hook into tech tag clicks and input
@@ -3807,9 +3948,30 @@ async function runDemo() {
 
     <!-- SLIDE: PATTERN (dynamic — all archetypes) -->
     <div class="client-slide slide-patterns" data-archetype="pattern-slide" id="clientPatternSlide">
+
+      <!-- discreet hover panel for facilitator -->
+      <div class="pattern-adjust-panel" id="patternAdjustPanel">
+        <span class="pap-label">Show:</span>
+        <span class="pap-chip pap-on" data-pat="1" onclick="toggleClientPattern(1,this)">P1 Process</span>
+        <span class="pap-chip pap-on" data-pat="2" onclick="toggleClientPattern(2,this)">P2 Monitoring</span>
+        <span class="pap-chip" data-pat="3" onclick="toggleClientPattern(3,this)">P3 Vendors</span>
+        <span class="pap-chip pap-on" data-pat="4" onclick="toggleClientPattern(4,this)">P4 Docs</span>
+        <span class="pap-chip pap-on" data-pat="5" onclick="toggleClientPattern(5,this)">P5 Briefing</span>
+        <span class="pap-chip" data-pat="6" onclick="toggleClientPattern(6,this)">P6 Follow-up</span>
+        <span class="pap-chip" data-pat="6b" onclick="toggleClientPattern('6b',this)">P6b Health</span>
+        <span class="pap-chip" data-pat="7" onclick="toggleClientPattern(7,this)">P7 Recon</span>
+        <span class="pap-chip pap-on" data-pat="8" onclick="toggleClientPattern(8,this)">P8 Compliance</span>
+        <span class="pap-chip pap-on" data-pat="9" onclick="toggleClientPattern(9,this)">P9 Knowledge</span>
+        <span class="pap-chip" data-pat="10" onclick="toggleClientPattern(10,this)">P10 Onboarding</span>
+        <span class="pap-chip" data-pat="11" onclick="toggleClientPattern(11,this)">P11 Intel</span>
+        <button class="pap-reset" onclick="resetPatternAdjust()">Reset to default</button>
+      </div>
+
+      <span class="pattern-slide-status is-default" id="patternSlideStatus">Default view</span>
+
       <div class="slide-eyebrow">Where We See Your Pattern</div>
       <div class="slide-headline">Your stack. <em>Our pattern recognition.</em></div>
-      <div class="slide-sub" style="margin-bottom:24px;">Every system you just named maps to something we've built before. Here's what that looks like for you.</div>
+      <div class="slide-sub" style="margin-bottom:16px;">Every system you just named maps to something we've built before.</div>
       <div class="pattern-client-grid" id="clientPatternGrid">
         <div class="pc-no-patterns" id="pcNoPatterns">
   <div style="font-size:14px;color:rgba(255,255,255,0.25);margin-bottom:16px;font-style:italic;">Tag your tech stack in PREP to highlight specific patterns</div>
@@ -3980,6 +4142,49 @@ async function runDemo() {
             <div class="demo-output-content" id="demoOutput"></div>
           </div>
 
+        </div>
+
+        <!-- P3 -->
+        <div class="pc-pattern-card" id="cpc-3">
+          <div class="pc-pattern-num">P3 · Operations</div>
+          <div class="pc-pattern-name">Vendor &amp; counterparty management</div>
+          <div class="pc-pattern-universal">External-party data normalised and acted on automatically. Eliminates the chasing.</div>
+          <div class="pc-pattern-skin" id="cpc-3-skin">Goodman — contractor follow-up &amp; COI tracking</div>
+        </div>
+        <!-- P6 -->
+        <div class="pc-pattern-card" id="cpc-6">
+          <div class="pc-pattern-num">P6 · Commercial</div>
+          <div class="pc-pattern-name">Follow-up &amp; pipeline automation</div>
+          <div class="pc-pattern-universal">Trigger-based outreach from CRM state changes. The 6pm Friday work — eliminated.</div>
+          <div class="pc-pattern-skin" id="cpc-6-skin">SSA — consultant follow-up automation</div>
+        </div>
+        <!-- P6b -->
+        <div class="pc-pattern-card" id="cpc-6b">
+          <div class="pc-pattern-num">P6b · Commercial</div>
+          <div class="pc-pattern-name">Account health scoring &amp; churn prevention</div>
+          <div class="pc-pattern-universal">Continuous scoring from engagement signals. Flags at-risk accounts before they churn.</div>
+          <div class="pc-pattern-skin" id="cpc-6b-skin">SSA — candidate &amp; client churn scoring</div>
+        </div>
+        <!-- P7 -->
+        <div class="pc-pattern-card" id="cpc-7">
+          <div class="pc-pattern-num">P7 · Finance &amp; Risk</div>
+          <div class="pc-pattern-name">Reconciliation &amp; audit trail</div>
+          <div class="pc-pattern-universal">Match records across systems, surface discrepancies, document resolution. Month-end at speed.</div>
+          <div class="pc-pattern-skin" id="cpc-7-skin">Goodman — CAM reconciliation &amp; invoice matching</div>
+        </div>
+        <!-- P10 -->
+        <div class="pc-pattern-card" id="cpc-10">
+          <div class="pc-pattern-num">P10 · Client &amp; Talent</div>
+          <div class="pc-pattern-name">Onboarding &amp; lifecycle communications</div>
+          <div class="pc-pattern-universal">Trigger-based personalised communications at every key lifecycle moment. Automated. On time.</div>
+          <div class="pc-pattern-skin" id="cpc-10-skin">Goodman — tenant lifecycle communications</div>
+        </div>
+        <!-- P11 -->
+        <div class="pc-pattern-card" id="cpc-11">
+          <div class="pc-pattern-num">P11 · Operations</div>
+          <div class="pc-pattern-name">Document intelligence &amp; extraction</div>
+          <div class="pc-pattern-universal">Unstructured legal &amp; financial documents → structured, queryable data. Foundation capability.</div>
+          <div class="pc-pattern-skin" id="cpc-11-skin">Arcmont — facility agreement → covenant register</div>
         </div>
       </div>
     </div>
