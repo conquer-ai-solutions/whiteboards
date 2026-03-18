@@ -1162,6 +1162,80 @@ body {
 .room-tech-a { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.55; }
 .room-tech-a em { color: #515FFC; font-style: normal; font-weight: 500; }
 
+
+/* ══ ARCHETYPE-SPECIFIC CLIENT SLIDES ══ */
+/* Hidden by default — shown via JS when archetype matches */
+.client-slide[data-archetype] { display: none; }
+.client-slide[data-archetype].arch-active { display: flex; }
+
+/* ── SLIDE: PEER LANDSCAPE ── */
+.slide-landscape { background: #08080F; }
+.landscape-slide-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; width: 100%;
+}
+.ls-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 24px 22px;
+}
+.ls-card.primary { border-color: rgba(56,187,148,0.25); background: rgba(56,187,148,0.04); }
+.ls-card.warn    { border-color: rgba(255,160,48,0.2);  background: rgba(255,160,48,0.03); }
+.ls-card-icon  { font-size: 20px; margin-bottom: 10px; }
+.ls-card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+.ls-card-body  { font-size: 12.5px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+.ls-card-body em { color: rgba(255,255,255,0.8); font-style: normal; font-weight: 500; }
+.ls-card.primary .ls-card-body { color: rgba(56,187,148,0.85); }
+.ls-card.primary .ls-card-body em { color: #38BB94; }
+
+/* ── SLIDE: INFRA TECHNICAL ARCHITECTURE ── */
+.slide-infra { background: #08080F; }
+.infra-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; width: 100%;
+}
+.infra-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 24px 22px;
+}
+.infra-card-icon  { font-size: 20px; margin-bottom: 12px; }
+.infra-card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+.infra-card-body  { font-size: 12.5px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+.infra-card-body em { color: #515FFC; font-style: normal; font-weight: 500; }
+.infra-assurance {
+  width: 100%; margin-top: 16px;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 10px;
+}
+.infra-ass-item {
+  background: rgba(81,95,252,0.08); border: 1px solid rgba(81,95,252,0.2);
+  border-radius: 8px; padding: 12px 14px; text-align: center;
+}
+.infra-ass-icon  { font-size: 16px; margin-bottom: 5px; }
+.infra-ass-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); line-height: 1.3; }
+
+/* ── SLIDE: NAV OPPORTUNITY MAP (committee frame) ── */
+.nav-frame-banner {
+  width: 100%; margin-bottom: 20px;
+  background: rgba(255,160,48,0.08); border: 1px solid rgba(255,160,48,0.2);
+  border-radius: 8px; padding: 14px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.nav-frame-icon  { font-size: 18px; flex-shrink: 0; }
+.nav-frame-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.nav-frame-body  { font-size: 11.5px; color: rgba(255,160,48,0.8); line-height: 1.45; }
+
+/* ── ARCHETYPE BADGE ON CLIENT TOPBAR ── */
+.client-arch-badge {
+  font-family: 'Geist Mono', monospace; font-size: 8px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px;
+  display: none;
+}
+.client-arch-badge.visible { display: inline-block; }
+.client-arch-badge.open  { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.35); }
+.client-arch-badge.peer  { background: rgba(56,187,148,0.15);  color: #38BB94; }
+.client-arch-badge.nav   { background: rgba(255,160,48,0.15);  color: #FFA030; }
+.client-arch-badge.infra { background: rgba(81,95,252,0.15);   color: #515FFC; }
+
 </style>
 </head>
 <body>
@@ -2075,7 +2149,7 @@ let clientSlideIndex = 0;
 const TOTAL_SLIDES = 5;
 
 function enterClientMode() {
-  // sync client name from prep strip
+  // sync client name
   const nameInput = document.querySelector('.cs-input');
   const name = nameInput ? nameInput.value.trim() : '';
   document.getElementById('clientSlideName').textContent = name || 'Working Session';
@@ -2084,17 +2158,90 @@ function enterClientMode() {
   const today = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
   document.getElementById('clientSlideDate').textContent = today;
 
-  // sync next step fields from room/prep
+  // sync next step
   const stepInputs = document.querySelectorAll('.room-field-input, .osf-input');
   const vals = Array.from(stepInputs).map(i => i.value.trim());
   document.getElementById('clientNextAction').textContent = vals[0] || '—';
   document.getElementById('clientNextOwner').textContent  = vals[1] || '—';
   document.getElementById('clientNextDate').textContent   = vals[2] || '—';
 
+  // detect selected archetype
+  const selectedCard = document.querySelector('.archetype-card.selected');
+  const archetype = selectedCard ? selectedCard.id.replace('arch-','') : 'open';
+
+  // apply archetype to slides
+  applyArchetypeToClient(archetype);
+
   clientSlideIndex = 0;
   renderClientSlide();
   document.getElementById('clientMode').classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+function applyArchetypeToClient(archetype) {
+  // hide all archetype-specific slides
+  document.querySelectorAll('.client-slide[data-archetype]').forEach(s => {
+    s.classList.remove('arch-active', 'active');
+  });
+
+  // define slide sequence per archetype
+  const sequences = {
+    open:  ['base-opening', 'base-shift', 'base-opp', 'base-how', 'base-next'],
+    peer:  ['base-opening', 'peer-landscape', 'base-opp', 'base-how', 'base-next'],
+    nav:   ['base-opening', 'base-shift', 'nav-opp', 'base-how', 'base-next'],
+    infra: ['base-opening', 'infra-arch', 'base-shift', 'base-opp', 'base-how', 'base-next'],
+  };
+
+  const seq = sequences[archetype] || sequences.open;
+
+  // build active slide list by mapping slide IDs
+  const slideMap = {
+    'base-opening':    document.querySelector('.client-slide.slide-opening'),
+    'base-shift':      document.querySelector('.client-slide.slide-shift:not([data-archetype])'),
+    'base-opp':        document.querySelector('.client-slide.slide-opp:not([data-archetype])'),
+    'base-how':        document.querySelector('.client-slide.slide-how'),
+    'base-next':       document.querySelector('.client-slide.slide-next'),
+    'peer-landscape':  document.querySelector('.client-slide[data-archetype="peer"]'),
+    'nav-opp':         document.querySelector('.client-slide.slide-opp[data-archetype="nav"]'),
+    'infra-arch':      document.querySelector('.client-slide[data-archetype="infra"]'),
+  };
+
+  // hide ALL slides first
+  document.querySelectorAll('.client-slide').forEach(s => {
+    s.classList.remove('active', 'exit');
+    s.style.display = 'none';
+  });
+
+  // show only slides in this sequence
+  const activeSlides = seq.map(id => slideMap[id]).filter(Boolean);
+  activeSlides.forEach(s => { s.style.display = ''; });
+  if (activeSlides[0]) activeSlides[0].classList.add('active');
+
+  // rebuild dots
+  const dotsEl = document.querySelector('.client-dots');
+  dotsEl.innerHTML = '';
+  activeSlides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'client-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsEl.appendChild(dot);
+  });
+
+  // update total
+  window.TOTAL_SLIDES = activeSlides.length;
+  document.getElementById('clientCounter').textContent = '1 / ' + window.TOTAL_SLIDES;
+
+  // show archetype badge
+  const badge = document.getElementById('clientArchBadge');
+  if (badge) {
+    const labels = { open:'Open Discovery', peer:'Peer Session', nav:'Navigator', infra:'Infra First' };
+    badge.textContent = labels[archetype] || '';
+    badge.className = 'client-arch-badge visible ' + archetype;
+  }
+}
+
+function getActiveClientSlides() {
+  return Array.from(document.querySelectorAll('.client-slide')).filter(s => s.style.display !== 'none');
 }
 
 function exitClientMode() {
@@ -2103,19 +2250,21 @@ function exitClientMode() {
 }
 
 function goToSlide(idx) {
-  const slides = document.querySelectorAll('.client-slide');
+  const slides = getActiveClientSlides();
   const dots   = document.querySelectorAll('.client-dot');
+  if (!slides[clientSlideIndex] || !slides[idx]) return;
   slides[clientSlideIndex].classList.remove('active');
   slides[clientSlideIndex].classList.add('exit');
-  setTimeout(() => { slides[clientSlideIndex].classList.remove('exit'); }, 400);
+  setTimeout(() => { slides[clientSlideIndex] && slides[clientSlideIndex].classList.remove('exit'); }, 400);
   clientSlideIndex = idx;
   slides[clientSlideIndex].classList.add('active');
   dots.forEach((d,i) => d.classList.toggle('active', i === clientSlideIndex));
-  document.getElementById('clientCounter').textContent = (clientSlideIndex+1) + ' / ' + TOTAL_SLIDES;
+  document.getElementById('clientCounter').textContent = (clientSlideIndex+1) + ' / ' + (window.TOTAL_SLIDES || 5);
 }
 
 function clientNext() {
-  if (clientSlideIndex < TOTAL_SLIDES - 1) goToSlide(clientSlideIndex + 1);
+  const total = window.TOTAL_SLIDES || 5;
+  if (clientSlideIndex < total - 1) goToSlide(clientSlideIndex + 1);
 }
 function clientPrev() {
   if (clientSlideIndex > 0) goToSlide(clientSlideIndex - 1);
@@ -2425,6 +2574,7 @@ updateSpecMeter();
     <div class="client-topbar-nav">
       <button class="client-nav-btn" onclick="clientPrev()">← PREV</button>
       <span class="client-slide-counter" id="clientCounter">1 / 5</span>
+      <span class="client-arch-badge" id="clientArchBadge"></span>
       <button class="client-nav-btn" onclick="clientNext()">NEXT →</button>
     </div>
     <div class="client-topbar-right">
@@ -2574,6 +2724,122 @@ updateSpecMeter();
         </div>
       </div>
     </div>
+
+
+    <!-- SLIDE: PEER — LANDSCAPE (archetype-specific) -->
+    <div class="client-slide slide-landscape" data-archetype="peer">
+      <div class="slide-eyebrow">What We're Seeing</div>
+      <div class="slide-headline">Where AI is <em>actually delivering</em> right now.</div>
+      <div class="slide-sub" style="margin-bottom:28px;">Not a pitch — a view from across a range of live engagements.</div>
+      <div class="landscape-slide-grid">
+        <div class="ls-card primary">
+          <div class="ls-card-icon">🎯</div>
+          <div class="ls-card-title">What's working: extraction-first</div>
+          <div class="ls-card-body">The highest-value implementations are turning <em>unstructured data into structured, queryable, actionable data</em>. Documents, emails, calls. Not chatbots. Data pipelines that replace hours of manual work with seconds of automated processing.</div>
+        </div>
+        <div class="ls-card warn">
+          <div class="ls-card-icon">⚠️</div>
+          <div class="ls-card-title">What's overhyped: fully autonomous agents</div>
+          <div class="ls-card-body">Models aren't reliable enough for fully unsupervised decisions in regulated or high-stakes environments yet. The real value is <em>human-in-the-loop automation</em> — AI drafts, routes, flags; human decides on the exceptions.</div>
+        </div>
+        <div class="ls-card">
+          <div class="ls-card-icon">📈</div>
+          <div class="ls-card-title">The cost curve is steeper than most realise</div>
+          <div class="ls-card-body">Model costs dropping <em>10x every 12–18 months</em>. The architecture decisions made today determine whether you can take advantage of that. Companies building capability now will deploy cheaply at scale in 2026–27.</div>
+        </div>
+        <div class="ls-card">
+          <div class="ls-card-icon">🔑</div>
+          <div class="ls-card-title">The pattern across every successful engagement</div>
+          <div class="ls-card-body">Not the biggest budget. Not the most sophisticated model. <em>A specific, bounded, high-frequency problem, solved completely</em> before expanding. Every failed implementation tried to boil the ocean first.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE: INFRA — TECHNICAL ARCHITECTURE (archetype-specific) -->
+    <div class="client-slide slide-infra" data-archetype="infra">
+      <div class="slide-eyebrow">Technical Architecture</div>
+      <div class="slide-headline">Your cloud. Your perimeter. <em>Your governance.</em></div>
+      <div class="slide-sub" style="margin-bottom:28px;">Every implementation is designed to satisfy InfoSec before a line of code is written.</div>
+      <div class="infra-grid">
+        <div class="infra-card">
+          <div class="infra-card-icon">☁️</div>
+          <div class="infra-card-title">Deployed in your cloud</div>
+          <div class="infra-card-body">We deploy into <em>AWS, Azure, or GCP</em> — whichever you're already on. Under your security policies. Your team retains full access and control. We don't run anything on Conquer infrastructure in production.</div>
+        </div>
+        <div class="infra-card">
+          <div class="infra-card-icon">🔒</div>
+          <div class="infra-card-title">Data residency your way</div>
+          <div class="infra-card-body">Data can stay <em>entirely within your perimeter</em> if required. We can run models on-premise or in your private cloud. No data leaves unless you've explicitly approved the destination. Documented at architecture stage.</div>
+        </div>
+        <div class="infra-card">
+          <div class="infra-card-icon">🤖</div>
+          <div class="infra-card-title">Model agnostic</div>
+          <div class="infra-card-body">We don't sell a model. We select based on your requirements — <em>GPT-4o, Claude, Llama, or smaller fine-tuned models</em> for high-volume extraction. Running costs documented before delivery. Dropping fast.</div>
+        </div>
+      </div>
+      <div class="infra-assurance">
+        <div class="infra-ass-item"><div class="infra-ass-icon">📋</div><div class="infra-ass-label">Architecture for InfoSec review before code</div></div>
+        <div class="infra-ass-item"><div class="infra-ass-icon">🔌</div><div class="infra-ass-label">Existing systems via API or extraction</div></div>
+        <div class="infra-ass-item"><div class="infra-ass-icon">🏛</div><div class="infra-ass-label">Regulated institution experience</div></div>
+        <div class="infra-ass-item"><div class="infra-ass-icon">📊</div><div class="infra-ass-label">Running costs documented pre-handover</div></div>
+      </div>
+    </div>
+
+
+    <!-- SLIDE: NAV — OPP MAP WITH COMMITTEE FRAME (archetype-specific) -->
+    <div class="client-slide slide-opp" data-archetype="nav">
+      <div class="nav-frame-banner">
+        <div class="nav-frame-icon">🏛</div>
+        <div>
+          <div class="nav-frame-title">For your committee: the opportunity map</div>
+          <div class="nav-frame-body">Use this to show where the value sits. We'll help you identify the highest-confidence case to take forward internally.</div>
+        </div>
+      </div>
+      <div class="opp-client-map">
+        <div class="opp-map-col">
+          <div class="opp-map-head"><div class="opp-map-icon">📋</div><div class="opp-map-name">Operations</div></div>
+          <div class="opp-map-items">
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Automated reporting &amp; status</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Document generation</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Data extraction &amp; normalisation</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Workflow orchestration</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Exception detection &amp; routing</div>
+          </div>
+        </div>
+        <div class="opp-map-col">
+          <div class="opp-map-head"><div class="opp-map-icon">💼</div><div class="opp-map-name">Commercial</div></div>
+          <div class="opp-map-items">
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Deal intelligence &amp; signals</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Proposal &amp; RFP drafting</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Follow-up automation</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>CRM enrichment &amp; hygiene</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Meeting prep &amp; briefing</div>
+          </div>
+        </div>
+        <div class="opp-map-col">
+          <div class="opp-map-head"><div class="opp-map-icon">🧾</div><div class="opp-map-name">Finance &amp; Risk</div></div>
+          <div class="opp-map-items">
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Automated reconciliation</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Risk flag identification</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Regulatory change monitoring</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Audit trail generation</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Financial model population</div>
+          </div>
+        </div>
+        <div class="opp-map-col">
+          <div class="opp-map-head"><div class="opp-map-icon">🤝</div><div class="opp-map-name">Client &amp; Talent</div></div>
+          <div class="opp-map-items">
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Onboarding &amp; lifecycle comms</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Knowledge base management</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Internal Q&amp;A agents</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Training &amp; upskilling</div>
+            <div class="opp-map-item"><div class="opp-map-dot"></div>Sentiment &amp; churn signals</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
   </div><!-- /client-slides -->
 
