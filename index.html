@@ -2224,9 +2224,9 @@ body {
   position: fixed; inset: 0; z-index: 9999;
   background: #000212;
   display: none; align-items: center; justify-content: center;
-  overflow: hidden;
+  overflow: hidden; pointer-events: none;
 }
-#sessionOverlay.active { display: flex; }
+#sessionOverlay.active { display: flex; pointer-events: all; }
 
 #sessionCanvas {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -6536,6 +6536,7 @@ function launchSessionAnimation(clientName, callback) {
 
   if (clientName) clientDisplay.textContent = clientName.toUpperCase();
 
+  overlay.style.display = '';
   overlay.classList.add('active');
 
   // ── PARTICLE NEURAL NETWORK ──
@@ -6675,6 +6676,7 @@ function launchSessionAnimation(clientName, callback) {
       overlay.style.opacity = '0';
       setTimeout(() => {
         overlay.classList.remove('active');
+        overlay.style.display = 'none';
         overlay.style.opacity = '';
         overlay.style.transition = '';
         cancelAnimationFrame(frameId);
