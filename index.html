@@ -680,13 +680,16 @@ body {
 .client-slide {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 60px 80px;
+  align-items: center; justify-content: flex-start;
+  padding: 36px 72px 36px;
+  overflow-y: auto;
   opacity: 0;
   transform: translateX(40px);
   transition: opacity .4s ease, transform .4s ease;
   pointer-events: none;
+  scrollbar-width: none;
 }
+.client-slide::-webkit-scrollbar { display: none; }
 .client-slide.active {
   opacity: 1;
   transform: translateX(0);
@@ -701,6 +704,7 @@ body {
 .slide-opening {
   background: #08080F;
   justify-content: center;
+  align-items: center;
 }
 .slide-opening::before {
   content: '';
@@ -847,7 +851,8 @@ body {
 
 /* ── SLIDE 4: HOW WE WORK ── */
 .slide-how { background: #08080F; }
-.how-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; width: 100%; }
+.slide-how .slide-headline { font-size: clamp(22px, 2.8vw, 34px); margin-bottom: 20px; }
+.how-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; width: 100%; margin-bottom: 14px; }
 .how-col {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
@@ -869,7 +874,7 @@ body {
 
 /* risk banner */
 .risk-banner {
-  width: 100%; margin-top: 16px;
+  width: 100%; margin-top: 0;
   background: rgba(81,95,252,0.08);
   border: 1px solid rgba(81,95,252,0.25);
   border-radius: 10px; padding: 20px 28px;
@@ -887,7 +892,7 @@ body {
 .risk-banner-text em { color: #515FFC; font-style: normal; }
 
 /* ── SLIDE 5: NEXT STEP ── */
-.slide-next { background: #08080F; }
+.slide-next { background: #08080F; justify-content: center; align-items: center; }
 .next-inner { text-align: center; max-width: 700px; }
 .next-icon { font-size: 48px; margin-bottom: 28px; }
 .next-label {
