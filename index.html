@@ -495,6 +495,133 @@ body {
 }
 .room-toggle-btn:hover { background: var(--brand-mid); }
 
+
+/* ══ TASHDE PROCESS MAPPER ══ */
+.tashde-wrap {
+  margin-top: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: all .2s;
+}
+.tashde-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; background: none; border: none; cursor: pointer;
+  font-family: 'Geist', sans-serif;
+  transition: background .12s;
+}
+.tashde-toggle:hover { background: rgba(255,255,255,0.03); }
+.tashde-toggle-left { display: flex; align-items: center; gap: 12px; }
+.tashde-toggle-badge {
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--amber); background: var(--amber-bg);
+  border: 1px solid rgba(255,160,48,0.25);
+  border-radius: 4px; padding: 3px 8px;
+}
+.tashde-toggle-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.tashde-toggle-sub   { font-size: 11px; color: var(--text-dim); margin-left: 8px; }
+.tashde-toggle-arrow {
+  font-size: 11px; color: var(--text-dim);
+  transition: transform .2s;
+}
+.tashde-wrap.open .tashde-toggle-arrow { transform: rotate(180deg); }
+
+.tashde-body { display: none; padding: 0 20px 20px; }
+.tashde-wrap.open .tashde-body { display: block; }
+
+.tashde-intro {
+  font-size: 11.5px; color: var(--text-dim); line-height: 1.6;
+  padding: 12px 14px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r);
+  margin-bottom: 16px; font-style: italic;
+}
+.tashde-intro strong { color: var(--amber); font-style: normal; }
+
+.tashde-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.tashde-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden;
+  transition: border-color .15s;
+}
+.tashde-card:hover { border-color: var(--border-2); }
+.tashde-card.filled { border-color: rgba(56,187,148,0.3); }
+
+.tashde-card-head {
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.tashde-letter {
+  font-family: var(--mono); font-size: 14px; font-weight: 800;
+  color: var(--brand); line-height: 1; flex-shrink: 0;
+  width: 20px;
+}
+.tashde-word  { font-size: 11px; font-weight: 700; color: var(--text); }
+.tashde-ai-flag {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--brand); background: var(--brand-lit);
+  border-radius: 3px; padding: 2px 6px; margin-left: auto;
+  font-family: var(--mono); white-space: nowrap;
+}
+.tashde-question { font-size: 11px; color: var(--text-dim); line-height: 1.5; padding: 8px 14px 6px; font-style: italic; }
+.tashde-input {
+  width: 100%; background: transparent; border: none;
+  border-top: 1px solid var(--border);
+  padding: 8px 14px; font-family: 'Geist', sans-serif;
+  font-size: 11.5px; color: var(--text); outline: none;
+  resize: vertical; min-height: 60px; line-height: 1.5;
+  transition: background .12s;
+}
+.tashde-input:focus { background: rgba(81,95,252,0.04); }
+.tashde-input::placeholder { color: var(--text-dim); font-style: italic; }
+.tashde-input:not(:placeholder-shown) { }
+
+/* tashde in room mode */
+.room-tashde-wrap {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.room-tashde-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 32px; background: none; border: none; cursor: pointer;
+  font-family: 'Geist', sans-serif; transition: background .12s;
+}
+.room-tashde-toggle:hover { background: rgba(255,255,255,0.03); }
+.room-tashde-toggle-left { display: flex; align-items: center; gap: 10px; }
+.room-tashde-badge {
+  font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--amber); background: var(--amber-bg);
+  border: 1px solid rgba(255,160,48,0.2); border-radius: 3px; padding: 2px 7px;
+}
+.room-tashde-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); }
+.room-tashde-hint  { font-size: 10px; color: rgba(255,255,255,0.2); font-style: italic; }
+.room-tashde-arrow { font-size: 10px; color: rgba(255,255,255,0.2); transition: transform .2s; }
+.room-tashde-wrap.open .room-tashde-arrow { transform: rotate(180deg); }
+
+.room-tashde-body { display: none; padding: 0 32px 16px; }
+.room-tashde-wrap.open .room-tashde-body { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
+
+.room-tashde-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r); overflow: hidden;
+}
+.room-tashde-card-head {
+  padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; gap: 6px;
+}
+.room-tashde-letter { font-family: var(--mono); font-size: 12px; font-weight: 800; color: var(--brand); }
+.room-tashde-word   { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.6); }
+.room-tashde-input {
+  width: 100%; background: transparent; border: none; outline: none;
+  padding: 7px 10px; font-family: 'Geist', sans-serif;
+  font-size: 10.5px; color: rgba(255,255,255,0.7); resize: none;
+  min-height: 52px; line-height: 1.45;
+}
+.room-tashde-input::placeholder { color: rgba(255,255,255,0.2); font-size: 10px; }
+
 </style>
 </head>
 <body>
@@ -693,6 +820,87 @@ body {
       <div class="pi-item"><em>"If you had this working perfectly, what would you do with the time back?"</em> — reveals strategic ambition above the use case.</div>
     </div>
   </div>
+
+  <!-- TASHDE PROCESS MAPPER -->
+  <div class="tashde-wrap" id="tashdeWrap">
+    <button class="tashde-toggle" onclick="document.getElementById('tashdeWrap').classList.toggle('open')">
+      <div class="tashde-toggle-left">
+        <span class="tashde-toggle-badge">Second layer</span>
+        <span class="tashde-toggle-title">TASHDE Process Mapper</span>
+        <span class="tashde-toggle-sub">— deploy once a specific process is on the table</span>
+      </div>
+      <span class="tashde-toggle-arrow">▼</span>
+    </button>
+    <div class="tashde-body">
+      <div class="tashde-intro">
+        <strong>When to open this:</strong> The opening probes have surfaced a specific process worth going deep on — "vendor chasing", "the weekly Excel", "the compliance sign-off." Now map it systematically. Go dimension by dimension. Each answer directly informs whether and how Conquer can solve it.
+      </div>
+      <div class="tashde-grid">
+
+        <div class="tashde-card" id="tc-t">
+          <div class="tashde-card-head">
+            <div class="tashde-letter">T</div>
+            <div class="tashde-word">Triggers</div>
+            <div class="tashde-ai-flag">Entry point</div>
+          </div>
+          <div class="tashde-question">"What starts this process? Is it an event, a schedule, or someone deciding it needs to happen?"</div>
+          <textarea class="tashde-input" placeholder="e.g. Client sends email / Monday morning / someone notices it's overdue..." oninput="markFilled('tc-t',this)"></textarea>
+        </div>
+
+        <div class="tashde-card" id="tc-a">
+          <div class="tashde-card-head">
+            <div class="tashde-letter">A</div>
+            <div class="tashde-word">Actors</div>
+            <div class="tashde-ai-flag">Who bears it</div>
+          </div>
+          <div class="tashde-question">"Who touches this, in what order, and roughly how many times? Is it always the same person?"</div>
+          <textarea class="tashde-input" placeholder="e.g. Morgan (daily), then Sarah reviews, then Head of X signs off..." oninput="markFilled('tc-a',this)"></textarea>
+        </div>
+
+        <div class="tashde-card" id="tc-s">
+          <div class="tashde-card-head">
+            <div class="tashde-letter">S</div>
+            <div class="tashde-word">Systems</div>
+            <div class="tashde-ai-flag">Integration surface</div>
+          </div>
+          <div class="tashde-question">"What tools or platforms does this process touch? Where does data live and how does it move?"</div>
+          <textarea class="tashde-input" placeholder="e.g. Excel → email → SharePoint → manual CRM entry..." oninput="markFilled('tc-s',this)"></textarea>
+        </div>
+
+        <div class="tashde-card" id="tc-d">
+          <div class="tashde-card-head">
+            <div class="tashde-letter">D</div>
+            <div class="tashde-word">Decisions</div>
+            <div class="tashde-ai-flag">AI boundary</div>
+          </div>
+          <div class="tashde-question">"At what points does someone have to make a judgment call? Is it always the same call or does it vary?"</div>
+          <textarea class="tashde-input" placeholder="e.g. 'Mostly rules-based but edge cases go to Sarah' — that's the AI boundary..." oninput="markFilled('tc-d',this)"></textarea>
+        </div>
+
+        <div class="tashde-card" id="tc-h">
+          <div class="tashde-card-head">
+            <div class="tashde-letter">H</div>
+            <div class="tashde-word">Handoffs</div>
+            <div class="tashde-ai-flag">Friction point</div>
+          </div>
+          <div class="tashde-question">"Where does it pass between people or teams? What has to happen for the next person to be able to start?"</div>
+          <textarea class="tashde-input" placeholder="e.g. Morgan emails Sarah who then manually updates the tracker before X can proceed..." oninput="markFilled('tc-h',this)"></textarea>
+        </div>
+
+        <div class="tashde-card" id="tc-e">
+          <div class="tashde-card-head">
+            <div class="tashde-letter">E</div>
+            <div class="tashde-word">Exceptions</div>
+            <div class="tashde-ai-flag">Viability test</div>
+          </div>
+          <div class="tashde-question">"What breaks the normal flow? How often does it happen and what's the consequence when it does?"</div>
+          <textarea class="tashde-input" placeholder="e.g. Roughly 1 in 10, takes 3x as long, always escalates to senior..." oninput="markFilled('tc-e',this)"></textarea>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="beat-divider"></div>
@@ -1133,6 +1341,17 @@ document.getElementById('enterRoomBtn').addEventListener('click', () => {
   }
 });
 
+
+// ── TASHDE FILLED STATE ──
+function markFilled(id, textarea) {
+  const card = document.getElementById(id);
+  if (textarea.value.trim().length > 0) {
+    card.classList.add('filled');
+  } else {
+    card.classList.remove('filled');
+  }
+}
+
 </script>
 
 <!-- ══ ROOM MODE OVERLAY ══ -->
@@ -1250,6 +1469,45 @@ document.getElementById('enterRoomBtn').addEventListener('click', () => {
             <div class="room-mirror-when">When risk or budget comes up: "The only thing you're risking today is the time in this room. Everything else is on us."</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ROOM TASHDE -->
+  <div class="room-tashde-wrap" id="roomTashdeWrap">
+    <button class="room-tashde-toggle" onclick="document.getElementById('roomTashdeWrap').classList.toggle('open')">
+      <div class="room-tashde-toggle-left">
+        <span class="room-tashde-badge">TASHDE</span>
+        <span class="room-tashde-label">Process Mapper</span>
+        <span class="room-tashde-hint">— open when a specific process is on the table</span>
+      </div>
+      <span class="room-tashde-arrow">▼</span>
+    </button>
+    <div class="room-tashde-body">
+      <div class="room-tashde-card">
+        <div class="room-tashde-card-head"><div class="room-tashde-letter">T</div><div class="room-tashde-word">Triggers</div></div>
+        <textarea class="room-tashde-input" placeholder="What starts it?"></textarea>
+      </div>
+      <div class="room-tashde-card">
+        <div class="room-tashde-card-head"><div class="room-tashde-letter">A</div><div class="room-tashde-word">Actors</div></div>
+        <textarea class="room-tashde-input" placeholder="Who touches it?"></textarea>
+      </div>
+      <div class="room-tashde-card">
+        <div class="room-tashde-card-head"><div class="room-tashde-letter">S</div><div class="room-tashde-word">Systems</div></div>
+        <textarea class="room-tashde-input" placeholder="What platforms?"></textarea>
+      </div>
+      <div class="room-tashde-card">
+        <div class="room-tashde-card-head"><div class="room-tashde-letter">D</div><div class="room-tashde-word">Decisions</div></div>
+        <textarea class="room-tashde-input" placeholder="Where's the judgment?"></textarea>
+      </div>
+      <div class="room-tashde-card">
+        <div class="room-tashde-card-head"><div class="room-tashde-letter">H</div><div class="room-tashde-word">Handoffs</div></div>
+        <textarea class="room-tashde-input" placeholder="Where does it pass?"></textarea>
+      </div>
+      <div class="room-tashde-card">
+        <div class="room-tashde-card-head"><div class="room-tashde-letter">E</div><div class="room-tashde-word">Exceptions</div></div>
+        <textarea class="room-tashde-input" placeholder="What breaks it?"></textarea>
       </div>
     </div>
   </div>
