@@ -4043,17 +4043,32 @@ let TOTAL_SLIDES = 5;
 // ── BEAT NAV HIGHLIGHT ──
 const beats = ['beat-1','beat-2','beat-3','beat-4','beat-5'];
 const btns  = document.querySelectorAll('.beat-btn');
+
+function setActiveBeat(id) {
+  btns.forEach(b => b.classList.toggle('active', b.getAttribute('href') === '#' + id));
+}
+
+// On scroll: find which beat section is most prominent in viewport
 const obs = new IntersectionObserver((entries) => {
+  // Pick the entry with the largest intersection ratio
+  let best = null;
   entries.forEach(e => {
     if (e.isIntersecting) {
-      const id = e.target.id;
-      btns.forEach((b,i) => {
-        b.classList.toggle('active', b.getAttribute('href') === '#' + id);
-      });
+      if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
     }
   });
-}, { threshold: 0.3, rootMargin: '-52px 0px -60% 0px' });
+  if (best) setActiveBeat(best.target.id);
+}, { threshold: [0, 0.1, 0.25, 0.5], rootMargin: '-52px 0px -30% 0px' });
+
 beats.forEach(id => { const el = document.getElementById(id); if(el) obs.observe(el); });
+
+// Also set active immediately on click
+btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const href = btn.getAttribute('href');
+    if (href) setActiveBeat(href.replace('#', ''));
+  });
+});
 
 // ── SCROLL PROGRESS ──
 window.addEventListener('scroll', () => {
