@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conquer AI — Whiteboard Session</title>
+<style>
+  :root {
+    --brand:        #515FFC;
+    --brand-dark:   #3a4ad4;
+    --brand-light:  rgba(81,95,252,0.08);
+    --brand-mid:    rgba(81,95,252,0.15);
+    --ink:          #1A1A1A;
+    --ink-mid:      #333333;
+    --ink-light:    #888888;
+    --bg:           #F6F5F3;
+    --white:        #FFFFFF;
+    --border:       #E5E5E5;
+    --green:        #2D7D46;
+    --green-bg:     #F0F8F0;
+    --red:          #C0392B;
+    --red-bg:       #FDF0F0;
+    --amber:        #B8860B;
+    --amber-bg:     #FDF8EE;
+    --r:            10px;
+    --r-lg:         14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink-mid);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    color: white;
+    padding: 56px 60px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -80px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: rgba(81,95,252,0.07);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(81,95,252,0.04);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; }
+
+  .hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 44px;
+  }
+  .logo-block { display: flex; align-items: center; gap: 12px; }
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--brand);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 900; color: white;
+    letter-spacing: -1px;
+  }
+  .logo-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.02em; }
+  .hero-date { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; font-weight: 400; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(81,95,252,0.18);
+    color: rgba(130,143,255,0.95);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    padding: 5px 13px; border-radius: 20px;
+    border: 1px solid rgba(81,95,252,0.3);
+    margin-bottom: 22px;
+  }
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--brand); }
+
+  .hero h1 {
+    font-size: clamp(30px, 4vw, 50px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: white;
+    margin-bottom: 16px;
+    max-width: 720px;
+  }
+  .hero h1 em { color: var(--brand); font-style: normal; }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    max-width: 500px;
+    line-height: 1.65;
+    margin-bottom: 44px;
+    font-weight: 400;
+  }
+
+  .hero-agenda {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .agenda-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 9px 16px;
+    display: flex; align-items: center; gap: 9px;
+    cursor: default;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .agenda-pill:hover { border-color: rgba(81,95,252,0.4); background: rgba(81,95,252,0.08); }
+  .agenda-n {
+    font-size: 9px; font-weight: 800;
+    color: var(--brand); letter-spacing: 0.05em;
+    font-family: 'Helvetica Neue', monospace;
+  }
+  .agenda-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); }
+
+  /* ─── MAIN WRAP ─── */
+  .main { max-width: 1060px; margin: 0 auto; padding: 0 60px 100px; }
+
+  /* ─── SECTION ─── */
+  .section { margin-top: 64px; }
+  .section-eyebrow {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--brand); margin-bottom: 5px;
+  }
+  .section-title {
+    font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 700; color: var(--ink);
+    margin-bottom: 6px; letter-spacing: -0.015em;
+  }
+  .section-sub {
+    font-size: 13px; color: var(--ink-light);
+    max-width: 560px; line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 52px 0 0;
+  }
+
+  /* ─── SIGNAL STRIP ─── */
+  .signal-strip {
+    background: var(--ink);
+    border-radius: var(--r-lg);
+    padding: 36px 44px;
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr;
+    gap: 0;
+    align-items: start;
+  }
+  .signal-div { background: rgba(255,255,255,0.09); margin: 0 26px; }
+  .signal-item {}
+  .signal-icon { font-size: 20px; margin-bottom: 10px; display: block; }
+  .signal-headline {
+    font-size: 13px; font-weight: 700;
+    color: white; margin-bottom: 6px; line-height: 1.3;
+  }
+  .signal-body {
+    font-size: 11.5px; color: rgba(255,255,255,0.5);
+    line-height: 1.55;
+  }
+
+  /* ─── COST OF INACTION ─── */
+  .inaction-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-top: 4px;
+  }
+  .inaction-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 26px 22px;
+    position: relative; overflow: hidden;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .inaction-card:hover { box-shadow: 0 6px 22px rgba(0,0,0,0.07); transform: translateY(-2px); }
+  .inaction-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+  .inaction-card.red::before   { background: var(--red); }
+  .inaction-card.amber::before { background: var(--amber); }
+  .inaction-card.brand::before { background: var(--brand); }
+  .ghost-num {
+    position: absolute; top: 12px; right: 16px;
+    font-size: 52px; font-weight: 800;
+    color: rgba(0,0,0,0.04); line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .inaction-icon { font-size: 22px; margin-bottom: 12px; }
+  .inaction-title {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    margin-bottom: 8px; line-height: 1.3;
+  }
+  .inaction-body {
+    font-size: 12px; color: var(--ink-light);
+    line-height: 1.6;
+  }
+  .inaction-hook {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px; font-weight: 600;
+    color: var(--ink-mid);
+  }
+
+  /* ─── LENS CARDS ─── */
+  .lens-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px; margin-top: 4px;
+  }
+  .lens-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 28px 26px;
+    transition: box-shadow 0.15s;
+  }
+  .lens-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .lens-card.dark {
+    background: var(--ink); border-color: var(--ink);
+    grid-column: span 2;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px; align-items: start;
+    padding: 34px 36px;
+  }
+  .lens-tag {
+    display: inline-block;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 4px;
+    margin-bottom: 14px;
+  }
+  .lens-tag.brand { background: var(--brand-light); color: var(--brand); }
+  .lens-tag.ink   { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+  .lens-title {
+    font-size: 16px; font-weight: 700; color: var(--ink);
+    margin-bottom: 10px; line-height: 1.3; letter-spacing: -0.01em;
+  }
+  .lens-card.dark .lens-title { color: white; }
+  .lens-body {
+    font-size: 12.5px; color: var(--ink-light); line-height: 1.65;
+  }
+  .lens-card.dark .lens-body { color: rgba(255,255,255,0.5); }
+  .lens-divider { width: 1px; background: rgba(255,255,255,0.1); }
+  .lens-principle { }
+  .lens-p-num {
+    font-size: 28px; font-weight: 800; color: var(--brand);
+    line-height: 1; margin-bottom: 8px; letter-spacing: -0.03em;
+  }
+  .lens-p-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .lens-p-body { font-size: 11.5px; color: rgba(255,255,255,0.48); line-height: 1.55; }
+
+  /* ─── OPPORTUNITY MAP ─── */
+  .opp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px; margin-top: 4px;
+  }
+  .opp-col {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+  }
+  .opp-col-head {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .opp-col-icon { font-size: 16px; }
+  .opp-col-name { font-size: 11.5px; font-weight: 700; color: var(--ink); }
+  .opp-items { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .opp-item {
+    font-size: 11.5px; color: var(--ink-mid);
+    padding: 8px 10px;
+    background: var(--bg);
+    border-radius: 6px;
+    line-height: 1.4;
+    display: flex; align-items: flex-start; gap: 8px;
+    transition: background 0.12s;
+    cursor: default;
+  }
+  .opp-item:hover { background: var(--brand-light); }
+  .opp-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--brand); flex-shrink: 0; margin-top: 4px; }
+  .opp-note {
+    padding: 10px 16px 14px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-light);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ─── AGENTIC SHIFT ─── */
+  .shift-wrap {
+    display: grid;
+    grid-template-columns: 1fr 52px 1fr;
+    gap: 0; align-items: stretch;
+    margin-top: 4px;
+  }
+  .shift-side {
+    border-radius: var(--r-lg);
+    padding: 28px 26px;
+  }
+  .shift-old {
+    background: var(--white); border: 1px solid var(--border);
+  }
+  .shift-new {
+    background: rgba(81,95,252,0.05);
+    border: 1px solid rgba(81,95,252,0.2);
+  }
+  .shift-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: var(--ink-light);
+  }
+  .shift-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 16px;
+    display: inline-block; padding: 3px 9px; border-radius: 4px;
+  }
+  .shift-old .shift-label { background: rgba(0,0,0,0.05); color: var(--ink-light); }
+  .shift-new .shift-label { background: var(--brand-mid); color: var(--brand); }
+  .shift-title {
+    font-size: 17px; font-weight: 700; color: var(--ink);
+    margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.25;
+  }
+  .shift-items { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+  .shift-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12px; color: var(--ink-mid); line-height: 1.45;
+    padding: 8px 10px; border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.04);
+    background: rgba(0,0,0,0.015);
+  }
+  .shift-new .shift-item {
+    border-color: rgba(81,95,252,0.1);
+    background: rgba(81,95,252,0.04);
+  }
+  .shift-item-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── HOW WE WORK ─── */
+  .hww-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-top: 4px;
+  }
+  .hww-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 28px 24px;
+    position: relative; overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+  .hww-card:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.07); }
+  .hww-num {
+    position: absolute; bottom: 16px; right: 18px;
+    font-size: 64px; font-weight: 800;
+    color: rgba(0,0,0,0.03); line-height: 1; letter-spacing: -0.04em;
+  }
+  .hww-icon { font-size: 24px; margin-bottom: 14px; }
+  .hww-title {
+    font-size: 15px; font-weight: 700; color: var(--ink);
+    margin-bottom: 8px; letter-spacing: -0.01em; line-height: 1.3;
+  }
+  .hww-body {
+    font-size: 12.5px; color: var(--ink-light); line-height: 1.65;
+  }
+  .hww-proof {
+    margin-top: 14px; padding-top: 13px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px; color: var(--brand); font-weight: 600;
+  }
+
+  /* ─── DISCOVERY ─── */
+  .discovery-wrap {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px; margin-top: 4px;
+    align-items: start;
+  }
+  .disc-questions {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-lg); overflow: hidden;
+  }
+  .disc-q-head {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .disc-q-head-title { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .disc-q-count {
+    font-size: 10px; font-weight: 600; color: var(--ink-light);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2px 9px;
+  }
+  .disc-q-group { padding: 16px 22px; border-bottom: 1px solid var(--border); }
+  .disc-q-group:last-child { border-bottom: none; }
+  .disc-q-theme {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--brand);
+    margin-bottom: 10px;
+  }
+  .disc-q { display: flex; flex-direction: column; gap: 7px; }
+  .disc-q-item {
+    font-size: 12px; color: var(--ink-mid);
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 11px; border-radius: 6px;
+    background: var(--bg); line-height: 1.45;
+    transition: background 0.12s;
+    cursor: default;
+  }
+  .disc-q-item:hover { background: var(--brand-light); }
+  .disc-q-arrow { color: var(--brand); flex-shrink: 0; margin-top: 1px; font-size: 13px; }
+
+  .disc-sidebar { display: flex; flex-direction: column; gap: 12px; }
+  .disc-box {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 22px 20px;
+  }
+  .disc-box-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-light);
+    margin-bottom: 13px;
+  }
+  .disc-input-list { display: flex; flex-direction: column; gap: 8px; }
+  .disc-input-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: var(--ink-mid);
+    padding: 8px 10px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg);
+  }
+  .disc-input-icon { font-size: 14px; }
+  .disc-principle {
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    line-height: 1.4; margin-bottom: 8px;
+  }
+  .disc-principle-body {
+    font-size: 12px; color: var(--ink-light); line-height: 1.6;
+  }
+  .disc-box.dark {
+    background: var(--ink); border-color: var(--ink);
+  }
+  .disc-box.dark .disc-box-title { color: rgba(255,255,255,0.35); }
+  .disc-box.dark .disc-principle { color: white; }
+  .disc-box.dark .disc-principle-body { color: rgba(255,255,255,0.48); }
+
+  /* ─── MOMENTUM ─── */
+  .momentum-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-top: 4px;
+    align-items: start;
+  }
+  .momentum-table {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-lg); overflow: hidden;
+  }
+  .mt-head {
+    display: grid; grid-template-columns: 1fr 1fr 100px;
+    padding: 12px 20px;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+  }
+  .mt-col-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-light);
+  }
+  .mt-row {
+    display: grid; grid-template-columns: 1fr 1fr 100px;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.12s;
+  }
+  .mt-row:hover { background: var(--bg); }
+  .mt-row:last-child { border-bottom: none; }
+  .mt-action { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+  .mt-owner { font-size: 12px; color: var(--ink-mid); }
+  .mt-when {
+    font-size: 10.5px; font-weight: 600; color: var(--brand);
+    background: var(--brand-light); padding: 3px 9px;
+    border-radius: 20px; display: inline-block; text-align: center;
+  }
+  .mt-when.soon { color: var(--green); background: var(--green-bg); }
+
+  .momentum-right { display: flex; flex-direction: column; gap: 12px; }
+  .outcome-box {
+    background: var(--ink); border-radius: var(--r-lg);
+    padding: 28px 26px;
+  }
+  .outcome-box-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.13em;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+    margin-bottom: 16px;
+  }
+  .outcome-list { display: flex; flex-direction: column; gap: 9px; }
+  .outcome-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12.5px; color: rgba(255,255,255,0.65);
+    line-height: 1.45;
+  }
+  .outcome-check { color: var(--brand); flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+
+  .cta-box {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 24px 22px;
+  }
+  .cta-title {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    margin-bottom: 8px; line-height: 1.3;
+  }
+  .cta-body { font-size: 12px; color: var(--ink-light); line-height: 1.6; margin-bottom: 14px; }
+  .cta-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--brand); color: white;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 8px 16px; border-radius: 6px; cursor: default;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--ink);
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 80px;
+  }
+  .footer-left { display: flex; align-items: center; gap: 12px; }
+  .footer-logo { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; text-transform: uppercase; }
+  .footer-right { font-size: 11px; color: rgba(255,255,255,0.25); }
+
+  /* ─── FIELD LABELS (editable cues) ─── */
+  .field {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(81,95,252,0.08); border: 1px dashed rgba(81,95,252,0.3);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; font-weight: 600; color: var(--brand);
+    cursor: text;
+  }
+  .field::before { content: '✏'; font-size: 9px; }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="logo-block">
+        <div class="logo-mark">CQ</div>
+        <span class="logo-name">Conquer AI</span>
+      </div>
+      <span class="hero-date">WHITEBOARD SESSION · <span class="field">DATE</span></span>
+    </div>
+
+    <div class="hero-badge"><span class="badge-dot"></span>Discovery & Alignment</div>
+
+    <h1>A different conversation<br>about <em>what AI actually does.</em></h1>
+    <p class="hero-sub">
+      This session is about understanding your world before we say anything about ours.
+      We'll show you how we think — and build the picture together.
+    </p>
+
+    <div class="hero-agenda">
+      <div class="agenda-pill"><span class="agenda-n">01</span><span class="agenda-label">The State of Play</span></div>
+      <div class="agenda-pill"><span class="agenda-n">02</span><span class="agenda-label">The Conquer Lens</span></div>
+      <div class="agenda-pill"><span class="agenda-n">03</span><span class="agenda-label">Where AI Wins</span></div>
+      <div class="agenda-pill"><span class="agenda-n">04</span><span class="agenda-label">The Agentic Shift</span></div>
+      <div class="agenda-pill"><span class="agenda-n">05</span><span class="agenda-label">How We Work</span></div>
+      <div class="agenda-pill"><span class="agenda-n">06</span><span class="agenda-label">Discovery</span></div>
+      <div class="agenda-pill"><span class="agenda-n">07</span><span class="agenda-label">Momentum</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- ─── 01 STATE OF PLAY ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">01 · The State of Play</div>
+    <div class="section-title">Most businesses are operating below their potential — and they know it.</div>
+    <div class="section-sub">
+      The signals are everywhere. Not dramatic failures — just persistent friction that compounds every quarter.
+    </div>
+
+    <div class="signal-strip">
+      <div class="signal-item">
+        <span class="signal-icon">⏱</span>
+        <div class="signal-headline">Time lost to low-value work</div>
+        <div class="signal-body">Skilled people spending hours on admin, chasing updates, reformatting data — every day.</div>
+      </div>
+      <div class="signal-div"></div>
+      <div class="signal-item">
+        <span class="signal-icon">🔁</span>
+        <div class="signal-headline">Processes that don't scale</div>
+        <div class="signal-body">Growth adds headcount before it adds automation. The margin gets squeezed at exactly the wrong time.</div>
+      </div>
+      <div class="signal-div"></div>
+      <div class="signal-item">
+        <span class="signal-icon">🧠</span>
+        <div class="signal-headline">Institutional knowledge at risk</div>
+        <div class="signal-body">What lives in spreadsheets, inboxes, and people's heads — not in systems — walks out the door quietly.</div>
+      </div>
+      <div class="signal-div"></div>
+      <div class="signal-item">
+        <span class="signal-icon">🐌</span>
+        <div class="signal-headline">Speed of execution</div>
+        <div class="signal-body">Decisions wait for information. Information waits for people. People are in the wrong meeting.</div>
+      </div>
+    </div>
+
+    <div class="divider" style="margin-top:28px;"></div>
+    <div style="margin-top:28px;">
+      <div class="section-eyebrow" style="margin-bottom:18px;">The cost of standing still</div>
+      <div class="inaction-grid">
+        <div class="inaction-card red">
+          <div class="ghost-num">1</div>
+          <div class="inaction-icon">🔥</div>
+          <div class="inaction-title">Operational drag becomes structural</div>
+          <div class="inaction-body">What starts as friction becomes how things work. Teams adapt to the workaround rather than fixing the root cause.</div>
+          <div class="inaction-hook">The workaround becomes the process.</div>
+        </div>
+        <div class="inaction-card amber">
+          <div class="ghost-num">2</div>
+          <div class="inaction-icon">📉</div>
+          <div class="inaction-title">Competitors move while you deliberate</div>
+          <div class="inaction-body">The window to implement AI as a genuine differentiator narrows. Early movers shape the category; late movers buy off-the-shelf.</div>
+          <div class="inaction-hook">First-mover advantage is real and finite.</div>
+        </div>
+        <div class="inaction-card brand">
+          <div class="ghost-num">3</div>
+          <div class="inaction-icon">🎯</div>
+          <div class="inaction-title">Talent expectation has shifted</div>
+          <div class="inaction-body">High performers now evaluate employers on their tech stack. Repetitive, avoidable work accelerates attrition in precisely the roles you can't afford to lose.</div>
+          <div class="inaction-hook">The talent market has already decided.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 02 THE CONQUER LENS ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">02 · The Conquer Lens</div>
+    <div class="section-title">We think about AI differently. Here's how.</div>
+    <div class="section-sub">
+      Not tools. Not features. Agentic systems that work for your people — proactively, at scale.
+    </div>
+
+    <div class="lens-grid">
+      <div class="lens-card">
+        <div class="lens-tag brand">Philosophy</div>
+        <div class="lens-title">We design the right process first. Then we automate it.</div>
+        <div class="lens-body">
+          Most AI projects fail because they automate broken processes. We spend time understanding how work actually flows before we write a line of code. The result is AI that fits — not AI that causes new problems.
+        </div>
+      </div>
+      <div class="lens-card">
+        <div class="lens-tag brand">Approach</div>
+        <div class="lens-title">Proactive, not reactive. Your AI should anticipate — not just respond.</div>
+        <div class="lens-body">
+          Reactive AI waits to be asked. Our solutions surface insights before they're requested, draft communications before deadlines are missed, and flag risks before they become incidents. AI that works ahead of your people.
+        </div>
+      </div>
+      <div class="lens-card dark">
+        <div class="lens-principle">
+          <div class="lens-p-num">01</div>
+          <div class="lens-tag ink">Principle</div>
+          <div class="lens-p-title">You own the IP. You control the data.</div>
+          <div class="lens-p-body">Everything we build is yours. Deployed in your cloud, governed by your policies. We don't hold the keys.</div>
+        </div>
+        <div class="lens-divider"></div>
+        <div class="lens-principle">
+          <div class="lens-p-num">02</div>
+          <div class="lens-tag ink">Principle</div>
+          <div class="lens-p-title">Technology agnostic. Always client-aligned.</div>
+          <div class="lens-p-body">We're not here to sell a platform. We select the best technology for your situation — then we build.</div>
+        </div>
+        <div class="lens-divider"></div>
+        <div class="lens-principle">
+          <div class="lens-p-num">03</div>
+          <div class="lens-tag ink">Principle</div>
+          <div class="lens-p-title">Bespoke by design. Not a template.</div>
+          <div class="lens-p-body">What we build for you is tailored to your processes, your systems, your people. Not a configured SaaS product.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 03 WHERE AI WINS ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">03 · Where AI Wins</div>
+    <div class="section-title">The opportunity map — where agentic AI creates real leverage.</div>
+    <div class="section-sub">
+      AI doesn't win everywhere at once. These are the proven patterns where it compounds fastest.
+    </div>
+
+    <div class="opp-grid">
+      <div class="opp-col">
+        <div class="opp-col-head">
+          <div class="opp-col-icon">📋</div>
+          <div class="opp-col-name">Operations</div>
+        </div>
+        <div class="opp-items">
+          <div class="opp-item"><div class="opp-dot"></div>Automated reporting & status updates</div>
+          <div class="opp-item"><div class="opp-dot"></div>Document generation & processing</div>
+          <div class="opp-item"><div class="opp-dot"></div>Data extraction & normalisation</div>
+          <div class="opp-item"><div class="opp-dot"></div>Workflow orchestration</div>
+          <div class="opp-item"><div class="opp-dot"></div>Exception detection & routing</div>
+        </div>
+        <div class="opp-note">High volume · High frequency</div>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-head">
+          <div class="opp-col-icon">💼</div>
+          <div class="opp-col-name">Commercial</div>
+        </div>
+        <div class="opp-items">
+          <div class="opp-item"><div class="opp-dot"></div>Deal intelligence & pipeline signals</div>
+          <div class="opp-item"><div class="opp-dot"></div>Proposal & RFP drafting</div>
+          <div class="opp-item"><div class="opp-dot"></div>Follow-up automation</div>
+          <div class="opp-item"><div class="opp-dot"></div>CRM enrichment & hygiene</div>
+          <div class="opp-item"><div class="opp-dot"></div>Meeting prep & briefing agents</div>
+        </div>
+        <div class="opp-note">High value · High impact</div>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-head">
+          <div class="opp-col-icon">🧾</div>
+          <div class="opp-col-name">Finance & Risk</div>
+        </div>
+        <div class="opp-items">
+          <div class="opp-item"><div class="opp-dot"></div>Automated reconciliation</div>
+          <div class="opp-item"><div class="opp-dot"></div>Risk flag identification</div>
+          <div class="opp-item"><div class="opp-dot"></div>Regulatory change monitoring</div>
+          <div class="opp-item"><div class="opp-dot"></div>Audit trail generation</div>
+          <div class="opp-item"><div class="opp-dot"></div>Financial model population</div>
+        </div>
+        <div class="opp-note">High accuracy · High stakes</div>
+      </div>
+      <div class="opp-col">
+        <div class="opp-col-head">
+          <div class="opp-col-icon">🤝</div>
+          <div class="opp-col-name">Client & Talent</div>
+        </div>
+        <div class="opp-items">
+          <div class="opp-item"><div class="opp-dot"></div>Onboarding & lifecycle comms</div>
+          <div class="opp-item"><div class="opp-dot"></div>Knowledge base management</div>
+          <div class="opp-item"><div class="opp-dot"></div>Internal Q&A agents</div>
+          <div class="opp-item"><div class="opp-dot"></div>Training & upskilling support</div>
+          <div class="opp-item"><div class="opp-dot"></div>Sentiment & churn signals</div>
+        </div>
+        <div class="opp-note">High retention · High leverage</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 04 THE AGENTIC SHIFT ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">04 · The Agentic Shift</div>
+    <div class="section-title">This isn't about better tools. It's about a different model of work.</div>
+    <div class="section-sub">
+      Most businesses have deployed AI as a feature. We build it as a layer — one that thinks, acts, and coordinates across your systems.
+    </div>
+
+    <div class="shift-wrap">
+      <div class="shift-side shift-old">
+        <div class="shift-label">Before</div>
+        <div class="shift-title">AI as a tool you use</div>
+        <div class="shift-items">
+          <div class="shift-item"><span class="shift-item-icon">🖥</span>People ask the AI a question. AI responds. Work continues manually.</div>
+          <div class="shift-item"><span class="shift-item-icon">🔄</span>Each task requires a human trigger. Nothing happens automatically.</div>
+          <div class="shift-item"><span class="shift-item-icon">🗂</span>AI operates in isolation — it doesn't know what's in your CRM, inbox, or calendar.</div>
+          <div class="shift-item"><span class="shift-item-icon">⚠️</span>High manual overhead. Benefits don't compound. ROI is modest.</div>
+          <div class="shift-item"><span class="shift-item-icon">📦</span>Off-the-shelf. Everyone has it. No differentiation.</div>
+        </div>
+      </div>
+      <div class="shift-arrow">→</div>
+      <div class="shift-side shift-new">
+        <div class="shift-label">After</div>
+        <div class="shift-title">AI as a system that works</div>
+        <div class="shift-items">
+          <div class="shift-item"><span class="shift-item-icon">⚡</span>Agents monitor, decide, and act without waiting to be asked.</div>
+          <div class="shift-item"><span class="shift-item-icon">🔗</span>Integrated across your systems — CRM, email, calendar, documents, data.</div>
+          <div class="shift-item"><span class="shift-item-icon">🎯</span>Surfaces the right information to the right person at the right moment.</div>
+          <div class="shift-item"><span class="shift-item-icon">📈</span>Benefits compound. Each workflow automated frees capacity for the next layer.</div>
+          <div class="shift-item"><span class="shift-item-icon">🔒</span>Built for your business. Your data. Your IP. Your competitive edge.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 05 HOW WE WORK ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">05 · How We Work</div>
+    <div class="section-title">We've removed every reason not to start.</div>
+    <div class="section-sub">
+      Three things that make working with Conquer different from any other AI engagement you've had.
+    </div>
+
+    <div class="hww-grid">
+      <div class="hww-card">
+        <div class="hww-num">1</div>
+        <div class="hww-icon">🤝</div>
+        <div class="hww-title">Partnership over prescription</div>
+        <div class="hww-body">
+          We don't arrive with a solution and look for a problem. We uncover how work actually flows — current state in detail — and design the right target model before we apply any AI. We don't automate broken processes.
+        </div>
+        <div class="hww-proof">Your process. Your people. Designed together.</div>
+      </div>
+      <div class="hww-card">
+        <div class="hww-num">2</div>
+        <div class="hww-icon">🛡</div>
+        <div class="hww-title">At-risk delivery</div>
+        <div class="hww-body">
+          Discovery and scoping: at our risk. Pilot delivery: you pay only once we've delivered working software that meets agreed success criteria. First-time clients don't pay upfront. That's how confident we are.
+        </div>
+        <div class="hww-proof">No working software = no payment.</div>
+      </div>
+      <div class="hww-card">
+        <div class="hww-num">3</div>
+        <div class="hww-icon">🚀</div>
+        <div class="hww-title">Fast, iterative, real</div>
+        <div class="hww-body">
+          We build fast. Weekly demos. Real working software — not decks, not prototypes, not months of requirements gathering. You see progress from week one. Feedback shapes what we build. There are no surprises.
+        </div>
+        <div class="hww-proof">Working software. Every week.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 06 DISCOVERY ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">06 · Discovery</div>
+    <div class="section-title">The questions that matter. The things we need to understand.</div>
+    <div class="section-sub">
+      This isn't a requirements document. It's the start of a real conversation.
+    </div>
+
+    <div class="discovery-wrap">
+      <div class="disc-questions">
+        <div class="disc-q-head">
+          <div class="disc-q-head-title">Questions we want to explore</div>
+          <div class="disc-q-count">12 questions</div>
+        </div>
+        <div class="disc-q-group">
+          <div class="disc-q-theme">Process & Volume</div>
+          <div class="disc-q">
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>What does a typical week look like for your highest-performing people? Where does their time actually go?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>Which tasks are repeated most often — and which ones take the longest relative to the value they create?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>Where do things fall through the cracks? What's the most common preventable failure in your team's work?</div>
+          </div>
+        </div>
+        <div class="disc-q-group">
+          <div class="disc-q-theme">Systems & Data</div>
+          <div class="disc-q">
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>What are the core platforms your people live in daily? Where does data currently sit and how does it move?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>Are there systems that don't talk to each other — where people are manually bridging the gap?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>What's your current position on data governance and cloud infrastructure?</div>
+          </div>
+        </div>
+        <div class="disc-q-group">
+          <div class="disc-q-theme">Ambition & Constraints</div>
+          <div class="disc-q">
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>If you could remove one operational constraint in the next 12 months, what would it be?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>What's driven urgency on AI now — and who in the business is the strongest advocate?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>What does success look like at 6 months? Not in metrics — in terms of how work feels different?</div>
+          </div>
+        </div>
+        <div class="disc-q-group">
+          <div class="disc-q-theme">Risk & Readiness</div>
+          <div class="disc-q">
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>What previous technology changes have worked well — and what's made others harder than expected?</div>
+            <div class="disc-q-item"><div class="disc-q-arrow">›</div>Who else needs to be part of evaluating this opportunity — and what matters most to them?</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc-sidebar">
+        <div class="disc-box">
+          <div class="disc-box-title">What we'll need access to</div>
+          <div class="disc-input-list">
+            <div class="disc-input-item"><div class="disc-input-icon">📄</div>Sample documents or outputs</div>
+            <div class="disc-input-item"><div class="disc-input-icon">🗂</div>Current process walkthroughs</div>
+            <div class="disc-input-item"><div class="disc-input-icon">🔌</div>System list & access overview</div>
+            <div class="disc-input-item"><div class="disc-input-icon">👥</div>Key stakeholder intros</div>
+            <div class="disc-input-item"><div class="disc-input-icon">📊</div>Volume & frequency data</div>
+          </div>
+        </div>
+        <div class="disc-box dark">
+          <div class="disc-box-title">Our discovery principle</div>
+          <div class="disc-principle">"We earn the right to recommend by understanding first."</div>
+          <div class="disc-principle-body">We don't shortcut the discovery phase. Understanding your real process — not the idealised version — is what makes the difference between AI that works and AI that sits unused.</div>
+        </div>
+        <div class="disc-box">
+          <div class="disc-box-title">Session outputs</div>
+          <div class="disc-input-list">
+            <div class="disc-input-item"><div class="disc-input-icon">✅</div>Validated problem statement</div>
+            <div class="disc-input-item"><div class="disc-input-icon">✅</div>Agreed priority opportunity</div>
+            <div class="disc-input-item"><div class="disc-input-icon">✅</div>Clear next step & owner</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 07 MOMENTUM ─── -->
+  <div class="section fade-in">
+    <div class="section-eyebrow">07 · Momentum</div>
+    <div class="section-title">This session ends with a clear next step. Every time.</div>
+    <div class="section-sub">
+      A great conversation means nothing without forward motion.
+    </div>
+
+    <div class="momentum-grid">
+      <div class="momentum-table">
+        <div class="mt-head">
+          <div class="mt-col-label">Action</div>
+          <div class="mt-col-label">Owner</div>
+          <div class="mt-col-label">When</div>
+        </div>
+        <div class="mt-row">
+          <div class="mt-action">Share session notes & alignment doc</div>
+          <div class="mt-owner">Conquer AI</div>
+          <div><span class="mt-when soon">24 hrs</span></div>
+        </div>
+        <div class="mt-row">
+          <div class="mt-action">Provide sample documents / data access</div>
+          <div class="mt-owner"><span class="field">Client</span></div>
+          <div><span class="mt-when">This week</span></div>
+        </div>
+        <div class="mt-row">
+          <div class="mt-action">Intro to technical / data stakeholders</div>
+          <div class="mt-owner"><span class="field">Client</span></div>
+          <div><span class="mt-when">This week</span></div>
+        </div>
+        <div class="mt-row">
+          <div class="mt-action">Discovery deep-dive session</div>
+          <div class="mt-owner">Both</div>
+          <div><span class="mt-when">Next 5 days</span></div>
+        </div>
+        <div class="mt-row">
+          <div class="mt-action">Proposed solution overview & scoping</div>
+          <div class="mt-owner">Conquer AI</div>
+          <div><span class="mt-when">Week 2</span></div>
+        </div>
+      </div>
+
+      <div class="momentum-right">
+        <div class="outcome-box">
+          <div class="outcome-box-title">What leaves this room today</div>
+          <div class="outcome-list">
+            <div class="outcome-item"><span class="outcome-check">✓</span>Shared understanding of the priority problem</div>
+            <div class="outcome-item"><span class="outcome-check">✓</span>A named owner for every next action</div>
+            <div class="outcome-item"><span class="outcome-check">✓</span>A date in the diary for what happens next</div>
+            <div class="outcome-item"><span class="outcome-check">✓</span>Both parties have heard the same thing</div>
+          </div>
+        </div>
+        <div class="cta-box">
+          <div class="cta-title">The at-risk commitment</div>
+          <div class="cta-body">Discovery at our risk. Pilot at our risk. You pay only once working software has been delivered to agreed criteria. First engagement. No upfront cost.</div>
+          <div class="cta-pill">→ Start the conversation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  <div class="footer-left">
+    <div class="logo-mark" style="width:24px;height:24px;font-size:11px;">CQ</div>
+    <div class="footer-logo">Conquer AI</div>
+  </div>
+  <div class="footer-right">Confidential · <span class="field" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.35);">CLIENT NAME</span> · <span class="field" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.35);">DATE</span></div>
+</div>
+
+<script>
+  // Scroll-based fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
