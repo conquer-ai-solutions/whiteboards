@@ -3986,8 +3986,8 @@ name: Meridian Capital Partners
             </div>
 
             <div class="sim-api-key-row">
-              <div class="sim-ctx-label">Anthropic API key <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.2)">(session only — never stored)</span></div>
-              <input type="password" class="sim-api-key-input" id="simApiKey" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" oninput="this.classList.toggle('key-set', this.value.startsWith('sk-ant-'))">
+              <div class="sim-ctx-label">Anthropic API key <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.2)">(saved to this browser — one-time setup)</span></div>
+              <input type="password" class="sim-api-key-input" id="simApiKey" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" oninput="saveApiKey(this.value)">
             </div>
             <button class="sim-generate-btn" id="simGenerateBtn" onclick="generateSimulation()">
               <span class="sim-gen-icon">⚡</span>
@@ -4419,6 +4419,8 @@ function updateSpecMeter() {
 updateSpecMeter();
 // init pattern slide with defaults
 syncClientPatternSlide([], new Set());
+// load saved API key
+loadApiKey();
 
 
 // ══ PATTERN LIBRARY — system → pattern mapping ══
@@ -4799,7 +4801,7 @@ async function runDemo() {
   dot.classList.add('streaming');
 
   try {
-    const apiKey = document.getElementById('simApiKey')?.value.trim();
+    const apiKey = getApiKey();
     if (!apiKey) {
       if (output) output.innerHTML = '<div style="padding:24px;color:rgba(255,160,48,0.8);font-size:12px;line-height:1.7;">Paste your Anthropic API key into the field above to generate simulations.<br><br>Get one at <a href=\'https://console.anthropic.com/\' target=\'_blank\' style=\'color:#515FFC;\'>console.anthropic.com</a></div>';
       btn.disabled = false; btn.classList.remove('running');
@@ -5767,7 +5769,7 @@ async function generateSimulation() {
   try {
     const prompt = buildSimPrompt();
     
-    const apiKey = document.getElementById('simApiKey')?.value.trim();
+    const apiKey = getApiKey();
     if (!apiKey) {
       if (output) output.innerHTML = '<div style="padding:24px;color:rgba(255,160,48,0.8);font-size:12px;line-height:1.7;">Paste your Anthropic API key into the field above to generate simulations.<br><br>Get one at <a href=\'https://console.anthropic.com/\' target=\'_blank\' style=\'color:#515FFC;\'>console.anthropic.com</a></div>';
       btn.disabled = false; btn.classList.remove('running');
@@ -6164,6 +6166,38 @@ function applyBrief(p) {
 
   // Scroll to top of PREP
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// ══ API KEY PERSISTENCE ══
+function saveApiKey(val) {
+  const input = document.getElementById('simApiKey');
+  if (!input) return;
+  input.classList.toggle('key-set', val.startsWith('sk-ant-'));
+  if (val.startsWith('sk-ant-') && val.length > 20) {
+    try { localStorage.setItem('conquer_api_key', val); } catch(e) {}
+  } else if (val === '') {
+    try { localStorage.removeItem('conquer_api_key'); } catch(e) {}
+  }
+}
+
+function loadApiKey() {
+  try {
+    const saved = localStorage.getItem('conquer_api_key');
+    if (saved) {
+      const input = document.getElementById('simApiKey');
+      if (input) {
+        input.value = saved;
+        input.classList.add('key-set');
+      }
+    }
+  } catch(e) {}
+}
+
+function getApiKey() {
+  const input = document.getElementById('simApiKey');
+  if (input && input.value) return input.value.trim();
+  try { return localStorage.getItem('conquer_api_key') || ''; } catch(e) { return ''; }
 }
 
 </script>
