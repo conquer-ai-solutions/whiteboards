@@ -1713,7 +1713,7 @@ body {
   align-items: stretch;
   justify-content: flex-start;
   overflow: hidden;
-  padding: 30px 50px;
+  padding: 24px 48px;
 }
 .launcher-layout {
   display: grid;
@@ -1827,6 +1827,298 @@ body {
   display: flex; align-items: flex-start; gap: 9px;
 }
 .poc-hitl-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+
+/* ══ DEMO TABS ══ */
+.demo-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px; flex-shrink: 0;
+}
+.demo-tab {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 8px 18px; cursor: pointer;
+  font-family: 'Geist', sans-serif; font-size: 11.5px; font-weight: 600;
+  color: rgba(255,255,255,0.4); transition: all .15s;
+  display: flex; align-items: center; gap: 7px;
+}
+.demo-tab:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+.demo-tab.active { background: rgba(81,95,252,0.12); border-color: rgba(81,95,252,0.4); color: #fff; }
+.demo-tab-panel { display: none; flex: 1; min-height: 0; }
+.demo-tab-panel.active { display: flex; flex-direction: column; }
+#panelLauncher.active { display: block; }
+
+/* ══ SIMULATION GENERATOR ══ */
+.sim-layout {
+  display: grid; grid-template-columns: 280px 1fr;
+  gap: 16px; flex: 1; min-height: 0;
+  height: calc(100vh - 220px);
+}
+.sim-left {
+  display: flex; flex-direction: column; gap: 10px;
+  overflow-y: auto; scrollbar-width: none; min-height: 0;
+}
+.sim-left::-webkit-scrollbar { display: none; }
+.sim-ctx-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(81,95,252,0.7);
+  font-family: 'Geist Mono', monospace; margin-bottom: 8px;
+}
+.sim-context-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 9px; padding: 12px 14px;
+}
+.sim-ctx-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  gap: 8px;
+}
+.sim-ctx-row:last-child { border-bottom: none; }
+.sim-ctx-key { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.25); font-family: 'Geist Mono', monospace; letter-spacing: 0.06em; flex-shrink: 0; }
+.sim-ctx-val { font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.6); text-align: right; }
+.sim-ctx-val.set { color: #fff; }
+
+.sim-pattern-grid {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 5px;
+}
+.sim-p-btn {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 7px; padding: 8px 6px; cursor: pointer; transition: all .12s;
+  text-align: center;
+}
+.sim-p-btn:hover { border-color: rgba(255,255,255,0.15); }
+.sim-p-btn.active { border-color: rgba(81,95,252,0.5); background: rgba(81,95,252,0.1); }
+.sim-p-icon { font-size: 14px; margin-bottom: 4px; }
+.sim-p-name { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.5); margin-bottom: 3px; line-height: 1.2; }
+.sim-p-btn.active .sim-p-name { color: #fff; }
+.sim-p-codes { font-size: 7.5px; color: rgba(81,95,252,0.5); font-family: 'Geist Mono', monospace; }
+
+.sim-extra-input {
+  width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 10px 12px; font-family: 'Geist', sans-serif;
+  font-size: 11px; color: rgba(255,255,255,0.7); resize: none; height: 72px;
+  outline: none; line-height: 1.5;
+}
+.sim-extra-input::placeholder { color: rgba(255,255,255,0.2); }
+
+.sim-generate-btn {
+  width: 100%; padding: 12px; border: none; border-radius: 9px;
+  background: linear-gradient(215deg,#515FFC,#363FA9);
+  font-family: 'Geist', sans-serif; font-size: 13px; font-weight: 700;
+  color: white; cursor: pointer; transition: opacity .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  flex-shrink: 0;
+}
+.sim-generate-btn:hover { opacity: 0.88; }
+.sim-generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.sim-gen-spinner {
+  width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.7s linear infinite; display: none;
+}
+.sim-generate-btn.running .sim-gen-text,
+.sim-generate-btn.running .sim-gen-icon { display: none; }
+.sim-generate-btn.running .sim-gen-spinner { display: block; }
+
+.sim-hitl-note {
+  font-size: 9.5px; color: rgba(56,187,148,0.6); display: flex; gap: 6px;
+  align-items: flex-start; line-height: 1.5; flex-shrink: 0;
+}
+
+/* right output panel */
+.sim-right {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; overflow: hidden; display: flex;
+  flex-direction: column; min-height: 0;
+}
+.sim-empty-state {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px; text-align: center; gap: 12px;
+}
+.sim-empty-icon { font-size: 32px; opacity: 0.3; }
+.sim-empty-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.2); }
+.sim-empty-sub { font-size: 11px; color: rgba(255,255,255,0.15); line-height: 1.6; max-width: 300px; }
+.sim-output {
+  flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+/* ══ RENDERED SIMULATION UI ══ */
+.sim-app {
+  height: 100%; display: flex; flex-direction: column;
+  font-family: 'Geist', sans-serif; background: #0D0D18;
+}
+.sim-app-header {
+  padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.sim-app-title { font-size: 12px; font-weight: 700; color: #fff; }
+.sim-app-subtitle { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+.sim-app-badge {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; font-family: 'Geist Mono', monospace;
+  padding: 3px 8px; border-radius: 4px;
+  background: rgba(81,95,252,0.15); border: 1px solid rgba(81,95,252,0.3);
+  color: rgba(130,143,255,0.9);
+}
+.sim-app-live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9px; color: rgba(56,187,148,0.8); font-family: 'Geist Mono', monospace;
+}
+.sim-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #38BB94;
+  box-shadow: 0 0 0 0 rgba(56,187,148,0.4);
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
+.sim-app-body { flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.sim-metrics-strip {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+}
+.sim-metric {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 10px 12px;
+}
+.sim-metric.alert { border-color: rgba(241,60,71,0.3); background: rgba(241,60,71,0.06); }
+.sim-metric.warn  { border-color: rgba(255,160,48,0.3); background: rgba(255,160,48,0.05); }
+.sim-metric.good  { border-color: rgba(56,187,148,0.3); background: rgba(56,187,148,0.05); }
+.sim-metric-val { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+.sim-metric.alert .sim-metric-val { color: #F13C47; }
+.sim-metric.warn  .sim-metric-val { color: #FFA030; }
+.sim-metric.good  .sim-metric-val { color: #38BB94; }
+.sim-metric-label { font-size: 8.5px; font-weight: 600; color: rgba(255,255,255,0.3); margin-top: 3px; font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.07em; }
+.sim-metric-sub { font-size: 8.5px; color: rgba(255,255,255,0.2); margin-top: 2px; }
+
+.sim-exception-card {
+  background: rgba(241,60,71,0.06); border: 1px solid rgba(241,60,71,0.25);
+  border-radius: 10px; padding: 14px 16px;
+}
+.sim-exc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.sim-exc-dot { width: 8px; height: 8px; border-radius: 50%; background: #F13C47; flex-shrink: 0; }
+.sim-exc-title { font-size: 12px; font-weight: 700; color: #fff; }
+.sim-exc-badge { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; background: rgba(241,60,71,0.2); color: #F13C47; font-family: 'Geist Mono', monospace; }
+.sim-exc-body { font-size: 11px; color: rgba(255,255,255,0.55); line-height: 1.55; margin-bottom: 10px; }
+.sim-exc-detail { display: flex; gap: 16px; flex-wrap: wrap; }
+.sim-exc-kv { display: flex; flex-direction: column; gap: 2px; }
+.sim-exc-k { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Geist Mono', monospace; }
+.sim-exc-v { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); }
+
+.sim-queue { display: flex; flex-direction: column; gap: 5px; }
+.sim-queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.sim-queue-title { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+.sim-queue-count { font-size: 9px; color: rgba(255,255,255,0.25); }
+.sim-queue-item {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sim-queue-item:first-child { border-color: rgba(241,60,71,0.3); background: rgba(241,60,71,0.05); }
+.sim-queue-score {
+  font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.4);
+  font-family: 'Geist Mono', monospace; min-width: 32px; text-align: center;
+  flex-shrink: 0;
+}
+.sim-queue-item:first-child .sim-queue-score { color: #F13C47; }
+.sim-queue-body { flex: 1; }
+.sim-queue-name { font-size: 11.5px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+.sim-queue-meta { font-size: 9.5px; color: rgba(255,255,255,0.35); }
+.sim-queue-action {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  padding: 4px 10px; border-radius: 5px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.5); font-family: 'Geist Mono', monospace;
+  text-transform: uppercase; white-space: nowrap;
+}
+.sim-queue-item:first-child .sim-queue-action {
+  border-color: rgba(81,95,252,0.4); background: rgba(81,95,252,0.1); color: #515FFC;
+}
+
+.sim-confidence-bar {
+  height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 6px;
+  overflow: hidden;
+}
+.sim-confidence-fill { height: 100%; background: #38BB94; border-radius: 2px; }
+
+.sim-doc-card {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; overflow: hidden;
+}
+.sim-doc-header {
+  padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sim-doc-title { font-size: 11px; font-weight: 700; color: #fff; }
+.sim-doc-meta { font-size: 9px; color: rgba(255,255,255,0.3); }
+.sim-doc-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.sim-clause {
+  background: rgba(255,255,255,0.03); border-left: 3px solid rgba(81,95,252,0.4);
+  padding: 8px 12px; border-radius: 0 6px 6px 0;
+}
+.sim-clause-ref { font-size: 8px; font-weight: 700; color: rgba(81,95,252,0.7); font-family: 'Geist Mono', monospace; margin-bottom: 4px; letter-spacing: 0.1em; }
+.sim-clause-text { font-size: 11px; color: rgba(255,255,255,0.6); line-height: 1.55; }
+.sim-clause-determination {
+  margin-top: 6px; display: flex; align-items: center; gap: 8px;
+}
+.sim-det-label { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Geist Mono', monospace; }
+.sim-det-val { font-size: 11px; font-weight: 700; color: #38BB94; }
+.sim-det-conf { font-size: 9px; color: rgba(56,187,148,0.5); }
+
+.sim-briefing { display: flex; flex-direction: column; gap: 8px; }
+.sim-briefing-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.sim-briefing-title { font-size: 12px; font-weight: 700; color: #fff; }
+.sim-briefing-time { font-size: 9px; color: rgba(255,255,255,0.3); font-family: 'Geist Mono', monospace; }
+.sim-signal-row {
+  display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 7px;
+}
+.sim-signal-row.flagged { border-color: rgba(255,160,48,0.3); background: rgba(255,160,48,0.05); }
+.sim-signal-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.sim-signal-body { flex: 1; }
+.sim-signal-text { font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.4; }
+.sim-signal-source { font-size: 9px; color: rgba(255,255,255,0.25); margin-top: 2px; font-family: 'Geist Mono', monospace; }
+.sim-signal-flag { font-size: 9px; font-weight: 700; color: #FFA030; }
+
+.sim-score-card {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 14px 16px;
+}
+.sim-score-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+.sim-score-entity { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.sim-score-sub { font-size: 10px; color: rgba(255,255,255,0.4); }
+.sim-score-num {
+  font-size: 36px; font-weight: 700; letter-spacing: -0.03em;
+  color: #FFA030; line-height: 1;
+}
+.sim-score-num.high { color: #F13C47; }
+.sim-score-num.low  { color: #38BB94; }
+.sim-score-label { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'Geist Mono', monospace; text-align: right; }
+.sim-signals-breakdown { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.sim-signal-bar-row { display: flex; align-items: center; gap: 10px; }
+.sim-signal-bar-label { font-size: 10px; color: rgba(255,255,255,0.5); min-width: 140px; }
+.sim-signal-bar-track { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; }
+.sim-signal-bar-fill { height: 100%; background: rgba(255,160,48,0.6); border-radius: 2px; }
+.sim-signal-bar-val { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.4); min-width: 36px; text-align: right; font-family: 'Geist Mono', monospace; }
+
+.sim-approval-bar {
+  background: rgba(81,95,252,0.08); border: 1px solid rgba(81,95,252,0.2);
+  border-radius: 9px; padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-shrink: 0; margin-top: auto;
+}
+.sim-approval-text { font-size: 11px; color: rgba(255,255,255,0.6); font-style: italic; flex: 1; line-height: 1.4; }
+.sim-approval-btn {
+  background: linear-gradient(215deg,#515FFC,#363FA9);
+  border: none; border-radius: 7px; padding: 8px 16px;
+  font-family: 'Geist', sans-serif; font-size: 11px; font-weight: 700;
+  color: white; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+
+.sim-what-ai-did {
+  background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 8px 16px; display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0;
+}
+.sim-ai-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(81,95,252,0.6); font-family: 'Geist Mono', monospace; flex-shrink: 0; margin-top: 2px; }
+.sim-ai-text { font-size: 10px; color: rgba(255,255,255,0.3); line-height: 1.5; }
 
 </style>
 </head>
@@ -3447,81 +3739,141 @@ body {
     <!-- SLIDE: LIVE DEMO -->
 
     <!-- SLIDE: POC LAUNCHER -->
+    <!-- SLIDE: DEMO — Launcher + Simulation Generator -->
     <div class="client-slide slide-launcher" id="clientDemoSlide">
-      <div class="slide-eyebrow" style="margin-bottom:12px;">Live Demo</div>
-      <div class="slide-headline" style="margin-bottom:16px;font-size:clamp(24px,3vw,38px);">Select vertical + pattern. <em>Open the live POC.</em></div>
 
-      <div class="launcher-layout">
-
-        <!-- LEFT: selector -->
-        <div class="launcher-left">
-          <div class="launcher-section-label">Vertical</div>
-          <div id="launcherVerticals">
-            <div class="launcher-v-card" data-v="re" onclick="launcherSelectV('re',this)"><span class="launcher-v-icon">🏢</span><span class="launcher-v-name">Real Estate</span></div>
-            <div class="launcher-v-card" data-v="pc" onclick="launcherSelectV('pc',this)"><span class="launcher-v-icon">📊</span><span class="launcher-v-name">Private Credit</span></div>
-            <div class="launcher-v-card" data-v="av" onclick="launcherSelectV('av',this)"><span class="launcher-v-icon">🚗</span><span class="launcher-v-name">Automotive</span></div>
-            <div class="launcher-v-card" data-v="ai" onclick="launcherSelectV('ai',this)"><span class="launcher-v-icon">✈️</span><span class="launcher-v-name">Aviation</span></div>
-            <div class="launcher-v-card" data-v="st" onclick="launcherSelectV('st',this)"><span class="launcher-v-icon">👥</span><span class="launcher-v-name">Staffing</span></div>
-            <div class="launcher-v-card" data-v="me" onclick="launcherSelectV('me',this)"><span class="launcher-v-icon">📰</span><span class="launcher-v-name">Media</span></div>
-            <div class="launcher-v-card" data-v="am" onclick="launcherSelectV('am',this)"><span class="launcher-v-icon">💼</span><span class="launcher-v-name">Asset Management</span></div>
-            <div class="launcher-v-card" data-v="ib" onclick="launcherSelectV('ib',this)"><span class="launcher-v-icon">🏦</span><span class="launcher-v-name">Investment Banking</span></div>
-          </div>
-          <div class="launcher-section-label" style="margin-top:10px;">Pattern</div>
-          <div class="launcher-p-grid" id="launcherPatterns">
-            <div style="font-size:11px;color:rgba(255,255,255,0.2);font-style:italic;padding:8px 0;">Select a vertical first</div>
-          </div>
-        </div>
-
-        <!-- RIGHT: POC detail -->
-        <div class="launcher-right">
-          <div class="launcher-no-selection" id="launcherNoSelection">
-            Select a vertical and pattern<br>to see the live POC details
-          </div>
-          <div class="launcher-poc-panel" id="launcherPocPanel">
-            <div class="poc-header">
-              <div class="poc-header-meta">
-                <div class="poc-client-name" id="pocClientName">—</div>
-                <div class="poc-persona" id="pocPersona">—</div>
-                <div class="poc-pattern-tag" id="pocPatternTag">—</div>
-              </div>
-              <button class="poc-open-btn" id="pocOpenBtn" onclick="openPoc()">Open Live POC →</button>
-            </div>
-            <div class="poc-exception">
-              <div class="poc-exc-label">🔴 Live exception in progress</div>
-              <div class="poc-exc-text" id="pocException">—</div>
-              <div class="poc-exc-sub" id="pocExceptionSub">—</div>
-            </div>
-            <div class="poc-three-acts">
-              <div class="poc-act">
-                <div class="poc-act-num">Act 1 · Awareness</div>
-                <div class="poc-act-title">This is already happening</div>
-                <div class="poc-act-text" id="pocAct1">The monitoring view. The signal already detected.</div>
-              </div>
-              <div class="poc-act">
-                <div class="poc-act-num">Act 2 · Understanding</div>
-                <div class="poc-act-title">The pattern and root cause</div>
-                <div class="poc-act-text" id="pocAct2">The detail view. The exception in context.</div>
-              </div>
-              <div class="poc-act">
-                <div class="poc-act-num">Act 3 · Action</div>
-                <div class="poc-act-title">What we do about it</div>
-                <div class="poc-act-text" id="pocAct3">The intervention view. With your approval.</div>
-              </div>
-            </div>
-            <div class="poc-hitl">
-              <span class="poc-hitl-icon">🔄</span>
-              <div>
-                <div id="pocHitl" style="font-size:12px;font-style:italic;line-height:1.5;">AI prepares. Human decides.</div>
-                <div id="pocHitlSource" style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;font-family:'Geist Mono',monospace;color:rgba(56,187,148,0.5);margin-top:4px;"></div>
-              </div>
-            </div>
-
-            <!-- ROI metrics strip -->
-            <div class="poc-roi-strip" id="pocRoiStrip"></div>
-          </div>
-        </div>
-
+      <!-- Tab bar -->
+      <div class="demo-tabs">
+        <button class="demo-tab active" id="tabLauncher" onclick="switchDemoTab('launcher')">
+          <span>🔗</span> Live POC Navigator
+        </button>
+        <button class="demo-tab" id="tabSim" onclick="switchDemoTab('sim')">
+          <span>⚡</span> Generate Simulation
+        </button>
       </div>
+
+      <!-- ── TAB 1: POC LAUNCHER ── -->
+      <div class="demo-tab-panel active" id="panelLauncher">
+        <div class="launcher-layout">
+          <div class="launcher-left">
+            <div class="launcher-section-label">Vertical</div>
+            <div id="launcherVerticals">
+              <div class="launcher-v-card" data-v="re" onclick="launcherSelectV('re',this)"><span class="launcher-v-icon">🏢</span><span class="launcher-v-name">Real Estate</span></div>
+              <div class="launcher-v-card" data-v="pc" onclick="launcherSelectV('pc',this)"><span class="launcher-v-icon">📊</span><span class="launcher-v-name">Private Credit</span></div>
+              <div class="launcher-v-card" data-v="av" onclick="launcherSelectV('av',this)"><span class="launcher-v-icon">🚗</span><span class="launcher-v-name">Automotive</span></div>
+              <div class="launcher-v-card" data-v="ai" onclick="launcherSelectV('ai',this)"><span class="launcher-v-icon">✈️</span><span class="launcher-v-name">Aviation</span></div>
+              <div class="launcher-v-card" data-v="st" onclick="launcherSelectV('st',this)"><span class="launcher-v-icon">👥</span><span class="launcher-v-name">Staffing</span></div>
+              <div class="launcher-v-card" data-v="me" onclick="launcherSelectV('me',this)"><span class="launcher-v-icon">📰</span><span class="launcher-v-name">Media</span></div>
+              <div class="launcher-v-card" data-v="am" onclick="launcherSelectV('am',this)"><span class="launcher-v-icon">💼</span><span class="launcher-v-name">Asset Management</span></div>
+              <div class="launcher-v-card" data-v="ib" onclick="launcherSelectV('ib',this)"><span class="launcher-v-icon">🏦</span><span class="launcher-v-name">Investment Banking</span></div>
+            </div>
+            <div class="launcher-section-label" style="margin-top:10px;">Pattern</div>
+            <div class="launcher-p-grid" id="launcherPatterns">
+              <div style="font-size:11px;color:rgba(255,255,255,0.2);font-style:italic;padding:8px 0;">Select a vertical first</div>
+            </div>
+          </div>
+          <div class="launcher-right">
+            <div class="launcher-no-selection" id="launcherNoSelection">Select a vertical and pattern<br>to see the live POC details</div>
+            <div class="launcher-poc-panel" id="launcherPocPanel">
+              <div class="poc-header">
+                <div class="poc-header-meta">
+                  <div class="poc-client-name" id="pocClientName">—</div>
+                  <div class="poc-persona" id="pocPersona">—</div>
+                  <div class="poc-pattern-tag" id="pocPatternTag">—</div>
+                </div>
+                <button class="poc-open-btn" id="pocOpenBtn" onclick="openPoc()">Open Live POC →</button>
+              </div>
+              <div class="poc-exception">
+                <div class="poc-exc-label">🔴 Live exception in progress</div>
+                <div class="poc-exc-text" id="pocException">—</div>
+                <div class="poc-exc-sub" id="pocExceptionSub">—</div>
+              </div>
+              <div class="poc-three-acts">
+                <div class="poc-act"><div class="poc-act-num">Act 1 · Awareness</div><div class="poc-act-title">This is already happening</div><div class="poc-act-text" id="pocAct1">The monitoring view. The signal already detected.</div></div>
+                <div class="poc-act"><div class="poc-act-num">Act 2 · Understanding</div><div class="poc-act-title">The pattern and root cause</div><div class="poc-act-text" id="pocAct2">The detail view. The exception in context.</div></div>
+                <div class="poc-act"><div class="poc-act-num">Act 3 · Action</div><div class="poc-act-title">What we do about it</div><div class="poc-act-text" id="pocAct3">The intervention view. With your approval.</div></div>
+              </div>
+              <div class="poc-hitl"><span class="poc-hitl-icon">🔄</span><div><div id="pocHitl">AI prepares. Human decides.</div><div id="pocHitlSource"></div></div></div>
+              <div class="poc-roi-strip" id="pocRoiStrip"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB 2: SIMULATION GENERATOR ── -->
+      <div class="demo-tab-panel" id="panelSim">
+        <div class="sim-layout">
+
+          <!-- LEFT: context + controls -->
+          <div class="sim-left">
+            <div class="sim-context-card" id="simContextCard">
+              <div class="sim-ctx-label">Session context</div>
+              <div class="sim-ctx-row" id="simCtxClient"><span class="sim-ctx-key">Client</span><span class="sim-ctx-val" id="simCtxClientVal">Not set</span></div>
+              <div class="sim-ctx-row" id="simCtxVertical"><span class="sim-ctx-key">Vertical</span><span class="sim-ctx-val" id="simCtxVerticalVal">Not selected</span></div>
+              <div class="sim-ctx-row" id="simCtxPattern"><span class="sim-ctx-key">Pattern</span><span class="sim-ctx-val" id="simCtxPatternVal">Not selected</span></div>
+              <div class="sim-ctx-row" id="simCtxSignals"><span class="sim-ctx-key">Signals tagged</span><span class="sim-ctx-val" id="simCtxSignalsVal">0</span></div>
+            </div>
+
+            <div class="sim-pattern-pick">
+              <div class="sim-ctx-label">Select pattern to simulate</div>
+              <div class="sim-pattern-grid" id="simPatternGrid">
+                <div class="sim-p-btn active" data-p="monitoring" onclick="simSelectPattern('monitoring',this)">
+                  <div class="sim-p-icon">📡</div>
+                  <div class="sim-p-name">Monitoring</div>
+                  <div class="sim-p-codes">O1 · F1 · F2 · F3</div>
+                </div>
+                <div class="sim-p-btn" data-p="document" onclick="simSelectPattern('document',this)">
+                  <div class="sim-p-icon">📄</div>
+                  <div class="sim-p-name">Document Intel</div>
+                  <div class="sim-p-codes">O3 · C3 · C4</div>
+                </div>
+                <div class="sim-p-btn" data-p="briefing" onclick="simSelectPattern('briefing',this)">
+                  <div class="sim-p-icon">📋</div>
+                  <div class="sim-p-name">Intelligence</div>
+                  <div class="sim-p-codes">C2 · O4 · O5</div>
+                </div>
+                <div class="sim-p-btn" data-p="workflow" onclick="simSelectPattern('workflow',this)">
+                  <div class="sim-p-icon">⚡</div>
+                  <div class="sim-p-name">Workflow</div>
+                  <div class="sim-p-codes">O2 · CT1 · CT2</div>
+                </div>
+                <div class="sim-p-btn" data-p="scoring" onclick="simSelectPattern('scoring',this)">
+                  <div class="sim-p-icon">📊</div>
+                  <div class="sim-p-name">Scoring</div>
+                  <div class="sim-p-codes">C1 · CT5 · F4</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sim-extra-context">
+              <div class="sim-ctx-label">Add context <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.25)">(optional — their words from the session)</span></div>
+              <textarea class="sim-extra-input" id="simExtraInput" placeholder="e.g. They mentioned their compliance team spends Monday mornings manually checking covenant positions across 12 borrowers..."></textarea>
+            </div>
+
+            <button class="sim-generate-btn" id="simGenerateBtn" onclick="generateSimulation()">
+              <span class="sim-gen-icon">⚡</span>
+              <span class="sim-gen-text">Generate Simulation</span>
+              <div class="sim-gen-spinner"></div>
+            </button>
+
+            <div class="sim-hitl-note">
+              <span>🔄</span> Human approval will always be the final step in the simulation
+            </div>
+          </div>
+
+          <!-- RIGHT: rendered simulation output -->
+          <div class="sim-right" id="simRight">
+            <div class="sim-empty-state" id="simEmptyState">
+              <div class="sim-empty-icon">⚡</div>
+              <div class="sim-empty-title">Simulation will appear here</div>
+              <div class="sim-empty-sub">Select a pattern and hit Generate — a realistic product interface will render in under 15 seconds, built from the session context on the left.</div>
+            </div>
+            <div class="sim-output" id="simOutput" style="display:none;"></div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
 
@@ -4986,6 +5338,344 @@ function openPoc() {
 // Sync: when vertical selected in PREP, pre-select in launcher
 // (already handled by selectVertical calling launcherSelectV)
 
+
+
+// ══════════════════════════════════════════════════════════
+// DEMO TAB SWITCHER
+// ══════════════════════════════════════════════════════════
+function switchDemoTab(tab) {
+  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.demo-tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  if (tab === 'sim') updateSimContext();
+}
+
+// ══════════════════════════════════════════════════════════
+// SIMULATION GENERATOR
+// ══════════════════════════════════════════════════════════
+let simPatternType = 'monitoring';
+
+function simSelectPattern(type, btn) {
+  simPatternType = type;
+  document.querySelectorAll('.sim-p-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateSimContext() {
+  // Pull from PREP state
+  const clientEl = document.querySelector('.cs-input');
+  const clientName = clientEl ? clientEl.value.trim() : '';
+  const vertical = currentVertical;
+  
+  // Count tagged signals
+  const taggedSignals = document.querySelectorAll('.signal-chip.tagged');
+  
+  // Get selected pattern from launcher if set
+  const activeP = document.querySelector('.launcher-p-btn.lp-active');
+  const patternName = activeP ? activeP.querySelector('.launcher-p-name')?.textContent : null;
+  
+  const ctxClient = document.getElementById('simCtxClientVal');
+  const ctxVertical = document.getElementById('simCtxVerticalVal');
+  const ctxPattern = document.getElementById('simCtxPatternVal');
+  const ctxSignals = document.getElementById('simCtxSignalsVal');
+  
+  if (ctxClient) {
+    ctxClient.textContent = clientName || 'Not set';
+    ctxClient.className = 'sim-ctx-val' + (clientName ? ' set' : '');
+  }
+  
+  const VERTICAL_LABELS = {re:'Real Estate',pc:'Private Credit',av:'Automotive',ai:'Aviation',st:'Staffing',me:'Media',am:'Asset Management',ib:'Investment Banking'};
+  if (ctxVertical) {
+    ctxVertical.textContent = vertical ? VERTICAL_LABELS[vertical] : 'Not selected';
+    ctxVertical.className = 'sim-ctx-val' + (vertical ? ' set' : '');
+  }
+  if (ctxPattern) {
+    ctxPattern.textContent = patternName || 'Not selected';
+    ctxPattern.className = 'sim-ctx-val' + (patternName ? ' set' : '');
+  }
+  if (ctxSignals) {
+    ctxSignals.textContent = taggedSignals.length;
+    ctxSignals.className = 'sim-ctx-val' + (taggedSignals.length > 0 ? ' set' : '');
+  }
+}
+
+function buildSimPrompt() {
+  const clientEl = document.querySelector('.cs-input');
+  const clientName = clientEl ? clientEl.value.trim() : '';
+  const vertical = currentVertical;
+  const VERTICAL_LABELS = {re:'Real Estate',pc:'Private Credit',av:'Automotive',ai:'Aviation',st:'Staffing',me:'Media',am:'Asset Management',ib:'Investment Banking'};
+  const verticalLabel = VERTICAL_LABELS[vertical] || 'Enterprise';
+  
+  // Collect tagged signals
+  const taggedSignals = [];
+  document.querySelectorAll('.signal-chip.tagged').forEach(c => {
+    taggedSignals.push(c.textContent.trim());
+  });
+  
+  // Challenge from prep strip
+  const challengeEl = document.querySelectorAll('.cs-input')[2];
+  const challenge = challengeEl ? challengeEl.value.trim() : '';
+  
+  const extraContext = document.getElementById('simExtraInput')?.value.trim() || '';
+  
+  const PATTERN_NAMES = {
+    monitoring: 'Continuous Monitoring & Exception Detection',
+    document: 'Document Intelligence & Extraction',
+    briefing: 'Intelligence Briefing Compilation',
+    workflow: 'Workflow Orchestration & Routing',
+    scoring: 'Account Health Scoring & Churn Prevention'
+  };
+  
+  const companyName = clientName || 'the client';
+  
+  return `You are generating structured JSON data for a live product simulation demo. The simulation will be rendered as a real-looking product UI on screen during a client session.
+
+CONTEXT:
+- Client company: ${companyName}
+- Industry/Vertical: ${verticalLabel}
+- Pattern to demonstrate: ${PATTERN_NAMES[simPatternType]}
+- Tagged pain signals from session: ${taggedSignals.length > 0 ? taggedSignals.join('; ') : 'none yet'}
+- Primary challenge (their words): ${challenge || 'not captured yet'}
+- Additional context: ${extraContext || 'none'}
+
+INSTRUCTIONS:
+Generate realistic, specific simulation data for a ${PATTERN_NAMES[simPatternType]} system built for ${companyName} in the ${verticalLabel} sector.
+
+CRITICAL RULES:
+1. Use ${companyName}'s name throughout where appropriate (as the operator/user of the system)
+2. Use industry-specific terminology for ${verticalLabel} — no generic labels
+3. All data must be plausible and specific — real-looking reference numbers, realistic values
+4. Include exactly one "live exception" that is currently active requiring human attention
+5. The human approval action must always be the final step — never automated
+6. Include confidence scores on AI determinations (87-97% range)
+7. "What the AI is doing" description must be specific to their situation
+
+Respond ONLY with valid JSON in this exact structure (no markdown, no explanation):
+
+{
+  "company": "${companyName}",
+  "system_name": "name for the AI system (e.g. 'Covenant Monitor', 'Wire Intelligence', 'Account Sentinel')",
+  "persona": "Name, Role — Company (fictional name for operator)",
+  "pattern_type": "${simPatternType}",
+  "vertical": "${verticalLabel}",
+  "live_exception": {
+    "id": "reference ID (e.g. WO-2026-0847, INV-4721, SR1407)",
+    "title": "short exception title",
+    "description": "2-3 sentence description specific to their situation",
+    "severity": "BREACH|WARNING|FLAGGED|URGENT",
+    "key_values": [
+      {"key": "label", "value": "specific value"}
+    ]
+  },
+  "metrics": [
+    {"label": "metric name", "value": "value", "sub": "context", "type": "alert|warn|good|neutral"}
+  ],
+  "queue_items": [
+    {"score": 94, "name": "item name", "meta": "detail", "action": "Review"}
+  ],
+  "document_extracts": [
+    {"ref": "§12.4", "text": "extracted clause text", "determination": "determination result", "confidence": 96}
+  ],
+  "briefing_signals": [
+    {"icon": "📉", "text": "signal description", "source": "source system", "flagged": true}
+  ],
+  "score_entity": {"name": "entity name", "sub": "role/account type", "score": 78, "label": "AT RISK"},
+  "score_signals": [
+    {"label": "signal name", "weight": 0.38, "pct": 72}
+  ],
+  "hitl_statement": "exact human-in-the-loop statement for this scenario (e.g. 'Nothing is sent until you approve')",
+  "what_ai_did": "specific description of what the AI has done — what it monitored, what it detected, what it prepared",
+  "approval_action": "specific action label for the approval button (e.g. 'Approve Dispatch', 'Sign Off Trade', 'Send Intervention')"
+}`;
+}
+
+const PATTERN_TEMPLATES = {
+
+  monitoring: (d) => `
+    <div class="sim-metrics-strip">
+      ${(d.metrics||[]).slice(0,4).map(m => `
+        <div class="sim-metric ${m.type||''}">
+          <div class="sim-metric-val">${m.value}</div>
+          <div class="sim-metric-label">${m.label}</div>
+          ${m.sub ? `<div class="sim-metric-sub">${m.sub}</div>` : ''}
+        </div>`).join('')}
+    </div>
+    ${d.live_exception ? `
+    <div class="sim-exception-card">
+      <div class="sim-exc-header">
+        <div class="sim-exc-dot"></div>
+        <div class="sim-exc-title">${d.live_exception.id} — ${d.live_exception.title}</div>
+        <span class="sim-exc-badge">${d.live_exception.severity}</span>
+      </div>
+      <div class="sim-exc-body">${d.live_exception.description}</div>
+      <div class="sim-exc-detail">
+        ${(d.live_exception.key_values||[]).map(kv => `<div class="sim-exc-kv"><div class="sim-exc-k">${kv.key}</div><div class="sim-exc-v">${kv.value}</div></div>`).join('')}
+      </div>
+    </div>` : ''}
+    ${d.queue_items && d.queue_items.length > 0 ? `
+    <div class="sim-queue">
+      <div class="sim-queue-header"><div class="sim-queue-title">Exception queue</div><div class="sim-queue-count">${d.queue_items.length} items</div></div>
+      ${d.queue_items.slice(0,4).map(qi => `
+        <div class="sim-queue-item">
+          <div class="sim-queue-score">${qi.score}</div>
+          <div class="sim-queue-body"><div class="sim-queue-name">${qi.name}</div><div class="sim-queue-meta">${qi.meta}</div></div>
+          <button class="sim-queue-action">${qi.action||'Review'}</button>
+        </div>`).join('')}
+    </div>` : ''}`,
+
+  document: (d) => `
+    ${d.metrics && d.metrics.length > 0 ? `<div class="sim-metrics-strip">${d.metrics.slice(0,3).map(m => `<div class="sim-metric ${m.type||''}"><div class="sim-metric-val">${m.value}</div><div class="sim-metric-label">${m.label}</div></div>`).join('')}</div>` : ''}
+    <div class="sim-doc-card">
+      <div class="sim-doc-header">
+        <div><div class="sim-doc-title">${d.live_exception?.id || 'Document'} — ${d.live_exception?.title || 'Analysis'}</div><div class="sim-doc-meta">${d.live_exception?.description?.split('.')[0] || ''}</div></div>
+        <div class="sim-app-live"><div class="sim-live-dot"></div>AI analysing</div>
+      </div>
+      <div class="sim-doc-body">
+        ${(d.document_extracts||[]).map(ex => `
+          <div class="sim-clause">
+            <div class="sim-clause-ref">${ex.ref}</div>
+            <div class="sim-clause-text">${ex.text}</div>
+            <div class="sim-clause-determination">
+              <span class="sim-det-label">AI Determination:</span>
+              <span class="sim-det-val">${ex.determination}</span>
+              <span class="sim-det-conf">(${ex.confidence}% confidence)</span>
+            </div>
+            <div class="sim-confidence-bar"><div class="sim-confidence-fill" style="width:${ex.confidence}%"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>`,
+
+  briefing: (d) => `
+    ${d.metrics && d.metrics.length > 0 ? `<div class="sim-metrics-strip">${d.metrics.slice(0,4).map(m => `<div class="sim-metric ${m.type||''}"><div class="sim-metric-val">${m.value}</div><div class="sim-metric-label">${m.label}</div><div class="sim-metric-sub">${m.sub||''}</div></div>`).join('')}</div>` : ''}
+    <div class="sim-briefing">
+      <div class="sim-briefing-header">
+        <div class="sim-briefing-title">${d.system_name || 'Intelligence Briefing'} — ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} GMT</div>
+        <div class="sim-briefing-time">Compiled from live data feeds</div>
+      </div>
+      ${(d.briefing_signals||[]).map(s => `
+        <div class="sim-signal-row ${s.flagged ? 'flagged' : ''}">
+          <div class="sim-signal-icon">${s.icon||'•'}</div>
+          <div class="sim-signal-body">
+            <div class="sim-signal-text">${s.text}</div>
+            <div class="sim-signal-source">${s.source}</div>
+          </div>
+          ${s.flagged ? '<div class="sim-signal-flag">⚑ FLAGGED</div>' : ''}
+        </div>`).join('')}
+    </div>`,
+
+  workflow: (d) => `
+    ${d.metrics && d.metrics.length > 0 ? `<div class="sim-metrics-strip">${d.metrics.slice(0,4).map(m => `<div class="sim-metric ${m.type||''}"><div class="sim-metric-val">${m.value}</div><div class="sim-metric-label">${m.label}</div></div>`).join('')}</div>` : ''}
+    ${d.live_exception ? `
+    <div class="sim-exception-card">
+      <div class="sim-exc-header"><div class="sim-exc-dot"></div><div class="sim-exc-title">${d.live_exception.id} — ${d.live_exception.title}</div><span class="sim-exc-badge">${d.live_exception.severity}</span></div>
+      <div class="sim-exc-body">${d.live_exception.description}</div>
+      <div class="sim-exc-detail">${(d.live_exception.key_values||[]).map(kv => `<div class="sim-exc-kv"><div class="sim-exc-k">${kv.key}</div><div class="sim-exc-v">${kv.value}</div></div>`).join('')}</div>
+    </div>` : ''}
+    <div class="sim-queue">
+      <div class="sim-queue-header"><div class="sim-queue-title">Routing queue</div><div class="sim-queue-count">${(d.queue_items||[]).length} items enriched</div></div>
+      ${(d.queue_items||[]).slice(0,4).map(qi => `
+        <div class="sim-queue-item">
+          <div class="sim-queue-score">${qi.score}</div>
+          <div class="sim-queue-body"><div class="sim-queue-name">${qi.name}</div><div class="sim-queue-meta">${qi.meta}</div></div>
+          <button class="sim-queue-action">${qi.action||'Review'}</button>
+        </div>`).join('')}
+    </div>`,
+
+  scoring: (d) => `
+    ${d.score_entity ? `
+    <div class="sim-score-card">
+      <div class="sim-score-header">
+        <div><div class="sim-score-entity">${d.score_entity.name}</div><div class="sim-score-sub">${d.score_entity.sub}</div></div>
+        <div><div class="sim-score-num ${d.score_entity.score > 70 ? 'high' : d.score_entity.score < 40 ? 'low' : ''}">${d.score_entity.score}</div><div class="sim-score-label">${d.score_entity.label}</div></div>
+      </div>
+      <div class="sim-signals-breakdown">
+        ${(d.score_signals||[]).slice(0,4).map(s => `
+          <div class="sim-signal-bar-row">
+            <div class="sim-signal-bar-label">${s.label}</div>
+            <div class="sim-signal-bar-track"><div class="sim-signal-bar-fill" style="width:${s.pct}%"></div></div>
+            <div class="sim-signal-bar-val">×${s.weight}</div>
+          </div>`).join('')}
+      </div>
+      ${d.live_exception ? `<div style="font-size:11px;color:rgba(255,255,255,0.45);line-height:1.55;padding:8px 0;border-top:1px solid rgba(255,255,255,0.07)">${d.live_exception.description}</div>` : ''}
+    </div>
+    ${d.metrics ? `<div class="sim-metrics-strip">${d.metrics.slice(0,3).map(m => `<div class="sim-metric ${m.type||''}"><div class="sim-metric-val">${m.value}</div><div class="sim-metric-label">${m.label}</div></div>`).join('')}</div>` : ''}` : ''}`,
+};
+
+async function generateSimulation() {
+  const btn = document.getElementById('simGenerateBtn');
+  const emptyState = document.getElementById('simEmptyState');
+  const output = document.getElementById('simOutput');
+  
+  btn.disabled = true;
+  btn.classList.add('running');
+  if (emptyState) emptyState.style.display = 'none';
+  if (output) { output.style.display = 'flex'; output.style.flexDirection = 'column'; output.innerHTML = '<div style="flex:1;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:12px;font-style:italic;">Generating simulation...</div>'; }
+  
+  try {
+    const prompt = buildSimPrompt();
+    
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    
+    if (!response.ok) throw new Error('API error: ' + response.status);
+    
+    const data = await response.json();
+    const text = data.content?.find(b => b.type === 'text')?.text || '';
+    
+    // Parse JSON — strip any markdown fences
+    const clean = text.replace(/```json\n?|\n?```/g, '').trim();
+    const sim = JSON.parse(clean);
+    
+    renderSimulation(sim);
+    
+  } catch (err) {
+    if (output) output.innerHTML = `<div style="padding:24px;color:rgba(241,60,71,0.7);font-size:12px;">Generation error: ${err.message}<br><br>Check API connectivity.</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('running');
+  }
+}
+
+function renderSimulation(d) {
+  const output = document.getElementById('simOutput');
+  if (!output) return;
+  
+  const template = PATTERN_TEMPLATES[d.pattern_type] || PATTERN_TEMPLATES[simPatternType] || PATTERN_TEMPLATES.monitoring;
+  const bodyContent = template(d);
+  
+  output.innerHTML = `
+    <div class="sim-app">
+      <div class="sim-app-header">
+        <div>
+          <div class="sim-app-title">${d.system_name || 'AI Operations System'}</div>
+          <div class="sim-app-subtitle">${d.persona || ''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="sim-app-badge">${d.vertical || ''}</span>
+          <div class="sim-app-live"><div class="sim-live-dot"></div>Live</div>
+        </div>
+      </div>
+      <div class="sim-app-body">
+        ${bodyContent}
+      </div>
+      <div class="sim-approval-bar">
+        <div class="sim-approval-text">${d.hitl_statement || 'Nothing is actioned without your approval.'}</div>
+        <button class="sim-approval-btn" onclick="this.textContent='Approved ✓';this.style.background='#38BB94'">${d.approval_action || 'Approve & Send'}</button>
+      </div>
+      <div class="sim-what-ai-did">
+        <span class="sim-ai-label">What AI did</span>
+        <span class="sim-ai-text">${d.what_ai_did || ''}</span>
+      </div>
+    </div>`;
+}
 
 </script>
 </body>
