@@ -4311,6 +4311,7 @@ let launcherVertical = null;
 let launcherPattern = null;
 let currentPocUrl = null;
 let TOTAL_SLIDES = 5;
+let activeSlideSequence = [];
 
 // ── BEAT NAV HIGHLIGHT ──
 const beats = ['beat-1','beat-2','beat-3','beat-4','beat-5'];
@@ -4579,6 +4580,7 @@ function applyArchetypeToClient(archetype) {
   // show only slides in this sequence
   const activeSlides = seq.map(id => slideMap[id]).filter(Boolean);
   activeSlides.forEach(s => { s.style.display = 'flex'; });
+  activeSlideSequence = activeSlides; // store in sequence order
   if (activeSlides[0]) activeSlides[0].classList.add('active');
 
   // rebuild dots
@@ -4605,6 +4607,10 @@ function applyArchetypeToClient(archetype) {
 }
 
 function getActiveClientSlides() {
+  // Use stored sequence order (set by applyArchetypeToClient) — DOM order is unreliable
+  if (activeSlideSequence.length > 0) {
+    return activeSlideSequence.filter(s => s && s.style.display === 'flex');
+  }
   return Array.from(document.querySelectorAll('.client-slide')).filter(s => s.style.display === 'flex');
 }
 
