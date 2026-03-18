@@ -2325,6 +2325,114 @@ body {
   );
 }
 
+
+/* ══ SLIDE 0 — CONTEXT "WE KNOW YOU" ══ */
+.slide-context {
+  background: #08080F;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 24px 56px 20px;
+  overflow-y: auto; scrollbar-width: none;
+}
+.slide-context::-webkit-scrollbar { display: none; }
+
+.ctx-slide-inner {
+  width: 100%; display: flex; flex-direction: column; gap: 14px;
+}
+
+.ctx-header { flex-shrink: 0; }
+.ctx-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(81,95,252,0.7);
+  font-family: 'Geist Mono', monospace; margin-bottom: 6px;
+}
+.ctx-client-name {
+  font-size: clamp(28px, 4vw, 48px); font-weight: 700;
+  color: #fff; letter-spacing: -0.025em; line-height: 1.05;
+  margin-bottom: 6px;
+}
+.ctx-company-sub {
+  font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.5;
+  max-width: 700px;
+}
+
+.ctx-panels {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 12px; flex-shrink: 0;
+}
+.ctx-panel {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 14px 16px;
+}
+.ctx-panel-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.25);
+  font-family: 'Geist Mono', monospace; margin-bottom: 10px;
+}
+
+/* Panel A — brand chips */
+.ctx-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.ctx-brand-chip {
+  background: rgba(81,95,252,0.1); border: 1px solid rgba(81,95,252,0.25);
+  border-radius: 5px; padding: 4px 10px;
+  font-size: 11px; font-weight: 600; color: rgba(130,143,255,0.9);
+  font-family: 'Geist', sans-serif;
+}
+.ctx-chip-overflow {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px; padding: 4px 10px;
+  font-size: 10px; color: rgba(255,255,255,0.3);
+}
+
+/* Panel B — pressure + quote */
+.ctx-pressure { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 10px; }
+.ctx-quote {
+  border-left: 2px solid rgba(81,95,252,0.5);
+  padding: 8px 12px; margin-top: 8px;
+  background: rgba(81,95,252,0.06); border-radius: 0 6px 6px 0;
+}
+.ctx-quote-text {
+  font-size: 11.5px; font-style: italic; color: rgba(255,255,255,0.7);
+  line-height: 1.55; margin-bottom: 5px;
+}
+.ctx-quote-attr { font-size: 9.5px; color: rgba(81,95,252,0.6); font-family: 'Geist Mono', monospace; }
+
+/* Panel C — people */
+.ctx-people { display: flex; flex-direction: column; gap: 7px; }
+.ctx-person-row { display: flex; align-items: center; gap: 9px; }
+.ctx-avatar {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(81,95,252,0.15); border: 1px solid rgba(81,95,252,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: rgba(130,143,255,0.9);
+  font-family: 'Geist Mono', monospace;
+}
+.ctx-person-name { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.ctx-person-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+/* Panel D — signals */
+.ctx-signals-panel {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 14px 16px; flex-shrink: 0;
+}
+.ctx-signal-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.ctx-signal-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,160,48,0.06); border: 1px solid rgba(255,160,48,0.2);
+  border-radius: 6px; padding: 5px 11px;
+  font-size: 11px; color: rgba(255,255,255,0.55);
+}
+.ctx-signal-dot { width: 5px; height: 5px; border-radius: 50%; background: #FFA030; flex-shrink: 0; }
+.ctx-prior-ai { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; font-style: italic; }
+.ctx-prior-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.2); font-family: 'Geist Mono', monospace; margin-right: 6px; font-style: normal; }
+
+/* Footer */
+.ctx-footer {
+  font-size: 11.5px; color: rgba(255,255,255,0.25); font-style: italic;
+  border-top: 1px solid rgba(255,255,255,0.07); padding-top: 10px;
+  flex-shrink: 0;
+}
+
 </style>
 </head>
 <body>
@@ -3606,6 +3714,63 @@ name: Meridian Capital Partners
   <!-- slides -->
   <div class="client-slides" id="clientSlides">
 
+
+    <!-- SLIDE 0: CONTEXT — "We Know You" — conditional on CONTEXT data -->
+    <div class="client-slide slide-context" id="clientContextSlide" style="display:none;">
+      <div class="ctx-slide-inner">
+
+        <!-- Header -->
+        <div class="ctx-header">
+          <div class="ctx-eyebrow" id="ctxEyebrow">Session Context</div>
+          <div class="ctx-client-name" id="ctxClientName">—</div>
+          <div class="ctx-company-sub" id="ctxCompanySub"></div>
+        </div>
+
+        <!-- Three columns -->
+        <div class="ctx-panels" id="ctxPanels">
+
+          <!-- Panel A: Their Brands -->
+          <div class="ctx-panel" id="ctxPanelA">
+            <div class="ctx-panel-label">Their brands</div>
+            <div class="ctx-chips" id="ctxBrandChips"></div>
+          </div>
+
+          <!-- Panel B: Why We're Here -->
+          <div class="ctx-panel" id="ctxPanelB">
+            <div class="ctx-panel-label">Why we're here</div>
+            <div class="ctx-pressure" id="ctxPressure"></div>
+            <div class="ctx-quote" id="ctxQuote" style="display:none;">
+              <div class="ctx-quote-text" id="ctxQuoteText"></div>
+              <div class="ctx-quote-attr" id="ctxQuoteAttr"></div>
+            </div>
+          </div>
+
+          <!-- Panel C: Who's In The Room -->
+          <div class="ctx-panel" id="ctxPanelC">
+            <div class="ctx-panel-label">In the room</div>
+            <div class="ctx-people" id="ctxPeople"></div>
+          </div>
+
+        </div>
+
+        <!-- Panel D: What We've Heard -->
+        <div class="ctx-signals-panel" id="ctxPanelD">
+          <div class="ctx-panel-label">What we've heard</div>
+          <div class="ctx-signal-chips" id="ctxSignalChips"></div>
+          <div class="ctx-prior-ai" id="ctxPriorAi" style="display:none;">
+            <span class="ctx-prior-label">Previously tried:</span>
+            <span id="ctxPriorAiText"></span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="ctx-footer" id="ctxFooter" style="display:none;">
+          <span id="ctxFooterText"></span>
+        </div>
+
+      </div>
+    </div>
+
     <!-- SLIDE 1: OPENING -->
     <div class="client-slide slide-opening active" data-slide="1">
       <div class="opening-inner">
@@ -4380,17 +4545,19 @@ function applyArchetypeToClient(archetype) {
   });
 
   // define slide sequence per archetype
+  const contextPrefix = (document.getElementById('clientContextSlide')?.style.display !== 'none') ? ['base-context'] : [];
   const sequences = {
-    open:  ['base-opening', 'base-shift', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    peer:  ['base-opening', 'peer-landscape', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    nav:   ['base-opening', 'base-shift', 'nav-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    infra: ['base-opening', 'infra-arch', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    open:  [...contextPrefix, 'base-opening', 'base-shift', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    peer:  [...contextPrefix, 'base-opening', 'peer-landscape', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    nav:   [...contextPrefix, 'base-opening', 'base-shift', 'nav-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    infra: [...contextPrefix, 'base-opening', 'infra-arch', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
   };
 
   const seq = sequences[archetype] || sequences.open;
 
   // build active slide list by mapping slide IDs
   const slideMap = {
+    'base-context':    document.getElementById('clientContextSlide'),
     'base-opening':    document.querySelector('.client-slide.slide-opening'),
     'base-shift':      document.querySelector('.client-slide.slide-shift:not([data-archetype])'),
     'base-opp':        document.querySelector('.client-slide.slide-opp:not([data-archetype])'),
@@ -6044,7 +6211,7 @@ function parseIntelBrief(md) {
 
     // Key: value pairs (skip for list sections)
     const kvMatch = trimmed.match(/^([a-zA-Z_]+):\s*(.*)$/);
-    if (kvMatch && section && section !== 'signals' && section !== 'patterns') {
+    if (kvMatch && section && section !== 'signals' && section !== 'patterns' && section !== 'tashde') {
       const key = kvMatch[1].toLowerCase();
       const val = kvMatch[2].trim();
 
@@ -6287,6 +6454,30 @@ function applyBrief(p) {
     }
   }
 
+  // Render context slide from parsed data
+  const ctx = p.context || {};
+  const clientData = p.client || {};
+  const challengeData = p.challenge || {};
+  const archData = p.archetype || {};
+  const demoData = p.demo || {};
+  const vertData = p.vertical || {};
+
+  renderContextSlide({
+    name: clientData.name || '',
+    date: clientData.date || '',
+    people: clientData.people || '',
+    company_overview: ctx.company_overview || '',
+    products: ctx.products || '',
+    commercial_pressure: ctx.commercial_pressure || '',
+    their_language: ctx.their_language || '',
+    prior_ai: ctx.prior_ai || '',
+    primary_challenge: challengeData.primary_challenge || '',
+    archetype_reason: archData.archetype_reason || '',
+    demo_context: demoData.demo_context || '',
+    vertical_note: vertData.vertical_note || '',
+    signals: p.signals || [],
+  });
+
   // Scroll to top of PREP
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -6502,6 +6693,133 @@ function triggerClientMode() {
   launchSessionAnimation(name, () => {
     enterClientMode();
   });
+}
+
+
+// ══ CONTEXT SLIDE (SLIDE 0) ══
+let contextSlideData = null;
+
+function renderContextSlide(data) {
+  contextSlideData = data;
+  const slide = document.getElementById('clientContextSlide');
+  if (!slide) return;
+
+  const hasContent = data.company_overview || data.products || data.their_language
+    || data.commercial_pressure || (data.signals && data.signals.length > 0);
+  if (!hasContent) { slide.style.display = 'none'; return; }
+
+  // Eyebrow + client name
+  const dateStr = data.date || new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+  const eyebrow = document.getElementById('ctxEyebrow');
+  if (eyebrow) eyebrow.textContent = 'Session Context · ' + dateStr;
+
+  const nameEl = document.getElementById('ctxClientName');
+  if (nameEl) nameEl.textContent = data.name || 'Working Session';
+
+  const subEl = document.getElementById('ctxCompanySub');
+  if (subEl) subEl.textContent = data.company_overview || data.vertical_note || '';
+
+  // Panel A — brands
+  const panelA = document.getElementById('ctxPanelA');
+  const brandChips = document.getElementById('ctxBrandChips');
+  if (data.products && brandChips) {
+    const brands = data.products.split('|').map(s => s.trim()).filter(Boolean);
+    const show = brands.slice(0, 8);
+    const overflow = brands.length - 8;
+    brandChips.innerHTML = show.map(b =>
+      `<span class="ctx-brand-chip">${b}</span>`
+    ).join('') + (overflow > 0 ? `<span class="ctx-chip-overflow">+${overflow} more</span>` : '');
+    if (panelA) panelA.style.display = '';
+  } else if (panelA) panelA.style.display = 'none';
+
+  // Panel B — pressure + quote
+  const panelB = document.getElementById('ctxPanelB');
+  const pressureEl = document.getElementById('ctxPressure');
+  const quoteEl = document.getElementById('ctxQuote');
+  const quoteText = document.getElementById('ctxQuoteText');
+  const quoteAttr = document.getElementById('ctxQuoteAttr');
+
+  let hasPanelB = false;
+  if (data.commercial_pressure && pressureEl) {
+    pressureEl.textContent = data.commercial_pressure;
+    hasPanelB = true;
+  } else if (data.primary_challenge && pressureEl) {
+    pressureEl.textContent = data.primary_challenge;
+    hasPanelB = true;
+  }
+
+  if (data.their_language && quoteEl && quoteText && quoteAttr) {
+    // Split on em dash for attribution
+    const parts = data.their_language.split(/\s*—\s*/);
+    const quote = parts[0].replace(/^[""]|[""]$/g, '').trim();
+    const attr = parts.slice(1).join(' — ').trim();
+    quoteText.textContent = '"' + quote + '"';
+    quoteAttr.textContent = attr ? '— ' + attr : '';
+    quoteEl.style.display = '';
+    hasPanelB = true;
+  } else if (quoteEl) quoteEl.style.display = 'none';
+
+  if (panelB) panelB.style.display = hasPanelB ? '' : 'none';
+
+  // Panel C — people
+  const panelC = document.getElementById('ctxPanelC');
+  const peopleEl = document.getElementById('ctxPeople');
+  if (data.people && peopleEl) {
+    const people = data.people.split(',').map(s => s.trim()).filter(Boolean).slice(0, 6);
+    peopleEl.innerHTML = people.map(p => {
+      const parts = p.split('·').map(s => s.trim());
+      const name = parts[0] || p;
+      const role = parts[1] || '';
+      const initials = name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+      return `<div class="ctx-person-row">
+        <div class="ctx-avatar">${initials}</div>
+        <div><div class="ctx-person-name">${name}</div>${role ? `<div class="ctx-person-role">${role}</div>` : ''}</div>
+      </div>`;
+    }).join('');
+    if (panelC) panelC.style.display = '';
+  } else if (panelC) panelC.style.display = 'none';
+
+  // Panel D — signals
+  const panelD = document.getElementById('ctxPanelD');
+  const signalChipsEl = document.getElementById('ctxSignalChips');
+  const priorAiEl = document.getElementById('ctxPriorAi');
+  const priorAiText = document.getElementById('ctxPriorAiText');
+
+  let hasPanelD = false;
+  if (data.signals && data.signals.length > 0 && signalChipsEl) {
+    signalChipsEl.innerHTML = data.signals.map(s =>
+      `<div class="ctx-signal-chip"><div class="ctx-signal-dot"></div>${s.text || s}</div>`
+    ).join('');
+    hasPanelD = true;
+  }
+
+  if (data.prior_ai && priorAiEl && priorAiText) {
+    priorAiText.textContent = data.prior_ai;
+    priorAiEl.style.display = '';
+    hasPanelD = true;
+  } else if (priorAiEl) priorAiEl.style.display = 'none';
+
+  if (panelD) panelD.style.display = hasPanelD ? '' : 'none';
+
+  // Footer
+  const footerEl = document.getElementById('ctxFooter');
+  const footerText = document.getElementById('ctxFooterText');
+  const footerContent = data.demo_context
+    ? data.demo_context.split('.')[0] + '.'
+    : data.archetype_reason || '';
+  if (footerContent && footerEl && footerText) {
+    footerText.textContent = footerContent;
+    footerEl.style.display = '';
+  } else if (footerEl) footerEl.style.display = 'none';
+
+  // Show the slide
+  slide.style.display = 'flex';
+}
+
+function hasContextData(parsed) {
+  const ctx = parsed.context || {};
+  return !!(ctx.company_overview || ctx.products || ctx.their_language ||
+            ctx.commercial_pressure || (parsed.signals && parsed.signals.length > 0));
 }
 
 </script>
