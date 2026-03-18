@@ -1567,6 +1567,29 @@ body {
 .hitl-banner-title { font-size: 11.5px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
 .hitl-banner-body { font-size: 11px; color: var(--text-dim); line-height: 1.55; }
 
+
+/* ══ PATTERN SLIDE DEFAULT STATE ══ */
+.pc-default-card {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 16px 16px; text-align: left;
+}
+.pc-dc-area {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(81,95,252,0.6);
+  font-family: 'Geist Mono', monospace; margin-bottom: 6px;
+}
+.pc-dc-name {
+  font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.55);
+  margin-bottom: 6px; line-height: 1.3;
+}
+.pc-dc-eg {
+  font-size: 10.5px; color: rgba(255,255,255,0.25); line-height: 1.4;
+}
+.pc-no-patterns {
+  grid-column: 1/-1; display: flex; flex-direction: column;
+  align-items: center; padding: 20px 0;
+}
+
 </style>
 </head>
 <body>
@@ -2715,10 +2738,13 @@ let clientSlideIndex = 0;
 let TOTAL_SLIDES = 5;
 
 function enterClientMode() {
-  // sync client name
-  const nameInput = document.querySelector('.cs-input');
-  const name = nameInput ? nameInput.value.trim() : '';
+  // sync client name — get first cs-input (Client field)
+  const allNameInputs = document.querySelectorAll('.cs-input');
+  const name = allNameInputs.length > 0 ? allNameInputs[0].value.trim() : '';
   document.getElementById('clientSlideName').textContent = name || 'Working Session';
+  // Also update room mode client name
+  const roomClientEl = document.getElementById('roomClientName');
+  if (roomClientEl) roomClientEl.textContent = name || '—';
 
   // sync date
   const today = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
@@ -2753,9 +2779,9 @@ function applyArchetypeToClient(archetype) {
   // define slide sequence per archetype
   const sequences = {
     open:  ['base-opening', 'base-shift', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    peer:  ['base-opening', 'peer-landscape', 'base-patterns', 'base-opp', 'base-demo', 'base-how', 'base-next'],
+    peer:  ['base-opening', 'peer-landscape', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
     nav:   ['base-opening', 'base-shift', 'nav-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    infra: ['base-opening', 'infra-arch', 'base-shift', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    infra: ['base-opening', 'infra-arch', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
   };
 
   const seq = sequences[archetype] || sequences.open;
@@ -3785,7 +3811,20 @@ async function runDemo() {
       <div class="slide-headline">Your stack. <em>Our pattern recognition.</em></div>
       <div class="slide-sub" style="margin-bottom:24px;">Every system you just named maps to something we've built before. Here's what that looks like for you.</div>
       <div class="pattern-client-grid" id="clientPatternGrid">
-        <div class="pc-no-patterns" id="pcNoPatterns">Tag your tech stack in PREP to populate this slide</div>
+        <div class="pc-no-patterns" id="pcNoPatterns">
+  <div style="font-size:14px;color:rgba(255,255,255,0.25);margin-bottom:16px;font-style:italic;">Tag your tech stack in PREP to highlight specific patterns</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:900px;">
+    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Process automation</div><div class="pc-dc-eg">Goodman · SSA · News UK</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Continuous monitoring</div><div class="pc-dc-eg">Arcmont · Lingotto · LoganAir</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Document intelligence</div><div class="pc-dc-eg">Arcmont · Goodman · ACV</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Intelligence briefing</div><div class="pc-dc-eg">Lingotto · LoganAir · News UK</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Document generation</div><div class="pc-dc-eg">Itaú · Goodman · SSA</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Fin</div><div class="pc-dc-name">Mandate &amp; covenant monitoring</div><div class="pc-dc-eg">Arcmont · Lingotto · SSA</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Fin</div><div class="pc-dc-name">Reconciliation automation</div><div class="pc-dc-eg">Itaú · Goodman</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Talent</div><div class="pc-dc-name">Knowledge &amp; Q&amp;A agent</div><div class="pc-dc-eg">Goodman · LoganAir · Novant</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Account health scoring</div><div class="pc-dc-eg">SSA</div></div>
+  </div>
+</div>
         <!-- P1 -->
         <div class="pc-pattern-card" id="cpc-1">
           <div class="pc-pattern-num">P1 · Operations</div>
