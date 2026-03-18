@@ -2873,7 +2873,7 @@ function applyArchetypeToClient(archetype) {
 
   // show only slides in this sequence
   const activeSlides = seq.map(id => slideMap[id]).filter(Boolean);
-  activeSlides.forEach(s => { s.style.display = ''; });
+  activeSlides.forEach(s => { s.style.display = 'flex'; });
   if (activeSlides[0]) activeSlides[0].classList.add('active');
 
   // rebuild dots
@@ -2900,7 +2900,7 @@ function applyArchetypeToClient(archetype) {
 }
 
 function getActiveClientSlides() {
-  return Array.from(document.querySelectorAll('.client-slide')).filter(s => s.style.display !== 'none');
+  return Array.from(document.querySelectorAll('.client-slide')).filter(s => s.style.display === 'flex');
 }
 
 function exitClientMode() {
@@ -3947,7 +3947,7 @@ async function runDemo() {
 
 
     <!-- SLIDE: PATTERN (dynamic — all archetypes) -->
-    <div class="client-slide slide-patterns" data-archetype="pattern-slide" id="clientPatternSlide">
+    <div class="client-slide slide-patterns" id="clientPatternSlide">
 
       <!-- discreet hover panel for facilitator -->
       <div class="pattern-adjust-panel" id="patternAdjustPanel">
