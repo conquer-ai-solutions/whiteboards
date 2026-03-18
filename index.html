@@ -1710,6 +1710,22 @@ body {
 
 
 <!-- TECH STACK STRIP -->
+
+<!-- VERTICAL SELECTOR -->
+<div class="vertical-selector">
+  <div class="vertical-selector-label">Client Vertical <span>— drives signal chips, opp-map labels &amp; POC launcher</span></div>
+  <div class="vertical-cards">
+    <div class="vertical-card" id="vcard-re" onclick="selectVertical('re',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">🏢</div><div class="vertical-card-name">Real Estate</div><div class="vertical-card-poc">Goodman</div></div>
+    <div class="vertical-card" id="vcard-pc" onclick="selectVertical('pc',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">📊</div><div class="vertical-card-name">Private Credit</div><div class="vertical-card-poc">Arcmont</div></div>
+    <div class="vertical-card" id="vcard-av" onclick="selectVertical('av',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">🚗</div><div class="vertical-card-name">Automotive</div><div class="vertical-card-poc">ACV</div></div>
+    <div class="vertical-card" id="vcard-ai" onclick="selectVertical('ai',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">✈️</div><div class="vertical-card-name">Aviation</div><div class="vertical-card-poc">LoganAir</div></div>
+    <div class="vertical-card" id="vcard-st" onclick="selectVertical('st',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">👥</div><div class="vertical-card-name">Staffing</div><div class="vertical-card-poc">SSA / CDP</div></div>
+    <div class="vertical-card" id="vcard-me" onclick="selectVertical('me',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">📰</div><div class="vertical-card-name">Media</div><div class="vertical-card-poc">News UK</div></div>
+    <div class="vertical-card" id="vcard-am" onclick="selectVertical('am',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">💼</div><div class="vertical-card-name">Asset Management</div><div class="vertical-card-poc">Lingotto</div></div>
+    <div class="vertical-card" id="vcard-ib" onclick="selectVertical('ib',this)"><div class="vertical-check">✓</div><div class="vertical-card-icon">🏦</div><div class="vertical-card-name">Inv. Banking</div><div class="vertical-card-poc">Itaú BBA</div></div>
+  </div>
+</div>
+
 <div class="tech-strip">
   <div class="tech-strip-label">Known tech stack</div>
   <input class="tech-strip-input" id="techStackInput" type="text" placeholder="Type systems you know they use — e.g. Salesforce, Yardi, Bloomberg, Outlook, AWS, GCP, Copilot..." oninput="parseTechTags(this.value)">
@@ -1831,18 +1847,18 @@ body {
       </div>
       <div class="listen-signals">
         <div class="signal-label">Process signals</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Manual, repetitive work being done at volume</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Process that depends on one person's knowledge</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Handoffs where things get lost or delayed</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Same transformation happening the same way every time</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Workaround that has become the official process</div>
+        <div class="signal-chip" data-opp="ops-0" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Manual, repetitive work being done at volume</div>
+        <div class="signal-chip" data-opp="tal-3" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Process that depends on one person's knowledge</div>
+        <div class="signal-chip" data-opp="ops-3" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Handoffs where things get lost or delayed</div>
+        <div class="signal-chip" data-opp="ops-2" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Same transformation happening the same way every time</div>
+        <div class="signal-chip" data-opp="ops-4" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Workaround that has become the official process</div>
       </div>
       <div class="listen-signals" style="border-bottom:1px solid var(--border);">
         <div class="signal-label">Commercial signals</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Revenue or pipeline moving slower than it should</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>High-performers doing work below their level</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Decisions being made without good enough data</div>
-        <div class="signal-chip" onclick="this.classList.toggle('tagged')"><span class="chip-dot"></span>Compliance or risk exposure that's managed manually</div>
+        <div class="signal-chip" data-opp="com-0" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Revenue or pipeline moving slower than it should</div>
+        <div class="signal-chip" data-opp="tal-2" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>High-performers doing work below their level</div>
+        <div class="signal-chip" data-opp="com-0" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Decisions being made without good enough data</div>
+        <div class="signal-chip" data-opp="fin-2" onclick="this.classList.toggle('tagged');tagSignal(this)"><span class="chip-dot"></span>Compliance or risk exposure that's managed manually</div>
       </div>
       <div class="notes-area">
         <div class="notes-label">Live notes — their words, not yours</div>
@@ -2965,11 +2981,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') exitClientMode();
 });
 
-// sync opp map highlights from prep beat 3 to client slide 3
-document.addEventListener('click', (e) => {
-  const oppItem = e.target.closest('.opp-item.highlighted, .opp-item');
-  // handled inline on prep opp items already
-});
+// signal-to-opp sync now handled by tagSignal() function above
 
 
 // ══ ARCHETYPE SELECTOR ══
@@ -3473,6 +3485,514 @@ async function runDemo() {
     dot.classList.remove('streaming');
   }
 }
+
+
+// ══════════════════════════════════════════════════
+// COMBINATION MATRIX — vertical + pattern → POC
+// ══════════════════════════════════════════════════
+const COMBO_MATRIX = {
+  're': {
+    label: 'Real Estate', poc_base: 'https://conquer-ai-solutions.github.io/goomansmaintenance/',
+    patterns: [
+      { code:'O1', name:'Continuous Monitoring', persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
+        exception:'HVAC cooling failure WO-2026-0847, CVS Pharmacy Suite 114',
+        exSub:'Lease §12.4 — AI classified as tenant responsibility (96% confidence). Work order pre-populated, awaiting Ian\'s dispatch approval.',
+        act1:'Maintenance inbox monitored continuously. Exception surfaced the moment the ticket arrived — before Ian opened his email.',
+        act2:'AI cross-references Yardi and reads Lease §12.4 PDF. Tenant responsibility determined at 96% confidence. No manual research.',
+        act3:'Pre-populated work order ready for Ian\'s single-click dispatch. AI did the classification. Ian makes the call.',
+        hitl:'"AI does the classification. Ian makes the dispatch decision." — Human explicitly at every action point.' },
+      { code:'O3', name:'Document Intelligence', persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
+        exception:'Lease §12.4 ambiguity — tenant vs landlord responsibility for HVAC unit replacement',
+        exSub:'CVS Pharmacy lease. AI extracted relevant clause, determined responsibility, confidence 96%. Manual lookup would take 45 minutes.',
+        act1:'Lease PDF monitoring active. Relevant clauses indexed at origination, not at point of query.',
+        act2:'Clause extraction — §12.4 surfaces. AI interprets tenant vs landlord scope. Confidence score shown.',
+        act3:'Determination ready with source clause cited. Ian reviews extract and approves classification.',
+        hitl:'"Lease interpretation surfaced. Ian reviews before dispatch is confirmed."' },
+      { code:'O5', name:'Throughput Analytics', persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
+        exception:'Capital plan: 3 HVAC units approaching end of life — EPA R-410A phase-down affecting replacement timeline',
+        exSub:'AI surfaced regulatory signal in Capital Plan view. Replacement timeline brought forward by 18 months. Manual planning would miss this.',
+        act1:'Asset lifecycle monitoring running continuously. Regulatory signals (EPA AIM Act) ingested automatically.',
+        act2:'Contractor scorecard surfaces performance variance. Capital exposure calculated from asset age + regulatory timeline.',
+        act3:'Capital plan updated with regulatory-adjusted timelines. Ian reviews and approves revised schedule.',
+        hitl:'"Regulatory signals are surfaced. Capital plan decisions remain with Ian."' }
+    ]
+  },
+  'pc': {
+    label: 'Private Credit', poc_base: 'https://dijon-disco-68516268.figma.site/',
+    patterns: [
+      { code:'F1', name:'Covenant Monitoring', persona:'Credit Analyst — Arcmont Asset Management',
+        exception:'Nordic Logistics AB — BREACH: leverage 5.10x vs 4.50x max (DLF IV fund)',
+        exSub:'Agent ran 05:30 CET. 18 covenants tested across 6 borrowers across 4 funds. One breach, one watch (Meridian 1.85x vs 2.00x minimum).',
+        act1:'Agent runs 05:30–08:01 CET daily. Tests 18 covenants before the credit team arrives at their desks.',
+        act2:'Nordic Logistics: leverage covenant breached. Meridian: interest cover on watch. Full context pre-populated.',
+        act3:'Escalation routed to credit analyst with waiver recommendation. Analyst reviews and approves next action.',
+        hitl:'"Operates continuously, not on a schedule. Every covenant test logged. Analyst decides on escalation."' },
+      { code:'F4', name:'Audit Trail & Governance', persona:'Credit Analyst — Arcmont Asset Management',
+        exception:'Append-only compliance log — every covenant test, every decision, every waiver discussion recorded',
+        exSub:'Full audit trail available for LP review, regulatory inspection, or internal governance. No manual record-keeping required.',
+        act1:'Every agent run timestamped. Every covenant result recorded. Immutable from point of creation.',
+        act2:'Waiver discussions, override decisions, and escalation paths logged with actor and timestamp.',
+        act3:'Compliance log surfaced on demand for LP review or regulatory audit. No reconstruction required.',
+        hitl:'"Every AI action and human decision is a named, timestamped entry in the log."' }
+    ]
+  },
+  'av': {
+    label: 'Automotive (Title Ops)', poc_base: 'https://follow-push-13619011.figma.site/',
+    patterns: [
+      { code:'O1', name:'Exception Detection', persona:'Sarah Mitchell, Ops Supervisor — ACV Auctions',
+        exception:'247 outstanding titles. 34 beyond 10-day SLA. $4.2M revenue at risk.',
+        exSub:'Priority queue: top case scored 94, $18,400 exposure, 14 days outstanding. No Response 48%, Missing Title 25%, Incorrect Docs 14%.',
+        act1:'Title queue monitored continuously. 247 cases scored and ranked by exposure and SLA status in real time.',
+        act2:'Exception type breakdown surfaces: No Response driving 48% of breaches. Root cause identified without manual analysis.',
+        act3:'Sarah reviews prioritised queue. Top 15 cases surfaced for her attention. She approves actions per case.',
+        hitl:'"AI scores and ranks. Sarah works through the queue. Every action approved by Sarah."' },
+      { code:'O2', name:'Workflow Orchestration', persona:'Sarah Mitchell, Ops Supervisor — ACV Auctions',
+        exception:'Case #94712 — Missing Title, $18,400 exposure, 14 days outstanding, dealer non-responsive',
+        exSub:'AI routed case to Sarah with full context: dealer contact history, outstanding amount, SLA status, recommended next action.',
+        act1:'Cases auto-routed to correct queue with enrichment complete. Sarah receives a package, not a raw ticket.',
+        act2:'Dealer contact history, document checklist, and recommended action pre-populated for each case.',
+        act3:'Sarah reviews pre-populated action recommendation and approves or overrides. One click per case.',
+        hitl:'"AI does the routing and enrichment. Sarah approves every action."' }
+    ]
+  },
+  'ai': {
+    label: 'Aviation', poc_base: 'https://race-safe-58458546.figma.site/',
+    patterns: [
+      { code:'O1', name:'Exception Detection', persona:'H. Quinn, Ops Projects — LoganAir',
+        exception:'SR1407 GLA→SYY — First Officer sick report 05:47. NHS Lifeline route. EU261 applies.',
+        exSub:'37-minute countdown to crew briefing. Replacement FO needed. AI assessed EU261 liability automatically. RADO cross-referenced.',
+        act1:'Crew management system (RADO) monitored continuously. Sick report triggers immediate assessment before Ops team opens their systems.',
+        act2:'NHS Lifeline minimum crew requirement checked. EU261 liability assessed. Replacement FO options surfaced from standby pool.',
+        act3:'H. Quinn reviews disruption panel with all context pre-populated. Approves replacement assignment. Clock stopped.',
+        hitl:'"AI assesses, routes, and pre-populates. H. Quinn makes the crew decision."' },
+      { code:'F3', name:'Regulatory Monitoring', persona:'H. Quinn, Ops Projects — LoganAir',
+        exception:'Fatigue heatmap: LSI and ABZ oil & gas routes flagged above threshold (rolling 90-day)',
+        exSub:'EU261 auto-assessed on every disruption. Fatigue rule thresholds monitored by route by week. Patterns surface before incidents.',
+        act1:'Fatigue compliance monitored across all routes on rolling 90-day basis. Patterns identified before individual incidents occur.',
+        act2:'LSI and ABZ routes flagged above average — colour-coded heatmap. Root cause analysis available per route per crew group.',
+        act3:'H. Quinn reviews compliance view and determines roster adjustments. AI surfaces the pattern; human determines the response.',
+        hitl:'"Compliance patterns surfaced continuously. Roster decisions remain with Operations."' },
+      { code:'F5', name:'Scenario Modelling', persona:'H. Quinn, Ops Projects — LoganAir',
+        exception:'FO attrition rate: 12% projected. Current pipeline insufficient for 12-month safe minimum staffing.',
+        exSub:'Adjustable model: FO attrition rate → recruitment lead time → training pipeline → 12-month headcount projection. Interactive in real time.',
+        act1:'Headcount model built from live RADO data. Current trajectory projected forward 12 months automatically.',
+        act2:'Scenario: adjust FO attrition rate. Model shows staffing gap appearing in month 8 at current recruitment pace.',
+        act3:'H. Quinn adjusts variables and reviews projected outcomes. Board-ready scenario output available for planning sign-off.',
+        hitl:'"Model runs automatically. H. Quinn tests scenarios and approves the planning recommendation."' }
+    ]
+  },
+  'st': {
+    label: 'Staffing / Workforce', poc_base: 'https://conquer-ai-solutions.github.io/ssa/',
+    patterns: [
+      { code:'C1', name:'Account Health Scoring', persona:'Alex Kim, Account Manager — Clearpath Workforce Solutions',
+        exception:'Hartwell Group — risk score 78. Ticket vol +40%. NPS 5/10 (was 8/10). Portal dark 14 days. Competitor mention detected.',
+        exSub:'Sector-calibrated threshold. Signal weight for ticket volume: 0.38 for Financial Services at this size. Model confidence: 84%. Revenue at risk: £46,700 ARR.',
+        act1:'Nightly scoring across all accounts. Hartwell Group crosses threshold overnight — Alex sees it when she opens CDP in the morning.',
+        act2:'NLP analysis of ticket #4791 surfaces competitor mention in email thread. Tone analysis: "markedly less collaborative".',
+        act3:'AI-drafted outreach presented to Alex for review. Nothing is sent until Alex approves. Override captures outcome for model recalibration.',
+        hitl:'"Nothing is sent until you approve." — Strongest human-in-the-loop commitment in the portfolio.' },
+      { code:'CT2', name:'Root Cause Clustering', persona:'Sam Reeves, Head of Service Quality — Clearpath',
+        exception:'12 flagged accounts this month. Priority 1: Payroll Processing SLA driving 61% of at-risk accounts.',
+        exSub:'Addressing payroll SLA alone projected to reduce flagged accounts by ~58%. 4 root cause clusters identified with frequency and impact ranking.',
+        act1:'All flagged accounts analysed by NLP ticket taxonomy and SLA breach logs. Pattern identified without manual analysis.',
+        act2:'4 clusters: Payroll SLA 61%, Onboarding delay 22%, Support response 11%, Portal issues 6%. Ranked by projected impact of resolution.',
+        act3:'Sam reviews prioritised improvement agenda. Approves process changes and assigns owners. Root cause, not symptom.',
+        hitl:'"AI surfaces the pattern and ranks by impact. Sam decides on the process intervention."' },
+      { code:'F4', name:'Governance & Audit Trail', persona:'Jordan Hayes, COO — Clearpath Workforce Solutions',
+        exception:'Override log: M. Chen — manual call made instead of AI recommendation. Outcome logged. Model recalibrated.',
+        exSub:'81% model accuracy, ↑7pp since go-live. 3.8% churn rate ↓1.2pp over 6 months. Every recommendation, decision, and override logged.',
+        act1:'Every AI recommendation recorded with confidence score and signal weights. Immutable from point of generation.',
+        act2:'Human decisions — approve, edit, override — logged against each recommendation. Override outcomes feed model recalibration.',
+        act3:'Jordan reviews governance view: intervention success rate 82%, model improvement trajectory, revenue protected £420k.',
+        hitl:'"Every AI recommendation is logged. Human decisions — approve, edit, override — are recorded against each."' }
+    ]
+  },
+  'me': {
+    label: 'Media / News Publishing', poc_base: 'https://conquer-ai-solutions.github.io/editorial/',
+    patterns: [
+      { code:'O4', name:'Auto-Enrichment', persona:'JK (Wire Editor) — The Sun, News UK',
+        exception:'Canary Wharf explosion — AP Wire, 3m old, 180 words. Image needed. Sarah Hicks (Pic Editor) waiting 14 minutes.',
+        exSub:'Auto-enrichment: image match scored Strong/Fuzzy/None, 4 related articles found, tags generated, ClearDraft legal check running (~45s), rights clearance checked.',
+        act1:'Wire arrives. Enrichment runs automatically: image search, related articles, legal check, rights clearance. All before JK reads it.',
+        act2:'ClearDraft result arrives: UK digital rights cleared. Image match: strong on Canary Wharf archive. Related: 4 articles linked.',
+        act3:'JK reviews enriched wire package. Approves for Pic Editor. Three human approvals before publication: Wire → Pic → Duty Editor.',
+        hitl:'"AI enriches every wire before it reaches a human desk. Three approvals before publication."' },
+      { code:'O2', name:'Workflow Orchestration', persona:'Duty Editor — The Sun, News UK',
+        exception:'Approval queue: 6 stories pending. 3 legal checks in progress. Bank of England embargo until 12:00.',
+        exSub:'Wire-to-ready: 47s average (↓8s vs yesterday). Each story routed to correct desk with context pre-populated. Embargo flag active on BoE wire.',
+        act1:'All 6 wires in queue automatically routed by topic, urgency, and desk ownership. No manual triage.',
+        act2:'Embargo management: BoE wire held until 12:00 with countdown active. ClearDraft status shown per story.',
+        act3:'Duty Editor reviews queue. Approves each story in sequence. Single click per story with full context visible.',
+        hitl:'"AI routes and enriches. Duty Editor approves every publish decision."' },
+      { code:'O5', name:'Throughput Analytics', persona:'Managing Editor — The Sun, News UK',
+        exception:'Model evaluation: Artie API 87% vs SOLR 54% baseline. +33 points. 1,240 wires processed today, 94% AI-matched.',
+        exSub:'Braintrust evaluation running: Artie 87% (primary), AWS Bedrock 81% (fallback), Google Vertex 74% (test). Wire-to-ready 47s avg.',
+        act1:'Performance dashboard updated continuously. All four model variants benchmarked against the same wire corpus in real time.',
+        act2:'Artie API at 87% — 33 points above SOLR baseline. Evidence base for editorial AI investment available on demand.',
+        act3:'Managing Editor reviews model performance and platform config. Approves model selection and workflow rule changes.',
+        hitl:'"Model performance is transparent. Editorial decisions and workflow rules configured by the Managing Editor."' }
+    ]
+  },
+  'am': {
+    label: 'Asset Management', poc_base: 'https://conquer-ai-solutions.github.io/lingotto/',
+    patterns: [
+      { code:'F1', name:'Mandate Monitoring', persona:'Morgan Chen, Portfolio Manager — Lingotto',
+        exception:'NVDA single-stock 8.4% vs 8.0% mandate cap. Breach triggered by overnight price action.',
+        exSub:'Threshold alert at 07:58 GMT. PE allocation 14.2% vs 15.0% cap — one approved co-invest (£8.4M) would breach. Morning briefing flagged both.',
+        act1:'Infusion PMS monitored continuously. Threshold breaches surface at 07:58 — before Morgan\'s first trade of the day.',
+        act2:'NVDA position at 8.4%: 40bps above the 8.0% single-stock cap. PE capacity: £6.8M headroom before mandate breach.',
+        act3:'Morgan reviews threshold alerts with full portfolio context. Proposes NVDA sell. Routes to Taylor for compliance sign-off.',
+        hitl:'"AI does the checking. Taylor makes the call." — The Taylor Test. Every trade requires human sign-off before execution.' },
+      { code:'F2', name:'Pre-Trade Compliance', persona:'Taylor DeStefano, Head of Partnerships & Innovation — Lingotto',
+        exception:'NVDA sell 1,800 shares — 5 compliance checks run: concentration limit ✓, sector exposure ✓, IPS restrictions ✓, market impact FLAG, best execution NOTE.',
+        exSub:'"The Taylor Test" — Taylor\'s sign-off is the required gateway between every proposed trade and CIO UK approval. AI runs the checks. Taylor decides.',
+        act1:'Trade proposed by Morgan. Full compliance analysis runs in seconds: 5 checks against IPS rules and mandate limits.',
+        act2:'Two flags: market impact at 2.3% ADV (large print), VWAP execution recommended. Both require Taylor\'s acknowledgement.',
+        act3:'Taylor reviews analysis, acknowledges execution flags, and approves for CIO UK. Trade queued pending final sign-off.',
+        hitl:'"AI pre-checks every trade before it reaches Taylor\'s queue. Taylor reviews exceptions, not every line."' },
+      { code:'C2', name:'Intelligence Briefing', persona:'Morgan Chen, Portfolio Manager — Lingotto',
+        exception:'Morning briefing 06:00 GMT — NVDA -4.1% overnight, semiconductor export restrictions, ECB holds, Novo Nordisk trial data positive.',
+        exSub:'Compiled from Infusion PMS (portfolio ground truth) + Bloomberg (external market intelligence only). Active compliance issues flagged in summary.',
+        act1:'Briefing generated at 06:00 GMT before market open. Morgan reads context before any decisions.',
+        act2:'NVDA at -4.1%: flag raised in briefing before threshold breach confirmed. Semiconductor export restriction noted as policy risk.',
+        act3:'Morgan reviews briefing and identifies NVDA position for same-day review. Proactive, not reactive.',
+        hitl:'"AI compiles the briefing. Infusion PMS is the ground truth. Bloomberg is external intelligence only. Morgan acts on it."' },
+      { code:'C3', name:'Document Generation', persona:'Morgan Chen, Portfolio Manager — Lingotto',
+        exception:'Q1 Meridian Capital SMA factsheet — AI-compiled from Infusion PMS. Draft for Morgan\'s review before distribution.',
+        exSub:'Performance attribution: Healthcare +0.9%. Active compliance flag noted in exec summary. LP report awaiting COO sign-off. 14 mandates, 3 hours each manually.',
+        act1:'Factsheet generation triggered at quarter-end. AI compiles from Infusion PMS — no manual data entry.',
+        act2:'Performance attribution, compliance flag status, and portfolio summary all pre-populated. Active issue flagged in exec summary.',
+        act3:'Morgan reviews draft factsheet before distribution to LP. Approves or requests edits. Distribution only after Morgan\'s sign-off.',
+        hitl:'"AI-compiled from Infusion PMS. Draft for Morgan\'s review before distribution." — Stated explicitly in every factsheet.'  }
+    ]
+  },
+  'ib': {
+    label: 'Investment Banking', poc_base: null,
+    patterns: [
+      { code:'C3', name:'Document Generation', persona:'Ana Oliveira, Associate IB, Agribusiness & Consumer — Itaú BBA',
+        exception:'Pitchbook — orange juice sector, Rio Grande do Sul. Thesis text → visual presentation. Associate time: 60-70% on pitchbook production.',
+        exSub:'Consistent example from Daniel\'s own words (28 Jan call). Same scenario used throughout. Converts thesis text to formatted visual presentation automatically.',
+        act1:'Deal thesis exists in Ana\'s draft. AI converts to structured pitchbook format with visual layout and data population.',
+        act2:'Company profiles, financial model summaries, and market context compiled from Bloomberg and proprietary databases.',
+        act3:'Ana reviews draft pitchbook and approves before client distribution. Version control maintained.',
+        hitl:'"AI builds the first draft. Ana reviews, edits, and approves before any client sees it."' },
+      { code:'C4', name:'Private Data Mining', persona:'Ana Oliveira, Associate IB, Agribusiness & Consumer — Itaú BBA',
+        exception:'Orange juice producers, Rio Grande do Sul — private company financials structured for deal thesis. Currently sourced manually.',
+        exSub:'POC 2: Structuring private company data for thesis text. Sources, normalises, and surfaces. Discovery placeholder: [confirm private data source access in scoping].',
+        act1:'Private company data monitoring active across sector. New financials and ownership changes surfaced automatically.',
+        act2:'Orange juice sector signals normalised: revenue estimates, ownership structure, M&A activity, analyst coverage.',
+        act3:'Ana reviews structured company profiles for thesis integration. Approves data before including in deal documentation.',
+        hitl:'"AI structures and surfaces. Ana determines what\'s relevant and approves before inclusion in deal materials."' }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════
+// VERTICAL SIGNAL CHIPS — 6 per vertical
+// ═══════════════════════════════════════════════════
+const VERTICAL_SIGNALS = {
+  re: [
+    {text: 'Maintenance team manually checks lease PDFs to determine responsibility', opp: 'ops-2'},
+    {text: 'Work orders dispatched without Yardi cross-reference', opp: 'ops-3'},
+    {text: 'No early warning on assets approaching end of life', opp: 'ops-0'},
+    {text: 'Contractor performance tracked in spreadsheets', opp: 'ops-4'},
+    {text: 'EPA compliance changes monitored manually', opp: 'fin-2'},
+    {text: 'Capital plan built quarterly from memory, not system data', opp: 'ops-1'},
+  ],
+  pc: [
+    {text: 'Covenant monitoring done manually from spreadsheets updated monthly', opp: 'fin-0'},
+    {text: 'Borrower financials arrive in different formats — normalisation takes days', opp: 'ops-2'},
+    {text: 'No systematic early warning on approaching covenant limits', opp: 'fin-0'},
+    {text: 'LP reports compiled manually from multiple fund data sources', opp: 'com-0'},
+    {text: 'Audit trail for compliance purposes is paper-based', opp: 'fin-3'},
+    {text: 'Hebbia used for extraction but not connected to monitoring workflow', opp: 'ops-2'},
+  ],
+  av: [
+    {text: '247 outstanding titles — no priority order on which to action first', opp: 'ops-4'},
+    {text: '34 cases beyond 10-day SLA', opp: 'fin-2'},
+    {text: '$4.2M revenue exposure from title delays', opp: 'fin-0'},
+    {text: 'No visibility on which exception type drives most SLA breaches', opp: 'ops-0'},
+    {text: 'Ops team spending time chasing rather than resolving', opp: 'ops-3'},
+    {text: 'Resolution tracking done in spreadsheet', opp: 'ops-1'},
+  ],
+  ai: [
+    {text: 'Crew disruption managed by phone calls and manual RADO checks', opp: 'ops-4'},
+    {text: 'EU261 liability not assessed until after the fact', opp: 'fin-2'},
+    {text: 'Standby crew utilisation tracked weekly — no real-time visibility', opp: 'tal-2'},
+    {text: 'Fatigue compliance reviewed retrospectively, not proactively', opp: 'fin-2'},
+    {text: 'FO attrition planning relies on gut feel, not modelled scenarios', opp: 'tal-2'},
+    {text: 'NHS Lifeline routes — minimum crew breach risk not flagged early', opp: 'ops-0'},
+  ],
+  st: [
+    {text: 'Account managers don\'t know a client is at risk until they call to complain', opp: 'com-0'},
+    {text: 'NPS trends tracked manually — no alert when a score drops significantly', opp: 'tal-0'},
+    {text: 'No link between service delivery failures and churn risk', opp: 'tal-1'},
+    {text: 'Interventions reactive, not proactive', opp: 'com-2'},
+    {text: 'No visibility on which operational issues drive most churn risk', opp: 'tal-1'},
+    {text: 'Outreach drafted from scratch each time — no AI assist', opp: 'com-2'},
+  ],
+  me: [
+    {text: 'Wire triage is manual — editors reading every incoming item', opp: 'ops-4'},
+    {text: 'Image rights checked reactively — exposure when published without clearance', opp: 'fin-2'},
+    {text: 'Legal check happens after the wire is processed, not during', opp: 'fin-2'},
+    {text: 'Wire-to-ready time is hours, not minutes', opp: 'ops-0'},
+    {text: 'No visibility on model performance vs baseline', opp: 'ops-1'},
+    {text: 'Different desks follow different processes — no consistent workflow', opp: 'ops-3'},
+  ],
+  am: [
+    {text: 'Compliance monitoring done by reviewing Infusion reports manually each morning', opp: 'fin-0'},
+    {text: 'Pre-trade compliance checks take 30–45 minutes per trade', opp: 'fin-1'},
+    {text: 'Morning briefing compiled manually from Bloomberg and PMS — takes 2 hours', opp: 'com-0'},
+    {text: 'SMA factsheets produced quarterly in Excel — 14 mandates, 3 hours each', opp: 'com-2'},
+    {text: 'Recurring compliance reports built manually in Excel every week', opp: 'ops-1'},
+    {text: 'No proactive alert when a mandate limit is approaching', opp: 'fin-0'},
+  ],
+  ib: [
+    {text: 'Associates spend 60–70% of time building and updating pitchbooks', opp: 'com-2'},
+    {text: 'Private company data has to be manually sourced and structured', opp: 'ops-2'},
+    {text: 'Research signals monitored manually — sector news read by individuals', opp: 'com-0'},
+    {text: 'Deal thesis exists in an analyst\'s head, not a searchable format', opp: 'tal-3'},
+    {text: 'No systematic process for converting research to visual presentation', opp: 'com-2'},
+    {text: 'Pitchbook updates when a deal evolves take a full day', opp: 'ops-1'},
+  ]
+};
+
+// VERTICAL OPP-MAP LABELS
+const VERTICAL_OPP_LABELS = {
+  re:  {
+    'ops-0':'Maintenance monitoring', 'ops-1':'Capital plan automation', 'ops-2':'Lease intelligence',
+    'ops-3':'Yardi workflow routing', 'ops-4':'Contractor exception routing',
+    'com-0':'Tenant intelligence', 'com-1':'Lease renewal drafting', 'com-2':'Follow-up automation',
+    'com-3':'CRM enrichment', 'com-4':'Asset market signals',
+    'fin-0':'CAM reconciliation', 'fin-1':'Covenant monitoring', 'fin-2':'Regulatory signals (EPA)',
+    'fin-3':'Audit trail', 'fin-4':'Financial model population',
+    'tal-0':'Onboarding comms', 'tal-1':'Vendor knowledge agent', 'tal-2':'Contractor training',
+    'tal-3':'Process Q&A agent', 'tal-4':'Portfolio reporting'
+  },
+  pc:  {
+    'ops-0':'Covenant monitoring', 'ops-1':'Borrower reporting', 'ops-2':'Document extraction (Hebbia)',
+    'ops-3':'Fund workflow routing', 'ops-4':'Waiver exception routing',
+    'com-0':'LP intelligence briefing', 'com-1':'LP report generation', 'com-2':'Investor follow-up',
+    'com-3':'CRM enrichment', 'com-4':'Market signals (Bloomberg)',
+    'fin-0':'Covenant test automation', 'fin-1':'Pre-investment compliance', 'fin-2':'Regulatory monitoring',
+    'fin-3':'Append-only audit log', 'fin-4':'Fund model population',
+    'tal-0':'LP onboarding', 'tal-1':'Credit knowledge agent', 'tal-2':'Analyst productivity',
+    'tal-3':'Policy Q&A', 'tal-4':'Portfolio analytics'
+  },
+  av:  {
+    'ops-0':'Title exception detection', 'ops-1':'Throughput analytics', 'ops-2':'Document extraction',
+    'ops-3':'Case workflow routing', 'ops-4':'Priority queue scoring',
+    'com-0':'Dealer intelligence', 'com-1':'Case documentation', 'com-2':'Dealer follow-up',
+    'com-3':'CRM enrichment', 'com-4':'Auction signals',
+    'fin-0':'Revenue exposure tracking', 'fin-1':'Settlement compliance', 'fin-2':'SLA monitoring',
+    'fin-3':'Audit trail', 'fin-4':'Resolution modelling',
+    'tal-0':'Ops onboarding', 'tal-1':'Title rules agent', 'tal-2':'Team performance',
+    'tal-3':'Process Q&A', 'tal-4':'Ops analytics'
+  },
+  ai:  {
+    'ops-0':'Crew disruption monitoring', 'ops-1':'Performance analytics', 'ops-2':'Roster intelligence',
+    'ops-3':'Disruption routing', 'ops-4':'Exception detection (RADO)',
+    'com-0':'Charter signals', 'com-1':'Schedule documentation', 'com-2':'Crew follow-up',
+    'com-3':'CRM enrichment', 'com-4':'Route intelligence',
+    'fin-0':'EU261 liability tracking', 'fin-1':'Pre-flight compliance', 'fin-2':'Fatigue monitoring',
+    'fin-3':'Compliance audit trail', 'fin-4':'Headcount scenario modelling',
+    'tal-0':'Crew onboarding', 'tal-1':'Scheduling rules agent', 'tal-2':'Standby utilisation',
+    'tal-3':'Regulatory Q&A', 'tal-4':'Attrition forecasting'
+  },
+  st:  {
+    'ops-0':'Account health monitoring', 'ops-1':'Service quality analytics', 'ops-2':'Data enrichment',
+    'ops-3':'Escalation routing', 'ops-4':'Risk exception detection',
+    'com-0':'Account intelligence', 'com-1':'Proposal generation', 'com-2':'Proactive outreach',
+    'com-3':'CRM enrichment', 'com-4':'Churn signals (CDP)',
+    'fin-0':'Revenue protection tracking', 'fin-1':'SLA compliance', 'fin-2':'Regulatory monitoring',
+    'fin-3':'Override audit trail', 'fin-4':'Retention modelling',
+    'tal-0':'Client onboarding', 'tal-1':'Root cause clustering', 'tal-2':'Workforce planning',
+    'tal-3':'Process Q&A agent', 'tal-4':'COO analytics'
+  },
+  me:  {
+    'ops-0':'Wire monitoring (continuous)', 'ops-1':'Throughput analytics', 'ops-2':'Wire enrichment',
+    'ops-3':'Workflow routing (n8n)', 'ops-4':'Exception detection',
+    'com-0':'Editorial intelligence', 'com-1':'Story generation', 'com-2':'Distribution follow-up',
+    'com-3':'Audience enrichment', 'com-4':'Breaking signals',
+    'fin-0':'Rights clearance tracking', 'fin-1':'Embargo compliance', 'fin-2':'ClearDraft (legal)',
+    'fin-3':'Publication audit trail', 'fin-4':'Revenue model',
+    'tal-0':'Journalist onboarding', 'tal-1':'Editorial style agent', 'tal-2':'Desk performance',
+    'tal-3':'Editorial Q&A', 'tal-4':'Model benchmarking (Braintrust)'
+  },
+  am:  {
+    'ops-0':'Mandate monitoring (Infusion)', 'ops-1':'Compliance automation', 'ops-2':'Document extraction',
+    'ops-3':'Trade workflow routing', 'ops-4':'Threshold exception detection',
+    'com-0':'Morning briefing (06:00 GMT)', 'com-1':'Factsheet generation', 'com-2':'LP follow-up',
+    'com-3':'CRM enrichment', 'com-4':'Bloomberg intelligence',
+    'fin-0':'Mandate limit monitoring', 'fin-1':'Pre-trade compliance (Taylor Test)', 'fin-2':'Regulatory monitoring',
+    'fin-3':'Full actor audit trail', 'fin-4':'Threshold scenario modelling',
+    'tal-0':'LP onboarding', 'tal-1':'IPS rules agent', 'tal-2':'Analyst productivity',
+    'tal-3':'Compliance Q&A', 'tal-4':'Portfolio analytics'
+  },
+  ib:  {
+    'ops-0':'Deal signal monitoring', 'ops-1':'Research analytics', 'ops-2':'Private data extraction',
+    'ops-3':'Pitchbook workflow', 'ops-4':'Deal exception routing',
+    'com-0':'Sector intelligence signals', 'com-1':'Pitchbook generation', 'com-2':'Thesis documentation',
+    'com-3':'CRM enrichment', 'com-4':'Market intelligence (Bloomberg)',
+    'fin-0':'Deal financial tracking', 'fin-1':'Compliance checks', 'fin-2':'Regulatory monitoring',
+    'fin-3':'Deal audit trail', 'fin-4':'Financial model population',
+    'tal-0':'Associate onboarding', 'tal-1':'Deal precedent agent', 'tal-2':'Analyst productivity',
+    'tal-3':'Sector Q&A agent', 'tal-4':'Portfolio analytics'
+  }
+};
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let currentVertical = null;
+let launcherVertical = null;
+let launcherPattern = null;
+let currentPocUrl = null;
+
+// ═══════════════════════════════════════════════════
+// VERTICAL SELECTOR (PREP MODE)
+// ═══════════════════════════════════════════════════
+function selectVertical(vKey, card) {
+  currentVertical = vKey;
+  // Update card selection
+  document.querySelectorAll('.vertical-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  // Update signal chips
+  updateSignalChips(vKey);
+  // Update opp-map labels in CLIENT MODE slide 3
+  updateOppMapLabels(vKey);
+  // Sync to launcher if open
+  if (launcherVertical !== vKey) {
+    launcherSelectV(vKey, document.querySelector(`.launcher-v-card[data-v="${vKey}"]`));
+  }
+}
+
+function updateSignalChips(vKey) {
+  const signals = VERTICAL_SIGNALS[vKey];
+  if (!signals) return;
+  const containers = document.querySelectorAll('.listen-signals');
+  if (!containers.length) return;
+
+  // Replace process signals (first container) with vertical-specific ones
+  const processContainer = containers[0];
+  const label = processContainer.querySelector('.signal-label');
+  const existingChips = processContainer.querySelectorAll('.signal-chip');
+
+  // Remove existing chips
+  existingChips.forEach(c => c.remove());
+
+  // Add vertical-specific chips
+  signals.forEach(sig => {
+    const chip = document.createElement('div');
+    chip.className = 'signal-chip';
+    chip.setAttribute('data-opp', sig.opp);
+    chip.innerHTML = `<span class="chip-dot"></span>${sig.text}`;
+    chip.onclick = function() {
+      this.classList.toggle('tagged');
+      tagSignal(this);
+    };
+    processContainer.appendChild(chip);
+  });
+}
+
+function updateOppMapLabels(vKey) {
+  const labels = VERTICAL_OPP_LABELS[vKey];
+  if (!labels) return;
+  Object.entries(labels).forEach(([dataItem, label]) => {
+    const el = document.querySelector(`.opp-map-item[data-item="${dataItem}"]`);
+    if (el) {
+      // Keep the dot, update text
+      const dot = el.querySelector('.opp-map-dot');
+      el.innerHTML = '';
+      if (dot) el.appendChild(dot);
+      el.appendChild(document.createTextNode(label));
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// SIGNAL → OPP-MAP SYNC (fix the empty stub)
+// ═══════════════════════════════════════════════════
+function tagSignal(chip) {
+  const oppKey = chip.getAttribute('data-opp');
+  if (!oppKey) return;
+  const isTagged = chip.classList.contains('tagged');
+  // Highlight matching opp-map-item in CLIENT MODE slide 3
+  const oppEl = document.querySelector(`.opp-map-item[data-item="${oppKey}"]`);
+  if (oppEl) oppEl.classList.toggle('live', isTagged);
+  // Also highlight matching opp-item in PREP Beat 3
+  // (find by text match — approximate)
+}
+
+// ═══════════════════════════════════════════════════
+// POC LAUNCHER (CLIENT MODE)
+// ═══════════════════════════════════════════════════
+function launcherSelectV(vKey, card) {
+  launcherVertical = vKey;
+  launcherPattern = null;
+  // Update vertical cards
+  document.querySelectorAll('.launcher-v-card').forEach(c => c.classList.remove('lv-active'));
+  if (card) card.classList.add('lv-active');
+  // Populate pattern buttons
+  const pGrid = document.getElementById('launcherPatterns');
+  if (!pGrid) return;
+  const combo = COMBO_MATRIX[vKey];
+  if (!combo) return;
+  pGrid.innerHTML = '';
+  combo.patterns.forEach(p => {
+    const btn = document.createElement('div');
+    btn.className = 'launcher-p-btn';
+    btn.setAttribute('data-p', p.code);
+    btn.innerHTML = `<div class="launcher-p-code">${p.code}</div><div class="launcher-p-name">${p.name}</div>`;
+    btn.onclick = function() { launcherSelectP(p, this); };
+    pGrid.appendChild(btn);
+  });
+  // Hide POC panel
+  document.getElementById('launcherNoSelection').style.display = 'flex';
+  document.getElementById('launcherPocPanel').classList.remove('visible');
+}
+
+function launcherSelectP(p, btn) {
+  launcherPattern = p;
+  document.querySelectorAll('.launcher-p-btn').forEach(b => b.classList.remove('lp-active'));
+  btn.classList.add('lp-active');
+
+  const combo = COMBO_MATRIX[launcherVertical];
+  currentPocUrl = combo.poc_base;
+
+  // Populate POC panel
+  document.getElementById('pocClientName').textContent = combo.label;
+  document.getElementById('pocPersona').textContent = p.persona;
+  document.getElementById('pocPatternTag').textContent = `${p.code} · ${p.name}`;
+  document.getElementById('pocException').textContent = p.exception;
+  document.getElementById('pocExceptionSub').textContent = p.exSub;
+  document.getElementById('pocAct1').textContent = p.act1;
+  document.getElementById('pocAct2').textContent = p.act2;
+  document.getElementById('pocAct3').textContent = p.act3;
+  document.getElementById('pocHitl').textContent = p.hitl;
+
+  // Open button
+  const openBtn = document.getElementById('pocOpenBtn');
+  if (currentPocUrl) {
+    openBtn.textContent = 'Open Live POC →';
+    openBtn.disabled = false;
+    openBtn.style.opacity = '1';
+  } else {
+    openBtn.textContent = 'POC in development';
+    openBtn.disabled = true;
+    openBtn.style.opacity = '0.4';
+  }
+
+  document.getElementById('launcherNoSelection').style.display = 'none';
+  document.getElementById('launcherPocPanel').classList.add('visible');
+}
+
+function openPoc() {
+  if (currentPocUrl) window.open(currentPocUrl, '_blank');
+}
+
+// Sync: when vertical selected in PREP, pre-select in launcher
+// (already handled by selectVertical calling launcherSelectV)
 
 </script>
 
@@ -4085,131 +4605,79 @@ async function runDemo() {
 
 
     <!-- SLIDE: LIVE DEMO -->
-    <div class="client-slide slide-demo" id="clientDemoSlide">
-      <div class="slide-eyebrow" style="margin-bottom:16px;">Live Demo</div>
-      <div class="slide-headline" style="margin-bottom:20px;">Watch it work on <em>your problem.</em></div>
 
-      <div class="demo-layout">
+    <!-- SLIDE: POC LAUNCHER -->
+    <div class="client-slide slide-launcher" id="clientDemoSlide">
+      <div class="slide-eyebrow" style="margin-bottom:12px;">Live Demo</div>
+      <div class="slide-headline" style="margin-bottom:16px;font-size:clamp(24px,3vw,38px);">Select vertical + pattern. <em>Open the live POC.</em></div>
 
-        <!-- LEFT: demo type selector -->
-        <div>
-          <div class="demo-selector-label">Select demo type</div>
-          <div class="demo-selector">
+      <div class="launcher-layout">
 
-            <button class="demo-type-btn demo-selected" data-demo="docgen" onclick="selectDemo('docgen', this)">
-              <span class="demo-type-icon">📄</span>
-              <div class="demo-type-name">Document Generation</div>
-              <div class="demo-type-desc">Paste raw data or notes — watch a structured document appear</div>
-              <span class="demo-patterns-tag">P1 · P4</span>
-            </button>
-
-            <button class="demo-type-btn" data-demo="signal" onclick="selectDemo('signal', this)">
-              <span class="demo-type-icon">🔍</span>
-              <div class="demo-type-name">Signal Synthesis</div>
-              <div class="demo-type-desc">Paste emails, notes, or data — get a structured briefing back</div>
-              <span class="demo-patterns-tag">P5 · P8</span>
-            </button>
-
-            <button class="demo-type-btn" data-demo="exception" onclick="selectDemo('exception', this)">
-              <span class="demo-type-icon">⚡</span>
-              <div class="demo-type-name">Exception Detection</div>
-              <div class="demo-type-desc">Paste a list or dataset — watch anomalies get surfaced and routed</div>
-              <span class="demo-patterns-tag">P2 · P7</span>
-            </button>
-
-            <button class="demo-type-btn" data-demo="knowledge" onclick="selectDemo('knowledge', this)">
-              <span class="demo-type-icon">🧠</span>
-              <div class="demo-type-name">Knowledge Q&amp;A</div>
-              <div class="demo-type-desc">Paste a process doc or policy — ask it anything about it</div>
-              <span class="demo-patterns-tag">P9</span>
-            </button>
-
+        <!-- LEFT: selector -->
+        <div class="launcher-left">
+          <div class="launcher-section-label">Vertical</div>
+          <div id="launcherVerticals">
+            <div class="launcher-v-card" data-v="re" onclick="launcherSelectV('re',this)"><span class="launcher-v-icon">🏢</span><span class="launcher-v-name">Real Estate</span></div>
+            <div class="launcher-v-card" data-v="pc" onclick="launcherSelectV('pc',this)"><span class="launcher-v-icon">📊</span><span class="launcher-v-name">Private Credit</span></div>
+            <div class="launcher-v-card" data-v="av" onclick="launcherSelectV('av',this)"><span class="launcher-v-icon">🚗</span><span class="launcher-v-name">Automotive</span></div>
+            <div class="launcher-v-card" data-v="ai" onclick="launcherSelectV('ai',this)"><span class="launcher-v-icon">✈️</span><span class="launcher-v-name">Aviation</span></div>
+            <div class="launcher-v-card" data-v="st" onclick="launcherSelectV('st',this)"><span class="launcher-v-icon">👥</span><span class="launcher-v-name">Staffing</span></div>
+            <div class="launcher-v-card" data-v="me" onclick="launcherSelectV('me',this)"><span class="launcher-v-icon">📰</span><span class="launcher-v-name">Media</span></div>
+            <div class="launcher-v-card" data-v="am" onclick="launcherSelectV('am',this)"><span class="launcher-v-icon">💼</span><span class="launcher-v-name">Asset Management</span></div>
+            <div class="launcher-v-card" data-v="ib" onclick="launcherSelectV('ib',this)"><span class="launcher-v-icon">🏦</span><span class="launcher-v-name">Investment Banking</span></div>
+          </div>
+          <div class="launcher-section-label" style="margin-top:10px;">Pattern</div>
+          <div class="launcher-p-grid" id="launcherPatterns">
+            <div style="font-size:11px;color:rgba(255,255,255,0.2);font-style:italic;padding:8px 0;">Select a vertical first</div>
           </div>
         </div>
 
-        <!-- RIGHT: workspace -->
-        <div class="demo-workspace">
-
-          <div class="demo-input-area">
-            <div class="demo-input-head">
-              <div class="demo-input-label" id="demoInputLabel">Paste client context</div>
-              <div class="demo-input-hint" id="demoInputHint">Raw data, notes, or a description from the conversation</div>
-            </div>
-            <textarea class="demo-textarea" id="demoInput" placeholder="Paste something real from the conversation — a process description, some raw data, a document fragment, or a few bullet points of what they just told you..."></textarea>
+        <!-- RIGHT: POC detail -->
+        <div class="launcher-right">
+          <div class="launcher-no-selection" id="launcherNoSelection">
+            Select a vertical and pattern<br>to see the live POC details
           </div>
-
-          <div id="demoKnowledgeQ" style="display:none;">
-            <div class="demo-input-area">
-              <div class="demo-input-head">
-                <div class="demo-input-label">Question to ask</div>
-                <div class="demo-input-hint">What would their team need to know?</div>
+          <div class="launcher-poc-panel" id="launcherPocPanel">
+            <div class="poc-header">
+              <div class="poc-header-meta">
+                <div class="poc-client-name" id="pocClientName">—</div>
+                <div class="poc-persona" id="pocPersona">—</div>
+                <div class="poc-pattern-tag" id="pocPatternTag">—</div>
               </div>
-              <textarea class="demo-textarea" id="demoQuestion" style="height:60px;" placeholder="e.g. How do we handle the exception case when a vendor doesn't respond within 5 days?"></textarea>
+              <button class="poc-open-btn" id="pocOpenBtn" onclick="openPoc()">Open Live POC →</button>
             </div>
-          </div>
-
-          <button class="demo-run-btn" id="demoRunBtn" onclick="runDemo()">
-            <span class="btn-text">▶ Run — build this live</span>
-            <div class="btn-spinner"></div>
-          </button>
-
-          <div class="demo-output-area">
-            <div class="demo-output-head">
-              <div class="demo-output-label">
-                <div class="demo-live-dot" id="demoLiveDot"></div>
-                Output
+            <div class="poc-exception">
+              <div class="poc-exc-label">🔴 Live exception in progress</div>
+              <div class="poc-exc-text" id="pocException">—</div>
+              <div class="poc-exc-sub" id="pocExceptionSub">—</div>
+            </div>
+            <div class="poc-three-acts">
+              <div class="poc-act">
+                <div class="poc-act-num">Act 1 · Awareness</div>
+                <div class="poc-act-title">This is already happening</div>
+                <div class="poc-act-text" id="pocAct1">The monitoring view. The signal already detected.</div>
               </div>
-              <button class="demo-output-clear" onclick="clearDemoOutput()">clear</button>
+              <div class="poc-act">
+                <div class="poc-act-num">Act 2 · Understanding</div>
+                <div class="poc-act-title">The pattern and root cause</div>
+                <div class="poc-act-text" id="pocAct2">The detail view. The exception in context.</div>
+              </div>
+              <div class="poc-act">
+                <div class="poc-act-num">Act 3 · Action</div>
+                <div class="poc-act-title">What we do about it</div>
+                <div class="poc-act-text" id="pocAct3">The intervention view. With your approval.</div>
+              </div>
             </div>
-            <div class="demo-output-content" id="demoOutput"></div>
+            <div class="poc-hitl">
+              <span class="poc-hitl-icon">🔄</span>
+              <span id="pocHitl">AI prepares. Human decides.</span>
+            </div>
           </div>
-
         </div>
 
-        <!-- P3 -->
-        <div class="pc-pattern-card" id="cpc-3">
-          <div class="pc-pattern-num">P3 · Operations</div>
-          <div class="pc-pattern-name">Vendor &amp; counterparty management</div>
-          <div class="pc-pattern-universal">External-party data normalised and acted on automatically. Eliminates the chasing.</div>
-          <div class="pc-pattern-skin" id="cpc-3-skin">Property &amp; facilities — vendor follow-up &amp; compliance tracking</div>
-        </div>
-        <!-- P6 -->
-        <div class="pc-pattern-card" id="cpc-6">
-          <div class="pc-pattern-num">P6 · Commercial</div>
-          <div class="pc-pattern-name">Follow-up &amp; pipeline automation</div>
-          <div class="pc-pattern-universal">Trigger-based outreach from CRM state changes. The 6pm Friday work — eliminated.</div>
-          <div class="pc-pattern-skin" id="cpc-6-skin">Staffing &amp; professional services — automated follow-up from CRM state</div>
-        </div>
-        <!-- P6b -->
-        <div class="pc-pattern-card" id="cpc-6b">
-          <div class="pc-pattern-num">P6b · Commercial</div>
-          <div class="pc-pattern-name">Account health scoring &amp; churn prevention</div>
-          <div class="pc-pattern-universal">Continuous scoring from engagement signals. Flags at-risk accounts before they churn.</div>
-          <div class="pc-pattern-skin" id="cpc-6b-skin">Commercial — account health scoring from engagement signals</div>
-        </div>
-        <!-- P7 -->
-        <div class="pc-pattern-card" id="cpc-7">
-          <div class="pc-pattern-num">P7 · Finance &amp; Risk</div>
-          <div class="pc-pattern-name">Reconciliation &amp; audit trail</div>
-          <div class="pc-pattern-universal">Match records across systems, surface discrepancies, document resolution. Month-end at speed.</div>
-          <div class="pc-pattern-skin" id="cpc-7-skin">Finance — automated reconciliation across systems</div>
-        </div>
-        <!-- P10 -->
-        <div class="pc-pattern-card" id="cpc-10">
-          <div class="pc-pattern-num">P10 · Client &amp; Talent</div>
-          <div class="pc-pattern-name">Onboarding &amp; lifecycle communications</div>
-          <div class="pc-pattern-universal">Trigger-based personalised communications at every key lifecycle moment. Automated. On time.</div>
-          <div class="pc-pattern-skin" id="cpc-10-skin">Real estate &amp; services — trigger-based lifecycle communications</div>
-        </div>
-        <!-- P11 -->
-        <div class="pc-pattern-card" id="cpc-11">
-          <div class="pc-pattern-num">P11 · Operations</div>
-          <div class="pc-pattern-name">Document intelligence &amp; extraction</div>
-          <div class="pc-pattern-universal">Unstructured legal &amp; financial documents → structured, queryable data. Foundation capability.</div>
-          <div class="pc-pattern-skin" id="cpc-11-skin">Legal &amp; financial documents → structured, queryable data</div>
-        </div>
       </div>
     </div>
+
 
   </div><!-- /client-slides -->
 
