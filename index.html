@@ -1655,6 +1655,19 @@ body {
   padding-top: 8px;
 }
 
+
+/* ══ ROI METRICS STRIP ══ */
+.poc-roi-strip {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.poc-roi-item {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px; padding: 8px 12px; min-width: 120px; flex: 1;
+}
+.poc-roi-value { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+.poc-roi-metric { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.35); margin-top: 2px; font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; }
+.poc-roi-context { font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 1px; }
+
 </style>
 </head>
 <body>
@@ -3487,209 +3500,305 @@ async function runDemo() {
 }
 
 
-// ══════════════════════════════════════════════════
-// COMBINATION MATRIX — vertical + pattern → POC
-// ══════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════════
+// HITL PHRASING LIBRARY — exact quotes from POC portfolio
+// ══════════════════════════════════════════════════════════════
+const HITL_PHRASES = [
+  { quote: "AI does the checking. Taylor makes the call.", source: "Lingotto" },
+  { quote: "Nothing is sent until you approve.", source: "SSA" },
+  { quote: "This draft cannot be sent automatically. Your approval is the final step.", source: "SSA" },
+  { quote: "Every AI recommendation is logged. Human decisions — approve, edit, override — are recorded against each.", source: "SSA" },
+  { quote: "Overrides are especially valuable: when a human takes a different action, CDP notes the outcome and recalibrates.", source: "SSA" },
+  { quote: "AI pre-checks every trade before it reaches your queue. You review exceptions, not every line.", source: "Lingotto" },
+  { quote: "You are seeing today's run.", source: "SSA" },
+  { quote: "Operates continuously, not on a schedule.", source: "Arcmont" },
+];
+
+// ══════════════════════════════════════════════════════════════
+// ROI METRICS LIBRARY — exact numbers from POC portfolio
+// ══════════════════════════════════════════════════════════════
+const ROI_METRICS = {
+  editorial: [
+    { metric: "Wire-to-ready time", value: "47 seconds", context: "avg, The Sun, 17 Mar 2026" },
+    { metric: "AI vs SOLR baseline", value: "87% vs 54%", context: "Artie vs SOLR, +33 points" },
+    { metric: "Wires processed today", value: "1,240", context: "94% AI-matched" },
+  ],
+  ssa: [
+    { metric: "Revenue protected", value: "£420k", context: "11 accounts saved, March 2026" },
+    { metric: "Churn rate reduction", value: "↓1.2pp", context: "over 6 months post-deployment" },
+    { metric: "Intervention success rate", value: "82%", context: "accounts saved vs flagged" },
+    { metric: "Model accuracy improvement", value: "+7pp", context: "since go-live" },
+  ],
+  lingotto: [
+    { metric: "Manual review time replaced", value: "~18 hrs/week", context: "Taylor DeStefano alone" },
+    { metric: "PE allocation headroom", value: "£6.8M", context: "before mandate breach" },
+  ],
+  acv: [
+    { metric: "Title SLA exposure", value: "$4.2M", context: "at any given time" },
+    { metric: "Revenue recovered", value: "$2.8M", context: "title resolution programme" },
+    { metric: "AI routing accuracy", value: "91%", context: "case categorisation" },
+  ],
+  loganair: [
+    { metric: "Standby cost unused", value: "£12,400", context: "GLA, single period" },
+    { metric: "Standby utilisation gap", value: "34% vs 50–60%", context: "GLA airport" },
+  ],
+  arcmont: [
+    { metric: "Covenant tests per run", value: "18", context: "per 05:30–08:01 CET cycle" },
+  ],
+  goodman: [
+    { metric: "Classification confidence", value: "97%", context: "work order type" },
+    { metric: "Responsibility determination", value: "96%", context: "tenant vs landlord" },
+  ],
+};
+
+// ══════════════════════════════════════════════════════════════
+// COMBINATION MATRIX — 22 pairings, Intel brief as source of truth
+// ══════════════════════════════════════════════════════════════
 const COMBO_MATRIX = {
   're': {
     label: 'Real Estate', poc_base: 'https://conquer-ai-solutions.github.io/goomansmaintenance/',
     patterns: [
-      { code:'O1', name:'Continuous Monitoring', persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
+      { code:'O1', name:'Continuous Monitoring',
+        persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
         exception:'HVAC cooling failure WO-2026-0847, CVS Pharmacy Suite 114',
-        exSub:'Lease §12.4 — AI classified as tenant responsibility (96% confidence). Work order pre-populated, awaiting Ian\'s dispatch approval.',
-        act1:'Maintenance inbox monitored continuously. Exception surfaced the moment the ticket arrived — before Ian opened his email.',
-        act2:'AI cross-references Yardi and reads Lease §12.4 PDF. Tenant responsibility determined at 96% confidence. No manual research.',
-        act3:'Pre-populated work order ready for Ian\'s single-click dispatch. AI did the classification. Ian makes the call.',
-        hitl:'"AI does the classification. Ian makes the dispatch decision." — Human explicitly at every action point.' },
-      { code:'O3', name:'Document Intelligence', persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
-        exception:'Lease §12.4 ambiguity — tenant vs landlord responsibility for HVAC unit replacement',
-        exSub:'CVS Pharmacy lease. AI extracted relevant clause, determined responsibility, confidence 96%. Manual lookup would take 45 minutes.',
-        act1:'Lease PDF monitoring active. Relevant clauses indexed at origination, not at point of query.',
-        act2:'Clause extraction — §12.4 surfaces. AI interprets tenant vs landlord scope. Confidence score shown.',
-        act3:'Determination ready with source clause cited. Ian reviews extract and approves classification.',
-        hitl:'"Lease interpretation surfaced. Ian reviews before dispatch is confirmed."' },
-      { code:'O5', name:'Throughput Analytics', persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
-        exception:'Capital plan: 3 HVAC units approaching end of life — EPA R-410A phase-down affecting replacement timeline',
-        exSub:'AI surfaced regulatory signal in Capital Plan view. Replacement timeline brought forward by 18 months. Manual planning would miss this.',
-        act1:'Asset lifecycle monitoring running continuously. Regulatory signals (EPA AIM Act) ingested automatically.',
-        act2:'Contractor scorecard surfaces performance variance. Capital exposure calculated from asset age + regulatory timeline.',
-        act3:'Capital plan updated with regulatory-adjusted timelines. Ian reviews and approves revised schedule.',
-        hitl:'"Regulatory signals are surfaced. Capital plan decisions remain with Ian."' }
+        exSub:'Lease §12.4 — AI classified as tenant responsibility (96% confidence). Work order pre-populated, awaiting Ian\'s dispatch approval. Classification confidence: 97%.',
+        act1:'Outlook inbox monitored continuously. Exception surfaced the moment the ticket arrived — before Ian opened his email. AI has already cross-referenced Yardi.',
+        act2:'Yardi cross-reference confirms tenant scope. Lease §12.4 PDF extracted and read. Tenant responsibility at 96% confidence — shown with source clause cited.',
+        act3:'Pre-populated work order ready. Ian approves at the dispatch point. One click. AI did the preparation; Ian makes the decision.',
+        hitl:'Operates continuously, not on a schedule.',
+        metrics: ROI_METRICS.goodman },
+      { code:'O3', name:'Document Intelligence',
+        persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
+        exception:'Lease §12.4 ambiguity — tenant vs landlord responsibility for HVAC unit replacement, CVS Pharmacy',
+        exSub:'Full lease PDF extracted. Relevant clause surfaced. Responsibility determined at 96% confidence with source clause cited. Manual lookup: 45 minutes avoided.',
+        act1:'Lease PDFs indexed at origination, not at point of query. Every clause already extracted and structured — the system knows before Ian asks.',
+        act2:'§12.4 surfaces as the governing clause. AI interprets tenant vs landlord scope. Confidence score shown alongside the extracted text.',
+        act3:'Determination presented to Ian with source clause. Ian reviews and approves classification before dispatch. Not sent automatically.',
+        hitl:'This draft cannot be sent automatically. Your approval is the final step.',
+        metrics: ROI_METRICS.goodman },
+      { code:'O5', name:'Throughput Analytics',
+        persona:'Ian Gereg, Head of Maintenance — Goodman Properties',
+        exception:'Capital plan: 3 HVAC units approaching end of life — EPA AIM Act R-410A phase-down affecting replacement timeline by 18 months',
+        exSub:'Regulatory signal surfaced in Capital Plan view, not as a separate alert. Contractor scorecard shows 2 vendors below performance threshold. Capital exposure: £340k.',
+        act1:'Asset lifecycle monitoring running continuously. Regulatory signals (EPA AIM Act) ingested automatically and surfaced in the capital planning view.',
+        act2:'Contractor performance variance identified from Yardi job completion data. Capital exposure calculated from asset age × regulatory adjustment.',
+        act3:'Capital plan updated with regulatory-adjusted timelines for Ian\'s review. Ian approves revised schedule. Board-ready output.',
+        hitl:'Operates continuously, not on a schedule.',
+        metrics: ROI_METRICS.goodman }
     ]
   },
   'pc': {
     label: 'Private Credit', poc_base: 'https://dijon-disco-68516268.figma.site/',
     patterns: [
-      { code:'F1', name:'Covenant Monitoring', persona:'Credit Analyst — Arcmont Asset Management',
-        exception:'Nordic Logistics AB — BREACH: leverage 5.10x vs 4.50x max (DLF IV fund)',
-        exSub:'Agent ran 05:30 CET. 18 covenants tested across 6 borrowers across 4 funds. One breach, one watch (Meridian 1.85x vs 2.00x minimum).',
-        act1:'Agent runs 05:30–08:01 CET daily. Tests 18 covenants before the credit team arrives at their desks.',
-        act2:'Nordic Logistics: leverage covenant breached. Meridian: interest cover on watch. Full context pre-populated.',
-        act3:'Escalation routed to credit analyst with waiver recommendation. Analyst reviews and approves next action.',
-        hitl:'"Operates continuously, not on a schedule. Every covenant test logged. Analyst decides on escalation."' },
-      { code:'F4', name:'Audit Trail & Governance', persona:'Credit Analyst — Arcmont Asset Management',
-        exception:'Append-only compliance log — every covenant test, every decision, every waiver discussion recorded',
-        exSub:'Full audit trail available for LP review, regulatory inspection, or internal governance. No manual record-keeping required.',
-        act1:'Every agent run timestamped. Every covenant result recorded. Immutable from point of creation.',
-        act2:'Waiver discussions, override decisions, and escalation paths logged with actor and timestamp.',
-        act3:'Compliance log surfaced on demand for LP review or regulatory audit. No reconstruction required.',
-        hitl:'"Every AI action and human decision is a named, timestamped entry in the log."' }
+      { code:'F1', name:'Mandate & Covenant Monitoring',
+        persona:'Credit Analyst — Arcmont Asset Management',
+        exception:'Nordic Logistics AB — BREACH: leverage 5.10× vs 4.50× max (DLF IV fund)',
+        exSub:'Agent ran 05:30–08:01 CET. 18 covenants tested across 6 borrowers across 4 funds. One breach. Meridian on watch: interest cover 1.85× vs 2.00× minimum.',
+        act1:'Agent runs 05:30 CET daily. 18 covenants tested before the credit team arrives at their desks. Team sees only what needs their attention.',
+        act2:'Nordic Logistics: leverage covenant breached at 5.10×. Meridian: interest cover on watch at 1.85×. Full waiver context pre-populated for both.',
+        act3:'Escalation routed to credit analyst with waiver recommendation. Analyst reviews full context and approves next action. Append-only log records the decision.',
+        hitl:'Operates continuously, not on a schedule.',
+        metrics: ROI_METRICS.arcmont },
+      { code:'F4', name:'Audit Trail & Governance',
+        persona:'Credit Analyst — Arcmont Asset Management',
+        exception:'Append-only compliance log: every covenant test, every decision, every waiver discussion recorded with timestamp and actor',
+        exSub:'Full audit trail available for LP review, regulatory inspection, or internal governance. No manual record-keeping. AI is a named actor in the log.',
+        act1:'Every agent run timestamped and recorded from 05:30. Results immutable from point of creation. AI is a named actor, not a black box.',
+        act2:'Waiver discussions, override decisions, and escalation paths logged with actor, role, and timestamp. Full chain of custody.',
+        act3:'Compliance log surfaced on demand for LP review or regulatory audit. No reconstruction — the record was always there.',
+        hitl:'Every AI recommendation is logged. Human decisions — approve, edit, override — are recorded against each.',
+        metrics: ROI_METRICS.arcmont }
     ]
   },
   'av': {
-    label: 'Automotive (Title Ops)', poc_base: 'https://follow-push-13619011.figma.site/',
+    label: 'Automotive', poc_base: 'https://follow-push-13619011.figma.site/',
     patterns: [
-      { code:'O1', name:'Exception Detection', persona:'Sarah Mitchell, Ops Supervisor — ACV Auctions',
+      { code:'O1', name:'Exception Detection',
+        persona:'Sarah Mitchell, Ops Supervisor — ACV Auctions',
         exception:'247 outstanding titles. 34 beyond 10-day SLA. $4.2M revenue at risk.',
-        exSub:'Priority queue: top case scored 94, $18,400 exposure, 14 days outstanding. No Response 48%, Missing Title 25%, Incorrect Docs 14%.',
-        act1:'Title queue monitored continuously. 247 cases scored and ranked by exposure and SLA status in real time.',
-        act2:'Exception type breakdown surfaces: No Response driving 48% of breaches. Root cause identified without manual analysis.',
-        act3:'Sarah reviews prioritised queue. Top 15 cases surfaced for her attention. She approves actions per case.',
-        hitl:'"AI scores and ranks. Sarah works through the queue. Every action approved by Sarah."' },
-      { code:'O2', name:'Workflow Orchestration', persona:'Sarah Mitchell, Ops Supervisor — ACV Auctions',
+        exSub:'Priority queue — top case scored 94: $18,400 exposure, 14 days outstanding, dealer non-responsive. Exception type: No Response 48%, Missing Title 25%, Incorrect Docs 14%.',
+        act1:'Title queue monitored continuously. 247 cases scored and ranked by exposure and SLA status before Sarah opens her dashboard.',
+        act2:'Exception type breakdown: No Response driving 48% of breaches. Root cause identified automatically. $4.2M total exposure surfaced without manual analysis.',
+        act3:'Sarah reviews prioritised queue of 15 cases. Approves actions per case. AI scored and ranked; Sarah works through them in order of impact.',
+        hitl:'AI does the checking. Taylor makes the call.',
+        metrics: ROI_METRICS.acv },
+      { code:'O2', name:'Workflow Orchestration',
+        persona:'Sarah Mitchell, Ops Supervisor — ACV Auctions',
         exception:'Case #94712 — Missing Title, $18,400 exposure, 14 days outstanding, dealer non-responsive',
-        exSub:'AI routed case to Sarah with full context: dealer contact history, outstanding amount, SLA status, recommended next action.',
-        act1:'Cases auto-routed to correct queue with enrichment complete. Sarah receives a package, not a raw ticket.',
-        act2:'Dealer contact history, document checklist, and recommended action pre-populated for each case.',
-        act3:'Sarah reviews pre-populated action recommendation and approves or overrides. One click per case.',
-        hitl:'"AI does the routing and enrichment. Sarah approves every action."' }
+        exSub:'AI routed case to Sarah with full context pre-populated: dealer contact history, outstanding amount, SLA status, exception type, recommended next action.',
+        act1:'Cases auto-routed to correct queue with enrichment complete. Sarah receives a complete package — not a raw ticket.',
+        act2:'Dealer contact history, document checklist, and recommended action pre-populated for each case. AI accuracy: 91%.',
+        act3:'Sarah reviews pre-populated action recommendation and approves or overrides. One click per case. Override outcome captured for model recalibration.',
+        hitl:'Nothing is sent until you approve.',
+        metrics: ROI_METRICS.acv }
     ]
   },
   'ai': {
     label: 'Aviation', poc_base: 'https://race-safe-58458546.figma.site/',
     patterns: [
-      { code:'O1', name:'Exception Detection', persona:'H. Quinn, Ops Projects — LoganAir',
-        exception:'SR1407 GLA→SYY — First Officer sick report 05:47. NHS Lifeline route. EU261 applies.',
-        exSub:'37-minute countdown to crew briefing. Replacement FO needed. AI assessed EU261 liability automatically. RADO cross-referenced.',
-        act1:'Crew management system (RADO) monitored continuously. Sick report triggers immediate assessment before Ops team opens their systems.',
-        act2:'NHS Lifeline minimum crew requirement checked. EU261 liability assessed. Replacement FO options surfaced from standby pool.',
-        act3:'H. Quinn reviews disruption panel with all context pre-populated. Approves replacement assignment. Clock stopped.',
-        hitl:'"AI assesses, routes, and pre-populates. H. Quinn makes the crew decision."' },
-      { code:'F3', name:'Regulatory Monitoring', persona:'H. Quinn, Ops Projects — LoganAir',
-        exception:'Fatigue heatmap: LSI and ABZ oil & gas routes flagged above threshold (rolling 90-day)',
-        exSub:'EU261 auto-assessed on every disruption. Fatigue rule thresholds monitored by route by week. Patterns surface before incidents.',
-        act1:'Fatigue compliance monitored across all routes on rolling 90-day basis. Patterns identified before individual incidents occur.',
-        act2:'LSI and ABZ routes flagged above average — colour-coded heatmap. Root cause analysis available per route per crew group.',
-        act3:'H. Quinn reviews compliance view and determines roster adjustments. AI surfaces the pattern; human determines the response.',
-        hitl:'"Compliance patterns surfaced continuously. Roster decisions remain with Operations."' },
-      { code:'F5', name:'Scenario Modelling', persona:'H. Quinn, Ops Projects — LoganAir',
+      { code:'O1', name:'Exception Detection',
+        persona:'H. Quinn, Ops Projects — LoganAir',
+        exception:'SR1407 GLA→SYY — First Officer sick report 05:47. NHS Lifeline route. EU261 applies. 37-minute countdown to crew briefing.',
+        exSub:'Replacement FO needed immediately. AI assessed EU261 liability automatically. RADO cross-referenced for available standby crew.',
+        act1:'RADO crew management system monitored continuously. Sick report triggers immediate assessment — before Ops team opens their systems. 37-minute window surfaced.',
+        act2:'NHS Lifeline minimum crew requirement checked automatically. EU261 liability assessed. Replacement FO options surfaced from standby pool with availability confirmed.',
+        act3:'H. Quinn reviews disruption panel with all context pre-populated. Approves replacement assignment. Clock stopped at 23 minutes.',
+        hitl:'Operates continuously, not on a schedule.',
+        metrics: ROI_METRICS.loganair },
+      { code:'F3', name:'Regulatory Monitoring',
+        persona:'H. Quinn, Ops Projects — LoganAir',
+        exception:'Fatigue heatmap: LSI and ABZ oil & gas routes flagged above threshold on rolling 90-day basis',
+        exSub:'EU261 auto-assessed on every disruption. Fatigue rule thresholds monitored by route by week. Patterns surface before incidents occur.',
+        act1:'Fatigue compliance monitored across all routes on rolling 90-day basis. LSI and ABZ flagged above average — identified as a pattern, not an individual incident.',
+        act2:'Route-level fatigue heatmap colour-coded for immediate visibility. EU261 liability tracked per disruption with automatic assessment.',
+        act3:'H. Quinn reviews compliance view and determines roster adjustments. AI surfaces the pattern; H. Quinn determines the operational response.',
+        hitl:'AI pre-checks every trade before it reaches your queue. You review exceptions, not every line.',
+        metrics: ROI_METRICS.loganair },
+      { code:'F5', name:'Scenario Modelling',
+        persona:'H. Quinn, Ops Projects — LoganAir',
         exception:'FO attrition rate: 12% projected. Current pipeline insufficient for 12-month safe minimum staffing.',
-        exSub:'Adjustable model: FO attrition rate → recruitment lead time → training pipeline → 12-month headcount projection. Interactive in real time.',
-        act1:'Headcount model built from live RADO data. Current trajectory projected forward 12 months automatically.',
-        act2:'Scenario: adjust FO attrition rate. Model shows staffing gap appearing in month 8 at current recruitment pace.',
-        act3:'H. Quinn adjusts variables and reviews projected outcomes. Board-ready scenario output available for planning sign-off.',
-        hitl:'"Model runs automatically. H. Quinn tests scenarios and approves the planning recommendation."' }
+        exSub:'Adjustable scenario model: FO attrition rate → recruitment lead time → training pipeline → 12-month headcount projection. Interactive. Board-ready output.',
+        act1:'Headcount model built from live RADO data. Current trajectory projected forward 12 months automatically. Gap identified before it becomes a crisis.',
+        act2:'Scenario: increase FO attrition rate to 15%. Model shows safe minimum staffing breach in month 8 at current recruitment pace. Visual and immediate.',
+        act3:'H. Quinn adjusts variables and reviews projected outcomes. Board-ready scenario output for planning sign-off. AI models; H. Quinn decides on the plan.',
+        hitl:'Operates continuously, not on a schedule.',
+        metrics: ROI_METRICS.loganair }
     ]
   },
   'st': {
-    label: 'Staffing / Workforce', poc_base: 'https://conquer-ai-solutions.github.io/ssa/',
+    label: 'Staffing', poc_base: 'https://conquer-ai-solutions.github.io/ssa/',
     patterns: [
-      { code:'C1', name:'Account Health Scoring', persona:'Alex Kim, Account Manager — Clearpath Workforce Solutions',
-        exception:'Hartwell Group — risk score 78. Ticket vol +40%. NPS 5/10 (was 8/10). Portal dark 14 days. Competitor mention detected.',
-        exSub:'Sector-calibrated threshold. Signal weight for ticket volume: 0.38 for Financial Services at this size. Model confidence: 84%. Revenue at risk: £46,700 ARR.',
-        act1:'Nightly scoring across all accounts. Hartwell Group crosses threshold overnight — Alex sees it when she opens CDP in the morning.',
-        act2:'NLP analysis of ticket #4791 surfaces competitor mention in email thread. Tone analysis: "markedly less collaborative".',
+      { code:'C1', name:'Account Health Scoring',
+        persona:'Alex Kim, Account Manager — Clearpath Workforce Solutions',
+        exception:'Hartwell Group — risk score 78. Ticket vol +40%. NPS 5/10 (was 8/10). Portal dark 14 days. Competitor mention detected in email thread.',
+        exSub:'Signal weight for ticket volume: 0.38 (Financial Services, this size). Model confidence: 84%. Revenue at risk: £46,700 ARR. Ticket #4791: competitor mention confirmed.',
+        act1:'Nightly scoring across all accounts. Hartwell Group crosses threshold overnight. Alex sees it when she opens CDP — before Hartwell calls to complain.',
+        act2:'NLP analysis of ticket #4791 surfaces competitor mention in email thread. Tone analysis: "markedly less collaborative" across last 30 days.',
         act3:'AI-drafted outreach presented to Alex for review. Nothing is sent until Alex approves. Override captures outcome for model recalibration.',
-        hitl:'"Nothing is sent until you approve." — Strongest human-in-the-loop commitment in the portfolio.' },
-      { code:'CT2', name:'Root Cause Clustering', persona:'Sam Reeves, Head of Service Quality — Clearpath',
+        hitl:'Nothing is sent until you approve.',
+        metrics: ROI_METRICS.ssa },
+      { code:'CT2', name:'Root Cause Clustering',
+        persona:'Sam Reeves, Head of Service Quality — Clearpath Workforce Solutions',
         exception:'12 flagged accounts this month. Priority 1: Payroll Processing SLA driving 61% of at-risk accounts.',
-        exSub:'Addressing payroll SLA alone projected to reduce flagged accounts by ~58%. 4 root cause clusters identified with frequency and impact ranking.',
-        act1:'All flagged accounts analysed by NLP ticket taxonomy and SLA breach logs. Pattern identified without manual analysis.',
-        act2:'4 clusters: Payroll SLA 61%, Onboarding delay 22%, Support response 11%, Portal issues 6%. Ranked by projected impact of resolution.',
-        act3:'Sam reviews prioritised improvement agenda. Approves process changes and assigns owners. Root cause, not symptom.',
-        hitl:'"AI surfaces the pattern and ranks by impact. Sam decides on the process intervention."' },
-      { code:'F4', name:'Governance & Audit Trail', persona:'Jordan Hayes, COO — Clearpath Workforce Solutions',
-        exception:'Override log: M. Chen — manual call made instead of AI recommendation. Outcome logged. Model recalibrated.',
-        exSub:'81% model accuracy, ↑7pp since go-live. 3.8% churn rate ↓1.2pp over 6 months. Every recommendation, decision, and override logged.',
-        act1:'Every AI recommendation recorded with confidence score and signal weights. Immutable from point of generation.',
-        act2:'Human decisions — approve, edit, override — logged against each recommendation. Override outcomes feed model recalibration.',
-        act3:'Jordan reviews governance view: intervention success rate 82%, model improvement trajectory, revenue protected £420k.',
-        hitl:'"Every AI recommendation is logged. Human decisions — approve, edit, override — are recorded against each."' }
+        exSub:'Addressing payroll SLA alone projected to reduce flagged accounts by ~58%. 4 root cause clusters ranked by frequency and projected impact of resolution.',
+        act1:'All flagged accounts analysed by NLP ticket taxonomy and SLA breach logs. 4 clusters identified and ranked — without a single analyst doing manual review.',
+        act2:'Payroll SLA 61%, Onboarding delay 22%, Support response quality 11%, Portal issues 6%. Impact of resolving each cluster quantified.',
+        act3:'Sam reviews prioritised improvement agenda and approves process changes with owners assigned. Root cause addressed, not symptom.',
+        hitl:'Every AI recommendation is logged. Human decisions — approve, edit, override — are recorded against each.',
+        metrics: ROI_METRICS.ssa },
+      { code:'F4', name:'Audit Trail & Governance',
+        persona:'Jordan Hayes, COO — Clearpath Workforce Solutions',
+        exception:'Override log: M. Chen — manual call made instead of AI recommendation. Outcome logged. Model recalibrated. +7pp accuracy since go-live.',
+        exSub:'81% model accuracy ↑7pp since go-live. 3.8% churn rate ↓1.2pp over 6 months. £420k revenue protected. Every recommendation, decision, and override logged.',
+        act1:'Every AI recommendation recorded with confidence score and signal weights. Immutable from point of generation. AI is a named actor.',
+        act2:'Override outcome for M. Chen logged and used for model recalibration. Overrides are especially valuable — the model learns from human judgment.',
+        act3:'Jordan reviews governance view: 82% intervention success rate, model improvement trajectory, £420k revenue protected. Board-ready evidence base.',
+        hitl:'Overrides are especially valuable: when a human takes a different action, CDP notes the outcome and recalibrates.',
+        metrics: ROI_METRICS.ssa }
     ]
   },
   'me': {
-    label: 'Media / News Publishing', poc_base: 'https://conquer-ai-solutions.github.io/editorial/',
+    label: 'Media', poc_base: 'https://conquer-ai-solutions.github.io/editorial/',
     patterns: [
-      { code:'O4', name:'Auto-Enrichment', persona:'JK (Wire Editor) — The Sun, News UK',
+      { code:'O4', name:'Auto-Enrichment',
+        persona:'JK (Wire Editor) — The Sun, News UK',
         exception:'Canary Wharf explosion — AP Wire, 3m old, 180 words. Image needed. Sarah Hicks (Pic Editor) waiting 14 minutes.',
-        exSub:'Auto-enrichment: image match scored Strong/Fuzzy/None, 4 related articles found, tags generated, ClearDraft legal check running (~45s), rights clearance checked.',
-        act1:'Wire arrives. Enrichment runs automatically: image search, related articles, legal check, rights clearance. All before JK reads it.',
-        act2:'ClearDraft result arrives: UK digital rights cleared. Image match: strong on Canary Wharf archive. Related: 4 articles linked.',
-        act3:'JK reviews enriched wire package. Approves for Pic Editor. Three human approvals before publication: Wire → Pic → Duty Editor.',
-        hitl:'"AI enriches every wire before it reaches a human desk. Three approvals before publication."' },
-      { code:'O2', name:'Workflow Orchestration', persona:'Duty Editor — The Sun, News UK',
-        exception:'Approval queue: 6 stories pending. 3 legal checks in progress. Bank of England embargo until 12:00.',
+        exSub:'Auto-enrichment: image match scored Strong/Fuzzy/None. 4 related articles found. Tags generated. ClearDraft legal check running (~45s). Rights clearance: UK digital — cleared.',
+        act1:'Wire arrives. Enrichment runs automatically: image search, related articles, legal check, rights clearance. All complete before JK reads the full wire.',
+        act2:'ClearDraft result: UK digital rights cleared. Image match: Strong on Canary Wharf archive. 4 related articles linked with recency scores.',
+        act3:'JK reviews enriched package and approves for Pic Editor. Three human approvals before publication: Wire Editor → Pic Editor → Duty Editor.',
+        hitl:'This draft cannot be sent automatically. Your approval is the final step.',
+        metrics: ROI_METRICS.editorial },
+      { code:'O2', name:'Workflow Orchestration',
+        persona:'Duty Editor — The Sun, News UK',
+        exception:'Approval queue: 6 stories pending. 3 legal checks in progress. Bank of England embargo active until 12:00.',
         exSub:'Wire-to-ready: 47s average (↓8s vs yesterday). Each story routed to correct desk with context pre-populated. Embargo flag active on BoE wire.',
-        act1:'All 6 wires in queue automatically routed by topic, urgency, and desk ownership. No manual triage.',
-        act2:'Embargo management: BoE wire held until 12:00 with countdown active. ClearDraft status shown per story.',
-        act3:'Duty Editor reviews queue. Approves each story in sequence. Single click per story with full context visible.',
-        hitl:'"AI routes and enriches. Duty Editor approves every publish decision."' },
-      { code:'O5', name:'Throughput Analytics', persona:'Managing Editor — The Sun, News UK',
-        exception:'Model evaluation: Artie API 87% vs SOLR 54% baseline. +33 points. 1,240 wires processed today, 94% AI-matched.',
-        exSub:'Braintrust evaluation running: Artie 87% (primary), AWS Bedrock 81% (fallback), Google Vertex 74% (test). Wire-to-ready 47s avg.',
+        act1:'All 6 wires automatically routed by topic, urgency, desk ownership, and embargo status. No manual triage.',
+        act2:'Embargo management: BoE wire held until 12:00 with countdown active. ClearDraft status shown per story. Rights clearance visible at a glance.',
+        act3:'Duty Editor reviews queue. Approves each story in sequence. One click per story with full context visible. AI routed; Duty Editor approves.',
+        hitl:'Nothing is sent until you approve.',
+        metrics: ROI_METRICS.editorial },
+      { code:'O5', name:'Throughput Analytics',
+        persona:'Managing Editor — The Sun, News UK',
+        exception:'Model evaluation: Artie API 87% vs SOLR 54% baseline. +33 points. 1,240 wires processed today. 94% AI-matched.',
+        exSub:'Braintrust evaluation: Artie API 87% (primary), AWS Bedrock 81% (fallback), Google Vertex 74% (test), SOLR 54% (baseline). Wire-to-ready 47s avg.',
         act1:'Performance dashboard updated continuously. All four model variants benchmarked against the same wire corpus in real time.',
-        act2:'Artie API at 87% — 33 points above SOLR baseline. Evidence base for editorial AI investment available on demand.',
-        act3:'Managing Editor reviews model performance and platform config. Approves model selection and workflow rule changes.',
-        hitl:'"Model performance is transparent. Editorial decisions and workflow rules configured by the Managing Editor."' }
+        act2:'Artie API at 87% — 33 points above SOLR baseline. Evidence base for editorial AI investment fully documented and transparent.',
+        act3:'Managing Editor reviews model performance and approves platform configuration. Model selection and workflow rules configured by the Managing Editor.',
+        hitl:'Operates continuously, not on a schedule.',
+        metrics: ROI_METRICS.editorial }
     ]
   },
   'am': {
     label: 'Asset Management', poc_base: 'https://conquer-ai-solutions.github.io/lingotto/',
     patterns: [
-      { code:'F1', name:'Mandate Monitoring', persona:'Morgan Chen, Portfolio Manager — Lingotto',
-        exception:'NVDA single-stock 8.4% vs 8.0% mandate cap. Breach triggered by overnight price action.',
-        exSub:'Threshold alert at 07:58 GMT. PE allocation 14.2% vs 15.0% cap — one approved co-invest (£8.4M) would breach. Morning briefing flagged both.',
-        act1:'Infusion PMS monitored continuously. Threshold breaches surface at 07:58 — before Morgan\'s first trade of the day.',
-        act2:'NVDA position at 8.4%: 40bps above the 8.0% single-stock cap. PE capacity: £6.8M headroom before mandate breach.',
-        act3:'Morgan reviews threshold alerts with full portfolio context. Proposes NVDA sell. Routes to Taylor for compliance sign-off.',
-        hitl:'"AI does the checking. Taylor makes the call." — The Taylor Test. Every trade requires human sign-off before execution.' },
-      { code:'F2', name:'Pre-Trade Compliance', persona:'Taylor DeStefano, Head of Partnerships & Innovation — Lingotto',
-        exception:'NVDA sell 1,800 shares — 5 compliance checks run: concentration limit ✓, sector exposure ✓, IPS restrictions ✓, market impact FLAG, best execution NOTE.',
+      { code:'F1', name:'Mandate Monitoring',
+        persona:'Morgan Chen, Portfolio Manager — Lingotto',
+        exception:'NVDA single-stock 8.4% vs 8.0% mandate cap. Triggered by overnight price action.',
+        exSub:'Threshold alert at 07:58 GMT. PE allocation 14.2% vs 15.0% cap — one approved co-invest (£8.4M) would breach. Both flagged in morning briefing.',
+        act1:'Infusion PMS monitored continuously. Threshold breaches surface at 07:58 — before Morgan\'s first trade of the day. Infusion is the ground truth.',
+        act2:'NVDA at 8.4%: 40bps above 8.0% single-stock cap. PE capacity: £6.8M headroom before mandate breach. Full context with source data.',
+        act3:'Morgan reviews threshold alerts and proposes NVDA sell. Routes to Taylor for compliance sign-off — The Taylor Test. AI surfaces; Morgan proposes; Taylor decides.',
+        hitl:'AI does the checking. Taylor makes the call.',
+        metrics: ROI_METRICS.lingotto },
+      { code:'F2', name:'Pre-Trade Compliance (The Taylor Test)',
+        persona:'Taylor DeStefano, Head of Partnerships & Innovation — Lingotto',
+        exception:'NVDA sell 1,800 shares — 5 compliance checks: concentration ✓, sector ✓, IPS restrictions ✓, market impact FLAG (2.3% ADV), best execution NOTE (VWAP recommended)',
         exSub:'"The Taylor Test" — Taylor\'s sign-off is the required gateway between every proposed trade and CIO UK approval. AI runs the checks. Taylor decides.',
-        act1:'Trade proposed by Morgan. Full compliance analysis runs in seconds: 5 checks against IPS rules and mandate limits.',
-        act2:'Two flags: market impact at 2.3% ADV (large print), VWAP execution recommended. Both require Taylor\'s acknowledgement.',
-        act3:'Taylor reviews analysis, acknowledges execution flags, and approves for CIO UK. Trade queued pending final sign-off.',
-        hitl:'"AI pre-checks every trade before it reaches Taylor\'s queue. Taylor reviews exceptions, not every line."' },
-      { code:'C2', name:'Intelligence Briefing', persona:'Morgan Chen, Portfolio Manager — Lingotto',
-        exception:'Morning briefing 06:00 GMT — NVDA -4.1% overnight, semiconductor export restrictions, ECB holds, Novo Nordisk trial data positive.',
-        exSub:'Compiled from Infusion PMS (portfolio ground truth) + Bloomberg (external market intelligence only). Active compliance issues flagged in summary.',
-        act1:'Briefing generated at 06:00 GMT before market open. Morgan reads context before any decisions.',
-        act2:'NVDA at -4.1%: flag raised in briefing before threshold breach confirmed. Semiconductor export restriction noted as policy risk.',
-        act3:'Morgan reviews briefing and identifies NVDA position for same-day review. Proactive, not reactive.',
-        hitl:'"AI compiles the briefing. Infusion PMS is the ground truth. Bloomberg is external intelligence only. Morgan acts on it."' },
-      { code:'C3', name:'Document Generation', persona:'Morgan Chen, Portfolio Manager — Lingotto',
-        exception:'Q1 Meridian Capital SMA factsheet — AI-compiled from Infusion PMS. Draft for Morgan\'s review before distribution.',
-        exSub:'Performance attribution: Healthcare +0.9%. Active compliance flag noted in exec summary. LP report awaiting COO sign-off. 14 mandates, 3 hours each manually.',
-        act1:'Factsheet generation triggered at quarter-end. AI compiles from Infusion PMS — no manual data entry.',
-        act2:'Performance attribution, compliance flag status, and portfolio summary all pre-populated. Active issue flagged in exec summary.',
-        act3:'Morgan reviews draft factsheet before distribution to LP. Approves or requests edits. Distribution only after Morgan\'s sign-off.',
-        hitl:'"AI-compiled from Infusion PMS. Draft for Morgan\'s review before distribution." — Stated explicitly in every factsheet.'  }
+        act1:'Trade proposed by Morgan. Full compliance analysis runs in seconds: 5 checks against IPS rules and mandate limits. Taylor\'s queue pre-populated.',
+        act2:'Two flags requiring Taylor\'s acknowledgement: market impact at 2.3% ADV (large print) and VWAP execution recommended. Passing checks not shown — only exceptions.',
+        act3:'Taylor reviews analysis, acknowledges execution flags, and approves for CIO UK. AI did the checking; Taylor makes the call.',
+        hitl:'AI does the checking. Taylor makes the call.',
+        metrics: ROI_METRICS.lingotto },
+      { code:'C2', name:'Intelligence Briefing',
+        persona:'Morgan Chen, Portfolio Manager — Lingotto',
+        exception:'Morning briefing 06:00 GMT — NVDA -4.1% overnight, semiconductor export restrictions, ECB holds, Novo Nordisk trial data positive. Active compliance flag raised.',
+        exSub:'Compiled from Infusion PMS (portfolio ground truth) + Bloomberg (external market intelligence only). Active compliance issues flagged in summary before market open.',
+        act1:'Briefing generated at 06:00 GMT by Conquer AI. Morgan reads context before any decisions. NVDA flagged in briefing before threshold breach confirmed at 07:58.',
+        act2:'Portfolio moves overnight: ASML +3.2%, NVDA -4.1%, Brookfield +1.8%. Market intelligence: semiconductor export restrictions as policy risk surfaced.',
+        act3:'Morgan reviews briefing and identifies NVDA position for same-day review. Proactive, not reactive. Briefing is the evidence; Morgan makes the judgment.',
+        hitl:'You are seeing today\'s run.',
+        metrics: ROI_METRICS.lingotto },
+      { code:'C3', name:'Document Generation',
+        persona:'Morgan Chen, Portfolio Manager — Lingotto',
+        exception:'Q1 Meridian Capital SMA factsheet — AI-compiled from Infusion PMS. Draft for Morgan\'s review before distribution to LP.',
+        exSub:'Performance attribution: Healthcare +0.9%. Active compliance flag noted in exec summary. LP report awaiting COO sign-off. 14 mandates × 3 hours each — eliminated.',
+        act1:'Factsheet generation triggered at quarter-end. AI compiles directly from Infusion PMS — no manual data entry, no Excel. 14 SMA mandates processed simultaneously.',
+        act2:'Performance attribution, compliance flag status, and portfolio summary pre-populated. Active NVDA issue flagged in exec summary automatically.',
+        act3:'Morgan reviews draft factsheet before distribution. Approves or requests edits. Distribution only after Morgan\'s sign-off. "AI-compiled from Infusion PMS · Draft for Morgan\'s review."',
+        hitl:'AI-compiled from Infusion PMS. Draft for Morgan\'s review before distribution.',
+        metrics: ROI_METRICS.lingotto }
     ]
   },
   'ib': {
     label: 'Investment Banking', poc_base: null,
     patterns: [
-      { code:'C3', name:'Document Generation', persona:'Ana Oliveira, Associate IB, Agribusiness & Consumer — Itaú BBA',
-        exception:'Pitchbook — orange juice sector, Rio Grande do Sul. Thesis text → visual presentation. Associate time: 60-70% on pitchbook production.',
-        exSub:'Consistent example from Daniel\'s own words (28 Jan call). Same scenario used throughout. Converts thesis text to formatted visual presentation automatically.',
-        act1:'Deal thesis exists in Ana\'s draft. AI converts to structured pitchbook format with visual layout and data population.',
-        act2:'Company profiles, financial model summaries, and market context compiled from Bloomberg and proprietary databases.',
-        act3:'Ana reviews draft pitchbook and approves before client distribution. Version control maintained.',
-        hitl:'"AI builds the first draft. Ana reviews, edits, and approves before any client sees it."' },
-      { code:'C4', name:'Private Data Mining', persona:'Ana Oliveira, Associate IB, Agribusiness & Consumer — Itaú BBA',
-        exception:'Orange juice producers, Rio Grande do Sul — private company financials structured for deal thesis. Currently sourced manually.',
+      { code:'C3', name:'Document Generation',
+        persona:'Ana Oliveira, Associate IB, Agribusiness & Consumer, Southern Brazil — Itaú BBA',
+        exception:'Pitchbook — orange juice sector, Rio Grande do Sul. Thesis text → formatted visual presentation. Associates: 60–70% of time consumed by pitchbook production.',
+        exSub:'Consistent example from Daniel\'s own words, 28 January call. Orange juice in Rio Grande do Sul — used throughout all three acts. Never switch examples mid-demo.',
+        act1:'Deal thesis exists in Ana\'s draft. AI converts thesis text to structured pitchbook format with visual layout — the Awareness: this is already happening for every deal.',
+        act2:'Company profiles, financial model summaries, and orange juice sector context compiled from Bloomberg and internal databases. Ana sees the machine working on her problem.',
+        act3:'Ana reviews draft pitchbook and approves before any client sees it. Vision: she imagines every deal starting this way. Three demo objectives achieved.',
+        hitl:'This draft cannot be sent automatically. Your approval is the final step.',
+        metrics: [] },
+      { code:'C4', name:'Private Data Mining',
+        persona:'Ana Oliveira, Associate IB, Agribusiness & Consumer, Southern Brazil — Itaú BBA',
+        exception:'Orange juice producers, Rio Grande do Sul — private company financials structured for deal thesis. Currently: sourced manually per deal.',
         exSub:'POC 2: Structuring private company data for thesis text. Sources, normalises, and surfaces. Discovery placeholder: [confirm private data source access in scoping].',
-        act1:'Private company data monitoring active across sector. New financials and ownership changes surfaced automatically.',
-        act2:'Orange juice sector signals normalised: revenue estimates, ownership structure, M&A activity, analyst coverage.',
-        act3:'Ana reviews structured company profiles for thesis integration. Approves data before including in deal documentation.',
-        hitl:'"AI structures and surfaces. Ana determines what\'s relevant and approves before inclusion in deal materials."' }
+        act1:'Private company data monitored across sector. New financials and ownership changes surfaced automatically as they become available.',
+        act2:'Orange juice sector signals normalised: revenue estimates, ownership structure, M&A activity. Ana sees structured data where previously there was noise.',
+        act3:'Ana reviews structured company profiles for thesis integration. Approves data before inclusion in deal materials. The discovery placeholder is shown — we know what we don\'t know.',
+        hitl:'This draft cannot be sent automatically. Your approval is the final step.',
+        metrics: [] }
     ]
   }
 };
 
-// ═══════════════════════════════════════════════════
-// VERTICAL SIGNAL CHIPS — 6 per vertical
-// ═══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+// VERTICAL SIGNALS — exact language from Intel brief
+// ══════════════════════════════════════════════════════════════
 const VERTICAL_SIGNALS = {
   re: [
     {text: 'Maintenance team manually checks lease PDFs to determine responsibility', opp: 'ops-2'},
@@ -3705,34 +3814,34 @@ const VERTICAL_SIGNALS = {
     {text: 'No systematic early warning on approaching covenant limits', opp: 'fin-0'},
     {text: 'LP reports compiled manually from multiple fund data sources', opp: 'com-0'},
     {text: 'Audit trail for compliance purposes is paper-based', opp: 'fin-3'},
-    {text: 'Hebbia used for extraction but not connected to monitoring workflow', opp: 'ops-2'},
+    {text: 'Hebbia used for document extraction but not connected to monitoring workflow', opp: 'ops-2'},
   ],
   av: [
     {text: '247 outstanding titles — no priority order on which to action first', opp: 'ops-4'},
     {text: '34 cases beyond 10-day SLA', opp: 'fin-2'},
     {text: '$4.2M revenue exposure from title delays', opp: 'fin-0'},
-    {text: 'No visibility on which exception type drives most SLA breaches', opp: 'ops-0'},
+    {text: 'No visibility on which exception type is driving most SLA breaches', opp: 'ops-0'},
     {text: 'Ops team spending time chasing rather than resolving', opp: 'ops-3'},
     {text: 'Resolution tracking done in spreadsheet', opp: 'ops-1'},
   ],
   ai: [
-    {text: 'Crew disruption managed by phone calls and manual RADO checks', opp: 'ops-4'},
+    {text: 'Crew disruption managed by phone calls and manual checks against RADO', opp: 'ops-4'},
     {text: 'EU261 liability not assessed until after the fact', opp: 'fin-2'},
     {text: 'Standby crew utilisation tracked weekly — no real-time visibility', opp: 'tal-2'},
     {text: 'Fatigue compliance reviewed retrospectively, not proactively', opp: 'fin-2'},
     {text: 'FO attrition planning relies on gut feel, not modelled scenarios', opp: 'tal-2'},
-    {text: 'NHS Lifeline routes — minimum crew breach risk not flagged early', opp: 'ops-0'},
+    {text: 'NHS Lifeline routes require minimum crew — breach risk not flagged early', opp: 'ops-0'},
   ],
   st: [
-    {text: 'Account managers don\'t know a client is at risk until they call to complain', opp: 'com-0'},
+    {text: "Account managers don't know a client is at risk until they call to complain", opp: 'com-0'},
     {text: 'NPS trends tracked manually — no alert when a score drops significantly', opp: 'tal-0'},
     {text: 'No link between service delivery failures and churn risk', opp: 'tal-1'},
     {text: 'Interventions reactive, not proactive', opp: 'com-2'},
-    {text: 'No visibility on which operational issues drive most churn risk', opp: 'tal-1'},
+    {text: 'No visibility on which operational issues are driving most churn risk', opp: 'tal-1'},
     {text: 'Outreach drafted from scratch each time — no AI assist', opp: 'com-2'},
   ],
   me: [
-    {text: 'Wire triage is manual — editors reading every incoming item', opp: 'ops-4'},
+    {text: 'Wire triage is a manual process — editors reading every incoming item', opp: 'ops-4'},
     {text: 'Image rights checked reactively — exposure when published without clearance', opp: 'fin-2'},
     {text: 'Legal check happens after the wire is processed, not during', opp: 'fin-2'},
     {text: 'Wire-to-ready time is hours, not minutes', opp: 'ops-0'},
@@ -3751,7 +3860,7 @@ const VERTICAL_SIGNALS = {
     {text: 'Associates spend 60–70% of time building and updating pitchbooks', opp: 'com-2'},
     {text: 'Private company data has to be manually sourced and structured', opp: 'ops-2'},
     {text: 'Research signals monitored manually — sector news read by individuals', opp: 'com-0'},
-    {text: 'Deal thesis exists in an analyst\'s head, not a searchable format', opp: 'tal-3'},
+    {text: "Deal thesis exists in an analyst's head, not a searchable format", opp: 'tal-3'},
     {text: 'No systematic process for converting research to visual presentation', opp: 'com-2'},
     {text: 'Pitchbook updates when a deal evolves take a full day', opp: 'ops-1'},
   ]
@@ -3861,10 +3970,9 @@ function selectVertical(vKey, card) {
   updateSignalChips(vKey);
   // Update opp-map labels in CLIENT MODE slide 3
   updateOppMapLabels(vKey);
-  // Sync to launcher if open
-  if (launcherVertical !== vKey) {
-    launcherSelectV(vKey, document.querySelector(`.launcher-v-card[data-v="${vKey}"]`));
-  }
+  // Sync to launcher
+  const launcherCard = document.querySelector(`.launcher-v-card[data-v="${vKey}"]`);
+  if (launcherCard) launcherSelectV(vKey, launcherCard);
 }
 
 function updateSignalChips(vKey) {
@@ -3970,6 +4078,19 @@ function launcherSelectP(p, btn) {
   document.getElementById('pocAct2').textContent = p.act2;
   document.getElementById('pocAct3').textContent = p.act3;
   document.getElementById('pocHitl').textContent = p.hitl;
+  // Find source for this HITL phrase
+  const hitlEntry = (typeof HITL_PHRASES !== 'undefined') ? HITL_PHRASES.find(h => h.quote === p.hitl) : null;
+  const srcEl = document.getElementById('pocHitlSource');
+  if (srcEl) srcEl.textContent = hitlEntry ? '— ' + hitlEntry.source : '';
+
+  // Populate ROI metrics
+  const roiStrip = document.getElementById('pocRoiStrip');
+  if (roiStrip) {
+    const metrics = p.metrics || [];
+    roiStrip.innerHTML = metrics.slice(0,3).map(m =>
+      `<div class="poc-roi-item"><div class="poc-roi-value">${m.value}</div><div class="poc-roi-metric">${m.metric}</div><div class="poc-roi-context">${m.context}</div></div>`
+    ).join('');
+  }
 
   // Open button
   const openBtn = document.getElementById('pocOpenBtn');
@@ -4670,8 +4791,14 @@ function openPoc() {
             </div>
             <div class="poc-hitl">
               <span class="poc-hitl-icon">🔄</span>
-              <span id="pocHitl">AI prepares. Human decides.</span>
+              <div>
+                <div id="pocHitl" style="font-size:12px;font-style:italic;line-height:1.5;">AI prepares. Human decides.</div>
+                <div id="pocHitlSource" style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;font-family:'Geist Mono',monospace;color:rgba(56,187,148,0.5);margin-top:4px;"></div>
+              </div>
             </div>
+
+            <!-- ROI metrics strip -->
+            <div class="poc-roi-strip" id="pocRoiStrip"></div>
           </div>
         </div>
 
