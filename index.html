@@ -1236,6 +1236,150 @@ body {
 .client-arch-badge.nav   { background: rgba(255,160,48,0.15);  color: #FFA030; }
 .client-arch-badge.infra { background: rgba(81,95,252,0.15);   color: #515FFC; }
 
+
+/* ══ PATTERN LIBRARY ══ */
+.pattern-library {
+  margin-top: 20px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+}
+.pattern-lib-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; background: none; border: none; cursor: pointer;
+  font-family: 'Geist', sans-serif; transition: background .12s;
+}
+.pattern-lib-toggle:hover { background: rgba(255,255,255,0.02); }
+.pattern-lib-toggle-left { display: flex; align-items: center; gap: 12px; }
+.pattern-lib-badge {
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #515FFC; background: rgba(81,95,252,0.12);
+  border: 1px solid rgba(81,95,252,0.25); border-radius: 4px; padding: 3px 8px;
+}
+.pattern-lib-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.pattern-lib-sub   { font-size: 11px; color: var(--text-dim); margin-left: 8px; }
+.pattern-active-count {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--brand); background: var(--brand-lit);
+  border: 1px solid rgba(81,95,252,0.3);
+  border-radius: 20px; padding: 2px 9px; display: none;
+}
+.pattern-active-count.visible { display: inline-block; }
+.pattern-lib-arrow { font-size: 11px; color: var(--text-dim); transition: transform .2s; }
+.pattern-library.open .pattern-lib-arrow { transform: rotate(180deg); }
+
+.pattern-lib-body { display: none; padding: 0 20px 20px; }
+.pattern-library.open .pattern-lib-body { display: block; }
+
+/* system tags inside pattern library */
+.pattern-stack-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; padding: 10px 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.pattern-stack-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-dim);
+  font-family: var(--mono); flex-shrink: 0; margin-right: 4px;
+}
+.pattern-stack-hint { font-size: 10.5px; color: var(--text-dim); font-style: italic; }
+
+/* pattern grid */
+.pattern-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+}
+.pattern-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  transition: border-color .2s, opacity .2s;
+  opacity: 0.45;
+}
+.pattern-card.pattern-lit {
+  opacity: 1;
+  border-color: rgba(81,95,252,0.35);
+}
+.pattern-card-head {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.pattern-num {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--brand); flex-shrink: 0; padding-top: 1px;
+  width: 20px;
+}
+.pattern-area-tag {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 3px;
+  font-family: var(--mono); margin-left: auto; flex-shrink: 0;
+}
+.pattern-area-tag.ops  { background: rgba(81,95,252,0.1);  color: var(--brand); }
+.pattern-area-tag.com  { background: rgba(56,187,148,0.1); color: var(--green); }
+.pattern-area-tag.fin  { background: rgba(255,160,48,0.1); color: var(--amber); }
+.pattern-area-tag.tal  { background: rgba(255,255,255,0.06); color: var(--text-mid); }
+.pattern-name { font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.3; flex: 1; }
+.pattern-body { padding: 12px 16px; }
+.pattern-universal {
+  font-size: 11.5px; color: var(--text-mid); line-height: 1.55;
+  margin-bottom: 10px;
+}
+.pattern-skins { display: flex; flex-direction: column; gap: 5px; }
+.pattern-skin-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.4;
+  padding: 5px 8px; border-radius: 5px; transition: all .12s;
+}
+.pattern-skin-row.skin-lit {
+  background: var(--brand-lit);
+  border: 1px solid rgba(81,95,252,0.2);
+  color: var(--text);
+}
+.pattern-skin-system {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  color: var(--brand); flex-shrink: 0; margin-top: 1px;
+  min-width: 72px;
+}
+.pattern-skin-row.skin-lit .pattern-skin-system { color: var(--brand); }
+
+/* ══ CLIENT MODE PATTERN SLIDE ══ */
+.slide-patterns { background: #08080F; }
+.pattern-client-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; width: 100%;
+}
+.pc-pattern-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 20px 20px;
+  display: none; /* shown via JS when pattern is active */
+  flex-direction: column; gap: 8px;
+}
+.pc-pattern-card.pc-lit { display: flex; }
+.pc-pattern-num {
+  font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700;
+  color: #515FFC; margin-bottom: 2px;
+}
+.pc-pattern-name {
+  font-size: 14px; font-weight: 700; color: #fff;
+  line-height: 1.3; margin-bottom: 6px;
+}
+.pc-pattern-universal {
+  font-size: 12px; color: rgba(255,255,255,0.45);
+  line-height: 1.6; margin-bottom: 10px;
+}
+.pc-pattern-skin {
+  font-size: 12px; font-weight: 600;
+  background: rgba(81,95,252,0.12); border: 1px solid rgba(81,95,252,0.2);
+  border-radius: 6px; padding: 7px 12px; color: rgba(255,255,255,0.8);
+  line-height: 1.4;
+}
+.pc-pattern-skin em { color: #515FFC; font-style: normal; }
+.pc-no-patterns {
+  grid-column: 1/-1; text-align: center;
+  padding: 60px 20px;
+  font-size: 14px; color: rgba(255,255,255,0.25);
+  font-style: italic;
+}
+
 </style>
 </head>
 <body>
@@ -1838,6 +1982,203 @@ body {
       </div>
     </div>
   </div>
+
+
+  <!-- PATTERN LIBRARY -->
+  <div class="pattern-library" id="patternLibrary">
+    <button class="pattern-lib-toggle" onclick="document.getElementById('patternLibrary').classList.toggle('open')">
+      <div class="pattern-lib-toggle-left">
+        <span class="pattern-lib-badge">Pattern Library</span>
+        <span class="pattern-lib-title">10 Universal Patterns</span>
+        <span class="pattern-lib-sub">— lights up from your tech stack tags</span>
+        <span class="pattern-active-count" id="patternActiveCount">0 active</span>
+      </div>
+      <span class="pattern-lib-arrow">▼</span>
+    </button>
+    <div class="pattern-lib-body">
+      <div class="pattern-stack-row">
+        <span class="pattern-stack-label">Detecting from stack:</span>
+        <span class="pattern-stack-hint" id="patternStackHint">Tag systems in the Tech Stack strip above to light up relevant patterns</span>
+      </div>
+      <div class="pattern-grid">
+
+        <!-- P1 -->
+        <div class="pattern-card" id="pat-1" data-systems="yardi,sap,oracle,epic,jira,servicenow">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P1</div>
+            <div class="pattern-name">Process automation on high-volume repetitive tasks</div>
+            <div class="pattern-area-tag ops">Ops</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Ingest structured/semi-structured inputs → transform → output to downstream system. Whenever someone says "a person does this every day" — it's this.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>Work order creation and routing</div>
+              <div class="pattern-skin-row" data-system="sap"><div class="pattern-skin-system">SAP</div>PO processing, goods receipt matching</div>
+              <div class="pattern-skin-row" data-system="epic"><div class="pattern-skin-system">Epic</div>Prior auth submission, claims processing</div>
+              <div class="pattern-skin-row" data-system="jira servicenow"><div class="pattern-skin-system">Jira / SN</div>Ticket triage and routing</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P2 -->
+        <div class="pattern-card" id="pat-2" data-systems="yardi,bloomberg,epic,aws,gcp,azure">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P2</div>
+            <div class="pattern-name">Exception detection and routing</div>
+            <div class="pattern-area-tag ops">Ops</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Continuous monitoring against threshold → flag → route to right human. Different domains, identical architecture.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>Maintenance escalation, invoice discrepancy</div>
+              <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Compliance breach, limit breach alerts</div>
+              <div class="pattern-skin-row" data-system="epic"><div class="pattern-skin-system">Epic</div>Abnormal result flagging, deterioration alerts</div>
+              <div class="pattern-skin-row" data-system="aws gcp azure"><div class="pattern-skin-system">Cloud</div>Incident detection, cost anomaly</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P3 -->
+        <div class="pattern-card" id="pat-3" data-systems="yardi,bloomberg,sap">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P3</div>
+            <div class="pattern-name">Vendor / counterparty management automation</div>
+            <div class="pattern-area-tag ops">Ops</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Normalise external-party data from multiple sources → consolidate → trigger action. The "vendor chasing" problem.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>Contractor follow-up, COI tracking</div>
+              <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Counterparty due diligence packaging</div>
+              <div class="pattern-skin-row" data-system="sap"><div class="pattern-skin-system">SAP</div>RFQ processing, supplier scorecard</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P4 -->
+        <div class="pattern-card" id="pat-4" data-systems="bloomberg,yardi,salesforce,sap">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P4</div>
+            <div class="pattern-name">Document generation and transformation</div>
+            <div class="pattern-area-tag com">Com</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Take data inputs → produce formatted client-facing document. Same capability across every vertical — different document type, different data source.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Pitchbook, CIM, research report</div>
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>Lease abstract, offering memorandum</div>
+              <div class="pattern-skin-row" data-system="salesforce"><div class="pattern-skin-system">Salesforce</div>Proposal, engagement letter</div>
+              <div class="pattern-skin-row" data-system="sap"><div class="pattern-skin-system">SAP</div>Technical spec sheet, bid response</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P5 -->
+        <div class="pattern-card" id="pat-5" data-systems="bloomberg,salesforce,optimizely">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P5</div>
+            <div class="pattern-name">Deal intelligence and signal synthesis</div>
+            <div class="pattern-area-tag com">Com</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Aggregate disparate signals → surface commercially relevant insight → present in time for action. The "I don't have good enough data" problem.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>M&A signal, earnings preview, market intel</div>
+              <div class="pattern-skin-row" data-system="salesforce"><div class="pattern-skin-system">Salesforce</div>Churn signal, expansion signal, account intelligence</div>
+              <div class="pattern-skin-row" data-system="optimizely"><div class="pattern-skin-system">Optimizely</div>Experiment signal, conversion intelligence</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P6 -->
+        <div class="pattern-card" id="pat-6" data-systems="salesforce,microsoft 365,outlook,dynamics">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P6</div>
+            <div class="pattern-name">Follow-up and pipeline automation</div>
+            <div class="pattern-area-tag com">Com</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Trigger-based outreach and task creation from CRM state changes. Works across every vertical with any CRM — the "6pm Friday" pattern.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="salesforce"><div class="pattern-skin-system">Salesforce</div>Automated follow-up, next-step nudge, renewal outreach</div>
+              <div class="pattern-skin-row" data-system="dynamics"><div class="pattern-skin-system">Dynamics</div>KYC refresh, relationship maintenance</div>
+              <div class="pattern-skin-row" data-system="microsoft 365 outlook"><div class="pattern-skin-system">M365</div>Email-triggered task creation, meeting follow-up</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P7 -->
+        <div class="pattern-card" id="pat-7" data-systems="yardi,bloomberg,sap">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P7</div>
+            <div class="pattern-name">Reconciliation and audit trail automation</div>
+            <div class="pattern-area-tag fin">Fin</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Match records across systems → identify discrepancies → document resolution path. Month-end close automation in every vertical.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>CAM reconciliation, invoice matching</div>
+              <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Position reconciliation, P&L attribution</div>
+              <div class="pattern-skin-row" data-system="sap"><div class="pattern-skin-system">SAP</div>Inventory reconciliation, cost variance</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P8 -->
+        <div class="pattern-card" id="pat-8" data-systems="bloomberg,servicenow">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P8</div>
+            <div class="pattern-name">Regulatory change monitoring</div>
+            <div class="pattern-area-tag fin">Fin</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Scan regulatory sources → identify relevance to client's operating context → brief the right team. Every regulated vertical needs this.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Basel / MiFID / Dodd-Frank updates</div>
+              <div class="pattern-skin-row" data-system="servicenow"><div class="pattern-skin-system">ServiceNow</div>Policy change routing, compliance tracking</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P9 -->
+        <div class="pattern-card" id="pat-9" data-systems="yardi,salesforce,servicenow,copilot,microsoft 365">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P9</div>
+            <div class="pattern-name">Knowledge capture and internal Q&A</div>
+            <div class="pattern-area-tag tal">Talent</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Ingest institutional knowledge → make it queryable → keep it current. The "only Morgan knows how" problem. Highest urgency when key person risk is named.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>"How does our Yardi do X" agent</div>
+              <div class="pattern-skin-row" data-system="copilot"><div class="pattern-skin-system">Copilot</div>Internal docs agent — Copilot can't do this</div>
+              <div class="pattern-skin-row" data-system="salesforce"><div class="pattern-skin-system">Salesforce</div>Deal precedent search, playbook agent</div>
+              <div class="pattern-skin-row" data-system="servicenow microsoft 365"><div class="pattern-skin-system">M365/SN</div>Policy navigator, onboarding assistant</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P10 -->
+        <div class="pattern-card" id="pat-10" data-systems="salesforce,yardi,microsoft 365,dynamics">
+          <div class="pattern-card-head">
+            <div class="pattern-num">P10</div>
+            <div class="pattern-name">Onboarding and lifecycle communications</div>
+            <div class="pattern-area-tag tal">Talent</div>
+          </div>
+          <div class="pattern-body">
+            <div class="pattern-universal">Trigger-based personalised communications at key lifecycle moments. The template is universal — what changes is the lifecycle event and the system of record.</div>
+            <div class="pattern-skins">
+              <div class="pattern-skin-row" data-system="yardi"><div class="pattern-skin-system">Yardi</div>Tenant onboarding, lease renewal comms</div>
+              <div class="pattern-skin-row" data-system="salesforce dynamics"><div class="pattern-skin-system">CRM</div>Client onboarding, KYC comms, re-engagement</div>
+              <div class="pattern-skin-row" data-system="microsoft 365"><div class="pattern-skin-system">M365</div>Employee onboarding, L&D nudges</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="beat-divider"></div>
@@ -2186,10 +2527,10 @@ function applyArchetypeToClient(archetype) {
 
   // define slide sequence per archetype
   const sequences = {
-    open:  ['base-opening', 'base-shift', 'base-opp', 'base-how', 'base-next'],
-    peer:  ['base-opening', 'peer-landscape', 'base-opp', 'base-how', 'base-next'],
-    nav:   ['base-opening', 'base-shift', 'nav-opp', 'base-how', 'base-next'],
-    infra: ['base-opening', 'infra-arch', 'base-shift', 'base-opp', 'base-how', 'base-next'],
+    open:  ['base-opening', 'base-shift', 'base-opp', 'base-patterns', 'base-how', 'base-next'],
+    peer:  ['base-opening', 'peer-landscape', 'base-patterns', 'base-opp', 'base-how', 'base-next'],
+    nav:   ['base-opening', 'base-shift', 'nav-opp', 'base-patterns', 'base-how', 'base-next'],
+    infra: ['base-opening', 'infra-arch', 'base-shift', 'base-patterns', 'base-how', 'base-next'],
   };
 
   const seq = sequences[archetype] || sequences.open;
@@ -2204,6 +2545,7 @@ function applyArchetypeToClient(archetype) {
     'peer-landscape':  document.querySelector('.client-slide[data-archetype="peer"]'),
     'nav-opp':         document.querySelector('.client-slide.slide-opp[data-archetype="nav"]'),
     'infra-arch':      document.querySelector('.client-slide[data-archetype="infra"]'),
+    'base-patterns':   document.getElementById('clientPatternSlide'),
   };
 
   // hide ALL slides first
@@ -2347,6 +2689,175 @@ function updateSpecMeter() {
 }
 // init
 updateSpecMeter();
+
+
+// ══ PATTERN LIBRARY — system → pattern mapping ══
+const SYSTEM_PATTERN_MAP = {
+  'yardi':         [1,2,3,4,7,9,10],
+  'bloomberg':     [2,4,5,7,8],
+  'salesforce':    [4,5,6,9,10],
+  'sap':           [1,3,4,7],
+  'epic':          [1,2],
+  'jira':          [1],
+  'servicenow':    [1,8,9],
+  'aws':           [2],
+  'gcp':           [2],
+  'azure':         [2],
+  'copilot':       [9],
+  'microsoft 365': [6,9,10],
+  'outlook':       [6],
+  'dynamics':      [6,10],
+  'optimizely':    [5],
+};
+
+// skin copy per system per pattern
+const PATTERN_SKIN_COPY = {
+  '1-yardi':    'On <em>Yardi</em>: work order creation and routing — automated end to end',
+  '1-sap':      'On <em>SAP</em>: PO processing and goods receipt matching without manual touch',
+  '1-epic':     'On <em>Epic</em>: prior auth submission and claims processing at volume',
+  '1-jira':     'On <em>Jira</em>: ticket triage, classification, and routing to the right team',
+  '1-servicenow':'On <em>ServiceNow</em>: request fulfilment and CMDB transformation',
+  '2-yardi':    'On <em>Yardi</em>: maintenance escalation and invoice discrepancy detection',
+  '2-bloomberg': 'On <em>Bloomberg</em>: compliance breach and limit breach alerts in real time',
+  '2-epic':     'On <em>Epic</em>: abnormal result flagging and patient deterioration alerts',
+  '2-aws':      'On <em>AWS</em>: incident detection, cost anomaly, and resource alerts',
+  '2-gcp':      'On <em>GCP</em>: incident detection and infrastructure cost anomaly',
+  '2-azure':    'On <em>Azure</em>: incident detection and infrastructure cost anomaly',
+  '3-yardi':    'On <em>Yardi</em>: contractor follow-up and certificate of insurance tracking',
+  '3-bloomberg': 'On <em>Bloomberg</em>: counterparty due diligence packaging and aggregation',
+  '3-sap':      'On <em>SAP</em>: RFQ processing and automated supplier scorecard',
+  '4-bloomberg': 'On <em>Bloomberg</em>: pitchbook, CIM, and research report generation',
+  '4-yardi':    'On <em>Yardi</em>: lease abstract and offering memorandum automation',
+  '4-salesforce':'On <em>Salesforce</em>: proposal and engagement letter drafting',
+  '4-sap':      'On <em>SAP</em>: technical spec sheet and bid response generation',
+  '5-bloomberg': 'On <em>Bloomberg</em>: M&A signal, earnings preview, market intelligence briefing',
+  '5-salesforce':'On <em>Salesforce</em>: churn signal, expansion signal, account intelligence',
+  '5-optimizely':'On <em>Optimizely</em>: experiment signal synthesis and conversion intelligence',
+  '6-salesforce':'On <em>Salesforce</em>: automated follow-up, next-step nudge, renewal outreach',
+  '6-dynamics':  'On <em>Dynamics</em>: KYC refresh and relationship maintenance automation',
+  '6-microsoft 365': 'On <em>M365</em>: email-triggered task creation and meeting follow-up',
+  '6-outlook':   'On <em>Outlook</em>: email-triggered follow-up and meeting action items',
+  '7-yardi':    'On <em>Yardi</em>: CAM reconciliation and invoice matching automation',
+  '7-bloomberg': 'On <em>Bloomberg</em>: position reconciliation and P&L attribution',
+  '7-sap':      'On <em>SAP</em>: inventory reconciliation and cost variance analysis',
+  '8-bloomberg': 'On <em>Bloomberg</em>: Basel / MiFID / Dodd-Frank monitoring and briefing',
+  '8-servicenow':'On <em>ServiceNow</em>: policy change routing and compliance tracking',
+  '9-yardi':    'On <em>Yardi</em>: "how does our Yardi do X" — configuration and process agent',
+  '9-copilot':  'On your stack — this is exactly what <em>Copilot cannot do</em>. Proactive, integrated, queryable.',
+  '9-salesforce':'On <em>Salesforce</em>: deal precedent search and playbook agent',
+  '9-servicenow':'On <em>ServiceNow</em>: policy navigator and IT knowledge agent',
+  '9-microsoft 365': 'On <em>M365</em>: internal docs agent and onboarding assistant',
+  '10-yardi':   'On <em>Yardi</em>: tenant onboarding and lease renewal communications',
+  '10-salesforce':'On <em>Salesforce</em>: client onboarding and KYC comms automation',
+  '10-dynamics': 'On <em>Dynamics</em>: client lifecycle communications and re-engagement',
+  '10-microsoft 365': 'On <em>M365</em>: employee onboarding and L&D nudge automation',
+};
+
+function getActiveSystemsFromTags() {
+  const active = [];
+  document.querySelectorAll('.tech-tag.active').forEach(tag => {
+    active.push(tag.textContent.toLowerCase().trim());
+  });
+  const freeText = document.getElementById('techStackInput');
+  if (freeText && freeText.value.trim()) {
+    const knownSystems = Object.keys(SYSTEM_PATTERN_MAP);
+    const lower = freeText.value.toLowerCase();
+    knownSystems.forEach(s => { if (lower.includes(s) && !active.includes(s)) active.push(s); });
+  }
+  return active;
+}
+
+function updatePatternLibrary() {
+  const activeSystems = getActiveSystemsFromTags();
+  const activePatterns = new Set();
+
+  activeSystems.forEach(sys => {
+    (SYSTEM_PATTERN_MAP[sys] || []).forEach(p => activePatterns.add(p));
+  });
+
+  // Update pattern cards
+  document.querySelectorAll('.pattern-card').forEach(card => {
+    const patNum = parseInt(card.id.replace('pat-',''));
+    const lit = activePatterns.has(patNum);
+    card.classList.toggle('pattern-lit', lit);
+
+    // Highlight specific skin rows
+    if (lit) {
+      card.querySelectorAll('.pattern-skin-row').forEach(row => {
+        const rowSystems = row.getAttribute('data-system') || '';
+        const rowLit = activeSystems.some(s => rowSystems.toLowerCase().includes(s));
+        row.classList.toggle('skin-lit', rowLit);
+      });
+    }
+  });
+
+  // Update count badge
+  const count = activePatterns.size;
+  const badge = document.getElementById('patternActiveCount');
+  if (badge) {
+    badge.textContent = count + ' active';
+    badge.classList.toggle('visible', count > 0);
+  }
+
+  // Update hint
+  const hint = document.getElementById('patternStackHint');
+  if (hint) {
+    if (activeSystems.length > 0) {
+      hint.textContent = activeSystems.map(s => s.charAt(0).toUpperCase()+s.slice(1)).join(' · ') + ' → ' + count + ' patterns detected';
+    } else {
+      hint.textContent = 'Tag systems in the Tech Stack strip above to light up relevant patterns';
+    }
+  }
+
+  // Auto-open if patterns found
+  if (count > 0) {
+    document.getElementById('patternLibrary')?.classList.add('open');
+  }
+
+  // Sync to client mode pattern slide
+  syncClientPatternSlide(activeSystems, activePatterns);
+}
+
+function syncClientPatternSlide(activeSystems, activePatterns) {
+  const noPatterns = document.getElementById('pcNoPatterns');
+  let anyLit = false;
+
+  for (let p = 1; p <= 10; p++) {
+    const card = document.getElementById('cpc-'+p);
+    const skinEl = document.getElementById('cpc-'+p+'-skin');
+    if (!card) continue;
+
+    const lit = activePatterns.has(p);
+    card.classList.toggle('pc-lit', lit);
+    if (lit) anyLit = true;
+
+    // Find best skin copy for this pattern given active systems
+    if (skinEl && lit) {
+      let skinText = null;
+      for (const sys of activeSystems) {
+        const key = p + '-' + sys;
+        if (PATTERN_SKIN_COPY[key]) { skinText = PATTERN_SKIN_COPY[key]; break; }
+      }
+      skinEl.innerHTML = skinText || 'Pattern detected from your tech stack';
+    }
+  }
+
+  if (noPatterns) noPatterns.style.display = anyLit ? 'none' : 'block';
+}
+
+// Hook into tech tag clicks and input
+document.querySelectorAll('.tech-tag').forEach(tag => {
+  const orig = tag.onclick;
+  tag.onclick = function() { orig && orig.call(this); updatePatternLibrary(); };
+});
+const techInput = document.getElementById('techStackInput');
+if (techInput) {
+  const origInput = techInput.oninput;
+  techInput.oninput = function() {
+    origInput && origInput.call(this, {target: this});
+    updatePatternLibrary();
+  };
+}
 
 </script>
 
@@ -2836,6 +3347,88 @@ updateSpecMeter();
             <div class="opp-map-item"><div class="opp-map-dot"></div>Training &amp; upskilling</div>
             <div class="opp-map-item"><div class="opp-map-dot"></div>Sentiment &amp; churn signals</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- SLIDE: PATTERN (dynamic — all archetypes) -->
+    <div class="client-slide slide-patterns" data-archetype="pattern-slide" id="clientPatternSlide">
+      <div class="slide-eyebrow">Where We See Your Pattern</div>
+      <div class="slide-headline">Your stack. <em>Our pattern recognition.</em></div>
+      <div class="slide-sub" style="margin-bottom:24px;">Every system you just named maps to something we've built before. Here's what that looks like for you.</div>
+      <div class="pattern-client-grid" id="clientPatternGrid">
+        <div class="pc-no-patterns" id="pcNoPatterns">Tag your tech stack in PREP to populate this slide</div>
+        <!-- P1 -->
+        <div class="pc-pattern-card" id="cpc-1">
+          <div class="pc-pattern-num">P1 · Operations</div>
+          <div class="pc-pattern-name">Process automation on high-volume repetitive tasks</div>
+          <div class="pc-pattern-universal">If someone on your team does the same task every day — this is automatable. Same architecture across every vertical.</div>
+          <div class="pc-pattern-skin" id="cpc-1-skin">Specific to your stack</div>
+        </div>
+        <!-- P2 -->
+        <div class="pc-pattern-card" id="cpc-2">
+          <div class="pc-pattern-num">P2 · Operations</div>
+          <div class="pc-pattern-name">Exception detection and routing</div>
+          <div class="pc-pattern-universal">Continuous monitoring — flags what matters and routes it to the right person before it becomes a problem.</div>
+          <div class="pc-pattern-skin" id="cpc-2-skin">Specific to your stack</div>
+        </div>
+        <!-- P3 -->
+        <div class="pc-pattern-card" id="cpc-3">
+          <div class="pc-pattern-num">P3 · Operations</div>
+          <div class="pc-pattern-name">Vendor / counterparty management automation</div>
+          <div class="pc-pattern-universal">External-party data normalised, consolidated, and acted on automatically. Eliminates the chasing.</div>
+          <div class="pc-pattern-skin" id="cpc-3-skin">Specific to your stack</div>
+        </div>
+        <!-- P4 -->
+        <div class="pc-pattern-card" id="cpc-4">
+          <div class="pc-pattern-num">P4 · Commercial</div>
+          <div class="pc-pattern-name">Document generation and transformation</div>
+          <div class="pc-pattern-universal">Data in → formatted client-facing document out. Hours of work reduced to seconds. Your format, your data.</div>
+          <div class="pc-pattern-skin" id="cpc-4-skin">Specific to your stack</div>
+        </div>
+        <!-- P5 -->
+        <div class="pc-pattern-card" id="cpc-5">
+          <div class="pc-pattern-num">P5 · Commercial</div>
+          <div class="pc-pattern-name">Deal intelligence and signal synthesis</div>
+          <div class="pc-pattern-universal">Aggregate disparate signals, surface what matters, present it before the decision is made without it.</div>
+          <div class="pc-pattern-skin" id="cpc-5-skin">Specific to your stack</div>
+        </div>
+        <!-- P6 -->
+        <div class="pc-pattern-card" id="cpc-6">
+          <div class="pc-pattern-num">P6 · Commercial</div>
+          <div class="pc-pattern-name">Follow-up and pipeline automation</div>
+          <div class="pc-pattern-universal">The 6pm Friday work. Trigger-based, personalised, automatic. Your team does the relationship — not the admin.</div>
+          <div class="pc-pattern-skin" id="cpc-6-skin">Specific to your stack</div>
+        </div>
+        <!-- P7 -->
+        <div class="pc-pattern-card" id="cpc-7">
+          <div class="pc-pattern-num">P7 · Finance &amp; Risk</div>
+          <div class="pc-pattern-name">Reconciliation and audit trail automation</div>
+          <div class="pc-pattern-universal">Match records across systems, surface discrepancies, document the resolution. Month-end close at speed.</div>
+          <div class="pc-pattern-skin" id="cpc-7-skin">Specific to your stack</div>
+        </div>
+        <!-- P8 -->
+        <div class="pc-pattern-card" id="cpc-8">
+          <div class="pc-pattern-num">P8 · Finance &amp; Risk</div>
+          <div class="pc-pattern-name">Regulatory change monitoring</div>
+          <div class="pc-pattern-universal">Scans regulatory sources, identifies what's relevant to your context, briefs the right team automatically.</div>
+          <div class="pc-pattern-skin" id="cpc-8-skin">Specific to your stack</div>
+        </div>
+        <!-- P9 -->
+        <div class="pc-pattern-card" id="cpc-9">
+          <div class="pc-pattern-num">P9 · Client &amp; Talent</div>
+          <div class="pc-pattern-name">Knowledge capture and internal Q&amp;A</div>
+          <div class="pc-pattern-universal">Institutional knowledge made queryable. The "only Morgan knows" risk — eliminated.</div>
+          <div class="pc-pattern-skin" id="cpc-9-skin">Specific to your stack</div>
+        </div>
+        <!-- P10 -->
+        <div class="pc-pattern-card" id="cpc-10">
+          <div class="pc-pattern-num">P10 · Client &amp; Talent</div>
+          <div class="pc-pattern-name">Onboarding and lifecycle communications</div>
+          <div class="pc-pattern-universal">Trigger-based, personalised communications at every key lifecycle moment. Automated. On-brand. On time.</div>
+          <div class="pc-pattern-skin" id="cpc-10-skin">Specific to your stack</div>
         </div>
       </div>
     </div>
