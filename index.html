@@ -4545,12 +4545,12 @@ function applyArchetypeToClient(archetype) {
   });
 
   // define slide sequence per archetype
-  const contextPrefix = (document.getElementById('clientContextSlide')?.style.display !== 'none') ? ['base-context'] : [];
+  const contextSlide = (document.getElementById('clientContextSlide')?.style.display !== 'none') ? ['base-context'] : [];
   const sequences = {
-    open:  [...contextPrefix, 'base-opening', 'base-shift', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    peer:  [...contextPrefix, 'base-opening', 'peer-landscape', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    nav:   [...contextPrefix, 'base-opening', 'base-shift', 'nav-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
-    infra: [...contextPrefix, 'base-opening', 'infra-arch', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    open:  ['base-opening', ...contextSlide, 'base-shift', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    peer:  ['base-opening', ...contextSlide, 'peer-landscape', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    nav:   ['base-opening', ...contextSlide, 'base-shift', 'nav-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
+    infra: ['base-opening', ...contextSlide, 'infra-arch', 'base-opp', 'base-patterns', 'base-demo', 'base-how', 'base-next'],
   };
 
   const seq = sequences[archetype] || sequences.open;
