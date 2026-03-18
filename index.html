@@ -1382,15 +1382,22 @@ body {
 
 
 /* ══ LIVE DEMO SLIDE ══ */
-.slide-demo { background: #08080F; padding: 40px 60px; }
+.slide-demo {
+  background: #08080F;
+  padding: 40px 60px;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+}
 
 .demo-layout {
   display: grid;
   grid-template-columns: 340px 1fr;
   gap: 20px;
   width: 100%;
-  height: 100%;
-  max-height: calc(100vh - 180px);
+  flex: 1;
+  min-height: 0;
+  height: calc(100vh - 220px);
 }
 
 /* LEFT: demo selector */
@@ -1424,6 +1431,7 @@ body {
 .demo-workspace {
   display: flex; flex-direction: column; gap: 12px;
   min-height: 0;
+  overflow: hidden;
 }
 .demo-input-area {
   background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
@@ -1471,7 +1479,7 @@ body {
 .demo-output-area {
   background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
   border-radius: 12px; overflow: hidden;
-  flex: 1; display: flex; flex-direction: column; min-height: 0;
+  flex: 1; display: flex; flex-direction: column; min-height: 0; max-height: 300px;
 }
 .demo-output-head {
   padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.07);
