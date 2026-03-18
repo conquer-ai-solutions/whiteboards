@@ -3539,6 +3539,15 @@ body {
 </div><!-- /clientMode -->
 
 <script>
+// ── STATE ──
+let clientPatternOverrides = null;
+const DEFAULT_PATTERNS = new Set([1, 2, 4, 5, 8, 9]);
+let currentVertical = null;
+let launcherVertical = null;
+let launcherPattern = null;
+let currentPocUrl = null;
+let TOTAL_SLIDES = 5;
+
 // ── BEAT NAV HIGHLIGHT ──
 const beats = ['beat-1','beat-2','beat-3','beat-4','beat-5'];
 const btns  = document.querySelectorAll('.beat-btn');
@@ -3693,7 +3702,7 @@ function markFilled(id, textarea) {
 
 // ══ CLIENT MODE ══
 let clientSlideIndex = 0;
-let TOTAL_SLIDES = 5;
+
 
 function enterClientMode() {
   // sync client name — get first cs-input (Client field)
@@ -4049,9 +4058,7 @@ function updatePatternLibrary() {
 }
 
 // Track manual pattern overrides from the adjust panel
-let clientPatternOverrides = null; // null = use auto/default, Set = manual
 
-const DEFAULT_PATTERNS = new Set([1, 2, 4, 5, 8, 9]); // most universal patterns
 
 function syncClientPatternSlide(activeSystems, activePatterns) {
   const noPatterns = document.getElementById('pcNoPatterns');
@@ -4817,10 +4824,10 @@ const VERTICAL_OPP_LABELS = {
 // ═══════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════
-let currentVertical = null;
-let launcherVertical = null;
-let launcherPattern = null;
-let currentPocUrl = null;
+
+
+
+
 
 // ═══════════════════════════════════════════════════
 // VERTICAL SELECTOR (PREP MODE)
