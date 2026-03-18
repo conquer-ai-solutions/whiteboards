@@ -2627,7 +2627,7 @@ function markFilled(id, textarea) {
 
 // ══ CLIENT MODE ══
 let clientSlideIndex = 0;
-const TOTAL_SLIDES = 5;
+let TOTAL_SLIDES = 5;
 
 function enterClientMode() {
   // sync client name
@@ -2711,8 +2711,8 @@ function applyArchetypeToClient(archetype) {
   });
 
   // update total
-  window.TOTAL_SLIDES = activeSlides.length;
-  document.getElementById('clientCounter').textContent = '1 / ' + window.TOTAL_SLIDES;
+  TOTAL_SLIDES = activeSlides.length;
+  document.getElementById('clientCounter').textContent = '1 / ' + TOTAL_SLIDES;
 
   // show archetype badge
   const badge = document.getElementById('clientArchBadge');
@@ -2742,11 +2742,11 @@ function goToSlide(idx) {
   clientSlideIndex = idx;
   slides[clientSlideIndex].classList.add('active');
   dots.forEach((d,i) => d.classList.toggle('active', i === clientSlideIndex));
-  document.getElementById('clientCounter').textContent = (clientSlideIndex+1) + ' / ' + (window.TOTAL_SLIDES || 5);
+  document.getElementById('clientCounter').textContent = (clientSlideIndex+1) + ' / ' + (TOTAL_SLIDES || 5);
 }
 
 function clientNext() {
-  const total = window.TOTAL_SLIDES || 5;
+  const total = TOTAL_SLIDES || 5;
   if (clientSlideIndex < total - 1) goToSlide(clientSlideIndex + 1);
 }
 function clientPrev() {
