@@ -2281,7 +2281,7 @@ body {
         <div class="hitl-banner-icon">🔄</div>
         <div>
           <div class="hitl-banner-title">Design principle: human-in-the-loop across every pattern</div>
-          <div class="hitl-banner-body">AI recommends, flags, drafts, or alerts. The human decides and approves. "AI does the checking. Taylor makes the call." — Lingotto. "Nothing is sent until you approve." — SSA. This is the architecture, not a feature.</div>
+          <div class="hitl-banner-body">AI recommends, flags, drafts, or alerts. The human decides and approves. "AI does the checking. Taylor makes the call." — Lingotto. "Nothing is sent until you approve." — Staffing &amp; workforce. This is the architecture, not a feature.</div>
         </div>
       </div>
 
@@ -2298,7 +2298,7 @@ body {
             </div>
             <div class="pattern-verticals">
               <div class="pv-item"><span class="pv-tag">Real Estate</span>Goodman — work order lifecycle</div>
-              <div class="pv-item"><span class="pv-tag">Staffing</span>SSA — candidate processing pipeline</div>
+              <div class="pv-item"><span class="pv-tag">Staffing</span>Staffing &amp; workforce — candidate processing pipeline</div>
               <div class="pv-item"><span class="pv-tag">Media</span>News UK — content workflow routing</div>
             </div>
           </div>
@@ -2369,7 +2369,7 @@ body {
             <div class="pattern-verticals">
               <div class="pv-item"><span class="pv-tag">Fin Services</span>Itaú — pitchbook &amp; PowerPoint automation</div>
               <div class="pv-item"><span class="pv-tag">Real Estate</span>Goodman — lease &amp; work order documents</div>
-              <div class="pv-item"><span class="pv-tag">Staffing</span>SSA — candidate briefing documents</div>
+              <div class="pv-item"><span class="pv-tag">Staffing</span>Staffing &amp; workforce — candidate briefing documents</div>
             </div>
           </div>
         </div>
@@ -2396,11 +2396,11 @@ body {
           <div class="pattern-body">
             <div class="pattern-universal">Continuous scoring of account health from engagement signals. Flags at-risk accounts before they churn. Commercial pattern — not a talent one.</div>
             <div class="pattern-skins">
-              <div class="pattern-skin-row" data-system="salesforce"><div class="pattern-skin-system">Salesforce</div>CDP churn scoring — SSA</div>
+              <div class="pattern-skin-row" data-system="salesforce"><div class="pattern-skin-system">Salesforce</div>CDP churn scoring — Staffing &amp; workforce</div>
               <div class="pattern-skin-row" data-system="dynamics"><div class="pattern-skin-system">Dynamics</div>Relationship health &amp; KYC risk scoring</div>
             </div>
             <div class="pattern-verticals">
-              <div class="pv-item"><span class="pv-tag">Staffing</span>SSA — candidate &amp; client churn scoring</div>
+              <div class="pv-item"><span class="pv-tag">Staffing</span>Staffing &amp; workforce — candidate &amp; client churn scoring</div>
               <div class="pv-item"><span class="pv-tag">Fin Services</span>Relationship health scoring pre-review</div>
             </div>
           </div>
@@ -2416,7 +2416,7 @@ body {
               <div class="pattern-skin-row" data-system="microsoft 365 outlook"><div class="pattern-skin-system">M365</div>Email-triggered task creation</div>
             </div>
             <div class="pattern-verticals">
-              <div class="pv-item"><span class="pv-tag">Staffing</span>SSA — consultant follow-up automation</div>
+              <div class="pv-item"><span class="pv-tag">Staffing</span>Staffing &amp; workforce — consultant follow-up automation</div>
               <div class="pv-item"><span class="pv-tag">Real Estate</span>Goodman — tenant &amp; broker follow-up</div>
             </div>
           </div>
@@ -2445,7 +2445,7 @@ body {
             <div class="pattern-skins">
               <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Covenant register monitoring — Arcmont 05:30</div>
               <div class="pattern-skin-row" data-system="bloomberg"><div class="pattern-skin-system">Bloomberg</div>Pre-trade vs IPS mandates — Lingotto</div>
-              <div class="pattern-skin-row" data-system="servicenow"><div class="pattern-skin-system">ServiceNow</div>SLA breach tracking — SSA, LoganAir</div>
+              <div class="pattern-skin-row" data-system="servicenow"><div class="pattern-skin-system">ServiceNow</div>SLA breach tracking — Staffing &amp; workforce, LoganAir</div>
             </div>
             <div class="pattern-verticals">
               <div class="pv-item"><span class="pv-tag">Asset Mgmt</span>Arcmont — covenant agent daily at 05:30</div>
@@ -2829,6 +2829,28 @@ function enterClientMode() {
   // apply archetype to slides
   applyArchetypeToClient(archetype);
 
+  // Personalise pattern skins with client name if available
+  if (name) {
+    document.querySelectorAll('.pc-pattern-skin').forEach(el => {
+      // Already has client-specific text from stack tags — don't overwrite
+      // But update the "your vertical" reference if present
+    });
+    // Update the slide headline
+    const headlineEl = document.querySelector('#clientPatternSlide .slide-headline');
+    if (headlineEl) {
+      headlineEl.innerHTML = `${name}. <em>Here\'s where we see your pattern.</em>`;
+    }
+    const subEl = document.querySelector('#clientPatternSlide .slide-sub');
+    if (subEl) {
+      subEl.textContent = 'Based on what you\'ve described and the systems you use.';
+    }
+  } else {
+    const headlineEl = document.querySelector('#clientPatternSlide .slide-headline');
+    if (headlineEl) headlineEl.innerHTML = 'Where the patterns apply. <em>Tell us what\'s wrong with it.</em>';
+    const subEl = document.querySelector('#clientPatternSlide .slide-sub');
+    if (subEl) subEl.textContent = 'Each pattern maps to a demonstrated solution. Nothing generic.';
+  }
+
   clientSlideIndex = 0;
   renderClientSlide();
   document.getElementById('clientMode').classList.add('active');
@@ -3049,24 +3071,24 @@ const PATTERN_SKIN_COPY = {
   '4-yardi':    'On <em>Yardi</em>: lease abstract and offering memorandum automation',
   '4-salesforce':'On <em>Salesforce</em>: proposal and engagement letter drafting',
   '4-sap':      'On <em>SAP</em>: technical spec sheet and bid response generation',
-  '5-bloomberg': 'On <em>Bloomberg</em>: M&A signal, earnings preview, market intelligence briefing',
+  '5-bloomberg': 'On <em>Bloomberg</em>: M&amp;A signal, earnings preview, pre-session intelligence briefing',
   '5-salesforce':'On <em>Salesforce</em>: churn signal, expansion signal, account intelligence',
   '5-optimizely':'On <em>Optimizely</em>: experiment signal synthesis and conversion intelligence',
   '6-salesforce':'On <em>Salesforce</em>: automated follow-up, next-step nudge, renewal outreach',
   '6-dynamics':  'On <em>Dynamics</em>: KYC refresh and relationship maintenance automation',
   '6-microsoft 365': 'On <em>M365</em>: email-triggered task creation and meeting follow-up',
   '6-outlook':   'On <em>Outlook</em>: email-triggered follow-up and meeting action items',
-  '7-yardi':    'On <em>Yardi</em>: CAM reconciliation and invoice matching automation',
+  '7-yardi':    'On <em>Yardi</em>: CAM reconciliation &amp; invoice matching automation',
   '7-bloomberg': 'On <em>Bloomberg</em>: position reconciliation and P&L attribution',
   '7-sap':      'On <em>SAP</em>: inventory reconciliation and cost variance analysis',
-  '8-bloomberg': 'On <em>Bloomberg</em>: Basel / MiFID / Dodd-Frank monitoring and briefing',
+  '8-bloomberg': 'On <em>Bloomberg</em>: regulatory change monitoring &amp; compliance briefing',
   '8-servicenow':'On <em>ServiceNow</em>: policy change routing and compliance tracking',
-  '9-yardi':    'On <em>Yardi</em>: "how does our Yardi do X" — configuration and process agent',
+  '9-yardi':    'On <em>Yardi</em>: configuration &amp; process knowledge agent',
   '9-copilot':  'On your stack — this is exactly what <em>Copilot cannot do</em>. Proactive, integrated, queryable.',
   '9-salesforce':'On <em>Salesforce</em>: deal precedent search and playbook agent',
   '9-servicenow':'On <em>ServiceNow</em>: policy navigator and IT knowledge agent',
   '9-microsoft 365': 'On <em>M365</em>: internal docs agent and onboarding assistant',
-  '10-yardi':   'On <em>Yardi</em>: tenant onboarding and lease renewal communications',
+  '10-yardi':   'On <em>Yardi</em>: tenant onboarding &amp; lease lifecycle communications',
   '10-salesforce':'On <em>Salesforce</em>: client onboarding and KYC comms automation',
   '10-dynamics': 'On <em>Dynamics</em>: client lifecycle communications and re-engagement',
   '10-microsoft 365': 'On <em>M365</em>: employee onboarding and L&D nudge automation',
@@ -3976,15 +3998,15 @@ async function runDemo() {
         <div class="pc-no-patterns" id="pcNoPatterns">
   <div style="font-size:14px;color:rgba(255,255,255,0.25);margin-bottom:16px;font-style:italic;">Tag your tech stack in PREP to highlight specific patterns</div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:900px;">
-    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Process automation</div><div class="pc-dc-eg">Goodman · SSA · News UK</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Continuous monitoring</div><div class="pc-dc-eg">Arcmont · Lingotto · LoganAir</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Document intelligence</div><div class="pc-dc-eg">Arcmont · Goodman · ACV</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Intelligence briefing</div><div class="pc-dc-eg">Lingotto · LoganAir · News UK</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Document generation</div><div class="pc-dc-eg">Itaú · Goodman · SSA</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Fin</div><div class="pc-dc-name">Mandate &amp; covenant monitoring</div><div class="pc-dc-eg">Arcmont · Lingotto · SSA</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Fin</div><div class="pc-dc-name">Reconciliation automation</div><div class="pc-dc-eg">Itaú · Goodman</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Talent</div><div class="pc-dc-name">Knowledge &amp; Q&amp;A agent</div><div class="pc-dc-eg">Goodman · LoganAir · Novant</div></div>
-    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Account health scoring</div><div class="pc-dc-eg">SSA</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Process automation</div><div class="pc-dc-eg">Real estate · Staffing · Media</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Continuous monitoring</div><div class="pc-dc-eg">Asset mgmt · Asset mgmt · Airlines</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Ops</div><div class="pc-dc-name">Document intelligence</div><div class="pc-dc-eg">Asset mgmt · Real estate · Automotive</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Intelligence briefing</div><div class="pc-dc-eg">Asset mgmt · Airlines · Media</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Document generation</div><div class="pc-dc-eg">Financial services · Real estate · Staffing</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Fin</div><div class="pc-dc-name">Mandate &amp; covenant monitoring</div><div class="pc-dc-eg">Asset mgmt · Asset mgmt · Staffing</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Fin</div><div class="pc-dc-name">Reconciliation automation</div><div class="pc-dc-eg">Financial services · Real estate</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Talent</div><div class="pc-dc-name">Knowledge &amp; Q&amp;A agent</div><div class="pc-dc-eg">Real estate · Airlines · Healthcare</div></div>
+    <div class="pc-default-card"><div class="pc-dc-area">Com</div><div class="pc-dc-name">Account health scoring</div><div class="pc-dc-eg">Staffing &amp; workforce</div></div>
   </div>
 </div>
         <!-- P1 -->
@@ -3992,14 +4014,14 @@ async function runDemo() {
           <div class="pc-pattern-num">P1 · Operations</div>
           <div class="pc-pattern-name">Process automation on high-volume repetitive tasks</div>
           <div class="pc-pattern-universal">If someone on your team does the same task every day — this is automatable. Same architecture across every vertical.</div>
-          <div class="pc-pattern-skin" id="cpc-1-skin">Specific to your stack</div>
+          <div class="pc-pattern-skin" id="cpc-1-skin">Real estate &amp; operations — high-volume task automation</div>
         </div>
         <!-- P2 -->
         <div class="pc-pattern-card" id="cpc-2">
           <div class="pc-pattern-num">P2 · Operations</div>
           <div class="pc-pattern-name">Exception detection and routing</div>
           <div class="pc-pattern-universal">Continuous monitoring — flags what matters and routes it to the right person before it becomes a problem.</div>
-          <div class="pc-pattern-skin" id="cpc-2-skin">Specific to your stack</div>
+          <div class="pc-pattern-skin" id="cpc-2-skin">Continuous watch layer — alerts when thresholds are crossed, not on a schedule</div>
         </div>
         <!-- P3 -->
         <div class="pc-pattern-card" id="cpc-3">
@@ -4013,14 +4035,14 @@ async function runDemo() {
           <div class="pc-pattern-num">P4 · Commercial</div>
           <div class="pc-pattern-name">Document generation and transformation</div>
           <div class="pc-pattern-universal">Data in → formatted client-facing document out. Hours of work reduced to seconds. Your format, your data.</div>
-          <div class="pc-pattern-skin" id="cpc-4-skin">Specific to your stack</div>
+          <div class="pc-pattern-skin" id="cpc-4-skin">Financial services &amp; professional services — structured document generation</div>
         </div>
         <!-- P5 -->
         <div class="pc-pattern-card" id="cpc-5">
           <div class="pc-pattern-num">P5 · Commercial</div>
           <div class="pc-pattern-name">Deal intelligence and signal synthesis</div>
           <div class="pc-pattern-universal">Aggregate disparate signals, surface what matters, present it before the decision is made without it.</div>
-          <div class="pc-pattern-skin" id="cpc-5-skin">Specific to your stack</div>
+          <div class="pc-pattern-skin" id="cpc-5-skin">Asset management &amp; media — pre-session intelligence compiled overnight</div>
         </div>
         <!-- P6 -->
         <div class="pc-pattern-card" id="cpc-6">
@@ -4041,14 +4063,14 @@ async function runDemo() {
           <div class="pc-pattern-num">P8 · Finance &amp; Risk</div>
           <div class="pc-pattern-name">Regulatory change monitoring</div>
           <div class="pc-pattern-universal">Scans regulatory sources, identifies what's relevant to your context, briefs the right team automatically.</div>
-          <div class="pc-pattern-skin" id="cpc-8-skin">Specific to your stack</div>
+          <div class="pc-pattern-skin" id="cpc-8-skin">Regulated institutions — mandate, covenant &amp; SLA compliance monitoring</div>
         </div>
         <!-- P9 -->
         <div class="pc-pattern-card" id="cpc-9">
           <div class="pc-pattern-num">P9 · Client &amp; Talent</div>
           <div class="pc-pattern-name">Knowledge capture and internal Q&amp;A</div>
           <div class="pc-pattern-universal">Institutional knowledge made queryable. The "only Morgan knows" risk — eliminated.</div>
-          <div class="pc-pattern-skin" id="cpc-9-skin">Specific to your stack</div>
+          <div class="pc-pattern-skin" id="cpc-9-skin">Any vertical — institutional knowledge made queryable. The "only one person knows" risk eliminated.</div>
         </div>
         <!-- P10 -->
         <div class="pc-pattern-card" id="cpc-10">
@@ -4149,42 +4171,42 @@ async function runDemo() {
           <div class="pc-pattern-num">P3 · Operations</div>
           <div class="pc-pattern-name">Vendor &amp; counterparty management</div>
           <div class="pc-pattern-universal">External-party data normalised and acted on automatically. Eliminates the chasing.</div>
-          <div class="pc-pattern-skin" id="cpc-3-skin">Goodman — contractor follow-up &amp; COI tracking</div>
+          <div class="pc-pattern-skin" id="cpc-3-skin">Property &amp; facilities — vendor follow-up &amp; compliance tracking</div>
         </div>
         <!-- P6 -->
         <div class="pc-pattern-card" id="cpc-6">
           <div class="pc-pattern-num">P6 · Commercial</div>
           <div class="pc-pattern-name">Follow-up &amp; pipeline automation</div>
           <div class="pc-pattern-universal">Trigger-based outreach from CRM state changes. The 6pm Friday work — eliminated.</div>
-          <div class="pc-pattern-skin" id="cpc-6-skin">SSA — consultant follow-up automation</div>
+          <div class="pc-pattern-skin" id="cpc-6-skin">Staffing &amp; professional services — automated follow-up from CRM state</div>
         </div>
         <!-- P6b -->
         <div class="pc-pattern-card" id="cpc-6b">
           <div class="pc-pattern-num">P6b · Commercial</div>
           <div class="pc-pattern-name">Account health scoring &amp; churn prevention</div>
           <div class="pc-pattern-universal">Continuous scoring from engagement signals. Flags at-risk accounts before they churn.</div>
-          <div class="pc-pattern-skin" id="cpc-6b-skin">SSA — candidate &amp; client churn scoring</div>
+          <div class="pc-pattern-skin" id="cpc-6b-skin">Commercial — account health scoring from engagement signals</div>
         </div>
         <!-- P7 -->
         <div class="pc-pattern-card" id="cpc-7">
           <div class="pc-pattern-num">P7 · Finance &amp; Risk</div>
           <div class="pc-pattern-name">Reconciliation &amp; audit trail</div>
           <div class="pc-pattern-universal">Match records across systems, surface discrepancies, document resolution. Month-end at speed.</div>
-          <div class="pc-pattern-skin" id="cpc-7-skin">Goodman — CAM reconciliation &amp; invoice matching</div>
+          <div class="pc-pattern-skin" id="cpc-7-skin">Finance — automated reconciliation across systems</div>
         </div>
         <!-- P10 -->
         <div class="pc-pattern-card" id="cpc-10">
           <div class="pc-pattern-num">P10 · Client &amp; Talent</div>
           <div class="pc-pattern-name">Onboarding &amp; lifecycle communications</div>
           <div class="pc-pattern-universal">Trigger-based personalised communications at every key lifecycle moment. Automated. On time.</div>
-          <div class="pc-pattern-skin" id="cpc-10-skin">Goodman — tenant lifecycle communications</div>
+          <div class="pc-pattern-skin" id="cpc-10-skin">Real estate &amp; services — trigger-based lifecycle communications</div>
         </div>
         <!-- P11 -->
         <div class="pc-pattern-card" id="cpc-11">
           <div class="pc-pattern-num">P11 · Operations</div>
           <div class="pc-pattern-name">Document intelligence &amp; extraction</div>
           <div class="pc-pattern-universal">Unstructured legal &amp; financial documents → structured, queryable data. Foundation capability.</div>
-          <div class="pc-pattern-skin" id="cpc-11-skin">Arcmont — facility agreement → covenant register</div>
+          <div class="pc-pattern-skin" id="cpc-11-skin">Legal &amp; financial documents → structured, queryable data</div>
         </div>
       </div>
     </div>
